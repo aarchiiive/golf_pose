@@ -1,0 +1,52 @@
+/* Loading.css */
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.loader {
+  border: 6px solid #f3f3f3;
+  border-top: 6px solid #b1b1b1;
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin 2s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.loading {
+  display: none;
+}
+
+.loading-text {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 16px;
+  font-weight: semi-bold;
+  color: rgb(61, 61, 61);
+  margin-top: 24px;
+}
+
+/* .company-logo-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-top: 120px;
+}
+
+.company-logo {
+  width: 40px;
+} */
