@@ -1,0 +1,47 @@
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+  background-color: white;
+}
+
+video.mb-4 {
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 20px;
+  box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff;
+}
+
+button {
+  background-color: white;
+  color: gray;
+  padding: 10px 20px;
+  border-radius: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff;
+  font-family: 'Poppins', Courier, monospace;
+  font-weight: 600;
+}
+
+button:hover {
+  background-color: #f1f1f1;
+
+}
+
+button:focus {
+  outline: none;
+}
+
+.start-button,
+.stop-button,
+.download-button {
+  /* Add any specific styles for these buttons here */
+}
