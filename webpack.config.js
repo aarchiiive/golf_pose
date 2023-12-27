@@ -8,9 +8,16 @@ module.exports = {
     filename: 'bundle.js', // 번들 파일 이름
     path: path.resolve(__dirname, 'dist'), // 번들 파일 경로
   },
-  plugins: [new HtmlWebpackPlugin({ template: path.resolve(__dirname, "public", "index.html"),
-    favicon: "./public/favicon.ico",
-    filename: "index.html",
-    manifest: "./public/manifest.json",
-  })]
+  
+  test: /\.(png|svg|jpg|jpeg|gif|ico)$/,
+  exclude: /node_modules/,
+  use: ['file-loader?name=[name].[ext]'], // ?name=[name].[ext] is only necessary to preserve the original file name
+
+  plugins: [
+    new HtmlWebpackPlugin({
+      template: './public/index.html',
+      filename: './index.html',
+      favicon: './public/favicon.ico'
+    })
+  ],
 };
