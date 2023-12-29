@@ -9,9 +9,9 @@ import Loading from './pages/loading';
 ReactDOM.render(
   <Router basename={process.env.PUBLIC_URL}>
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/record" element={<Record />} />
-      <Route path="/loading" element={<Loading />} />
+      <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
+      <Route path={`${process.env.PUBLIC_URL}/record`} element={<Record />} />
+      <Route path={`${process.env.PUBLIC_URL}/loading`} element={<Loading />} />
     </Routes>
   </Router>,
   document.getElementById('root')
