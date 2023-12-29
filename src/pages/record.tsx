@@ -20,6 +20,34 @@ const Record: React.FC = () => {
   const [buttonText, setButtonText] = useState(buttonTexts[0]);
   const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
 
+  const [videoStyle, setVideoStyle] = useState({});
+  const [nextButtonStyle, setNextButtonStyle] = useState({});
+  const [nextIconStyle, setNextIconStyle] = useState({});
+
+  const updateStyles = () => {
+    const width = window.innerWidth;
+
+    setVideoStyle({
+      width: `${width * 0.75}px`,
+    });
+    setNextButtonStyle({
+      right: `${width * 0.01}px`,
+      width: `${width * 0.05}px`,
+      height: `${width * 0.05}px`,
+      borderRadius: `${width * 0.025}px`,
+    });
+    setNextIconStyle({
+      width: `${width * 0.03}px`,
+      height: `${width * 0.03}px`,
+    });
+  };
+
+  useEffect(() => {
+    updateStyles();
+    window.addEventListener('resize', updateStyles);
+    return () => window.removeEventListener('resize', updateStyles);
+  }, []);
+
   useEffect(() => {
     // Function to start video stream
     const startVideoStream = async () => {
@@ -103,7 +131,7 @@ const Record: React.FC = () => {
   return (
     <div className="record">
       <div className="header">Hi-Swing Project</div>
-      <video ref={videoRef} className="streamer" autoPlay playsInline />
+      <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
 
       {/* Start/Stop button */}
       <div className="button-container">
@@ -117,12 +145,13 @@ const Record: React.FC = () => {
 
       {/* Next button */}
       {showNextButton && (
-        <button className="next-button">
+        <button className="next-button" style={nextButtonStyle} onClick={handleNextButtonClick}>
           <img
             className="next-icon"
             src={require('../assets/arrow_right.png')}
             alt="Next"
-            onClick={handleNextButtonClick}
+            style={nextIconStyle}
+            // onClick={handleNextButtonClick}
           />
         </button>
       )}
