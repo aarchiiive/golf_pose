@@ -130,7 +130,7 @@ const Record: React.FC = () => {
 
   return (
     <div className="record">
-      <div className="header">Hi-Swing Project</div>
+      <div className="header">H-Swing Project</div>
       <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
 
       {/* Start/Stop button */}
