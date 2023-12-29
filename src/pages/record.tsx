@@ -1,5 +1,10 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { 
+  useRef, 
+  useState, 
+  useEffect 
+} from 'react';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
 
 import '../styles/record.css';
 
@@ -40,7 +45,7 @@ const Record: React.FC = () => {
   const handleStartRecordingClick = async () => {
     if (isCapturing) {
       setButtonText(buttonTexts[0]);
-      mediaRecorderRef.current!.stop();
+      handleStopRecording();
     } else {
       setButtonText(buttonTexts[1]);
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -54,6 +59,30 @@ const Record: React.FC = () => {
 
     setIsCapturing(!isCapturing);
     setShowNextButton(true);
+  };
+
+  const handleStopRecording = () => {
+    mediaRecorderRef.current!.stop();
+    setIsCapturing(false);
+    setButtonText(buttonTexts[0]);
+
+    // Blob을 합치고 서버에 업로드
+    const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    const formData = new FormData();
+    formData.append('video', blob);
+
+    axios.post('http://127.0.0.1:8000/upload/', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+    .then(response => {
+      console.log('Upload successful', response.data);
+      // metirc score
+    })
+    .catch(error => {
+      console.error('Error uploading video', error);
+    });
   };
 
   const handleNextButtonClick = () => {
