@@ -4,22 +4,27 @@
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
   background-color: white;
 }
 
+.typewriter {
+  text-align: center; /* Center the text */
+}
+
 .typewriter h1 {
-  display: inline-block;
+  display: inline-block; /* Use inline-block for centered text */
   overflow: hidden;
-  border-right: .15em solid lightgray;
-  white-space: nowrap; /* Prevent line wrapping on larger screens */
+  border-right: .15em solid lightgray; /* Updated cursor color */
   margin: 0 auto;
   margin-top: 10%;
   margin-bottom: 10%;
   letter-spacing: .15em;
-  font-family: Consolas, monospace;
+  font-family: Consolas, monospace; /* Using Consolas font */
   font-weight: 500;
+  font-size: 1.5em; /* Adjust font size for readability */
   animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
+  white-space: pre-wrap; /* Wrap text and preserve formatting */
+  word-break: break-word; /* Allow words to break and wrap */
 }
 
 /* Typewriter typing effect */
@@ -31,18 +36,5 @@
 /* Typewriter cursor effect */
 @keyframes blink-caret {
   from, to { border-color: transparent; }
-  50% { border-color: rgb(142, 142, 142); }
-}
-
-.home-company-logo {
-  margin-top: 16%;
-}
-
-/* Media query for mobile devices */
-@media (max-width: 600px) {
-  .typewriter h1 {
-    white-space: normal; /* Enable line wrapping on smaller screens */
-    overflow-wrap: break-word; /* Ensures words wrap properly */
-    font-size: smaller; /* Optionally reduce font size for smaller screens */
-  }
+  50% { border-color: lightgray; }
 }
