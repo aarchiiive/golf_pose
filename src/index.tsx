@@ -7,7 +7,7 @@ import Record from './pages/record';
 import Loading from './pages/loading';
 
 ReactDOM.render(
-  <Router>
+  <Router basename={process.env.PUBLIC_URL}>
     <Routes>
       <Route path="/" element={<Home />} />
       <Route path="/record" element={<Record />} />
