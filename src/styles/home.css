@@ -11,13 +11,13 @@
 .typewriter h1 {
   display: inline-block;
   overflow: hidden;
-  border-right: .15em solid lightgray; /* Updated cursor color */
-  white-space: nowrap;
+  border-right: .15em solid lightgray;
+  white-space: nowrap; /* Prevent line wrapping on larger screens */
   margin: 0 auto;
   margin-top: 10%;
   margin-bottom: 10%;
   letter-spacing: .15em;
-  font-family: Consolas, monospace; /* Using Consolas font */
+  font-family: Consolas, monospace;
   font-weight: 500;
   animation: typing 3.5s steps(40, end), blink-caret .75s step-end infinite;
 }
@@ -31,9 +31,18 @@
 /* Typewriter cursor effect */
 @keyframes blink-caret {
   from, to { border-color: transparent; }
-  50% { border-color: rgb(142, 142, 142); } /* Updated cursor color in animation */
+  50% { border-color: rgb(142, 142, 142); }
 }
 
 .home-company-logo {
   margin-top: 16%;
+}
+
+/* Media query for mobile devices */
+@media (max-width: 600px) {
+  .typewriter h1 {
+    white-space: normal; /* Enable line wrapping on smaller screens */
+    overflow-wrap: break-word; /* Ensures words wrap properly */
+    font-size: smaller; /* Optionally reduce font size for smaller screens */
+  }
 }
