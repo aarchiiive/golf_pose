@@ -87,7 +87,13 @@ const Record: React.FC = () => {
       videoRef.current!.srcObject = mediaStream;
       videoRef.current!.play();
 
-      mediaRecorderRef.current = new MediaRecorder(mediaStream, { mimeType: "video/webm" });
+      let options = { mimeType: "video/webm" };
+      if (!MediaRecorder.isTypeSupported(options.mimeType)) {
+        console.log(`${options.mimeType} is not supported, switching to video/mp4.`);
+        options.mimeType = "video/mp4";
+      }
+
+      mediaRecorderRef.current = new MediaRecorder(mediaStream, options);
       mediaRecorderRef.current.addEventListener("dataavailable", handleDataAvailable);
       mediaRecorderRef.current.start();
 
@@ -151,7 +157,7 @@ const Record: React.FC = () => {
             src={require('../assets/arrow_right.png')}
             alt="Next"
             style={nextIconStyle}
-            // onClick={handleNextButtonClick}
+          // onClick={handleNextButtonClick}
           />
         </button>
       )}

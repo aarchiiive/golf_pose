@@ -66,6 +66,18 @@ button:focus {
   animation: streamer-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
 }
 
+@-webkit-keyframes streamer-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
+  }
+  50% {
+    box-shadow: 0 0 12px 16px rgba(255, 0, 0, 0.1);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
 @keyframes streamer-pulse {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
@@ -91,6 +103,23 @@ button:focus {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
+@-webkit-keyframes button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 12px 8px rgba(255, 0, 0, 0.1);
+    transform: scale(1.02);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    transform: scale(1);
+  }
+} 
 
 @keyframes button-pulse {
   0% {
@@ -120,6 +149,12 @@ button:focus {
   background-color: rgba(255, 0, 0, 0.7); /* Example: slightly darker red on hover */
   color: rgba(255, 255, 255, 0.8); /* Example: slightly transparent white color */
 }
+
+/* .streamer-recording, .start-button-recording {
+  -webkit-backface-visibility: hidden;
+  -webkit-transform: translate3d(0, 0, 0);
+  will-change: transform, box-shadow;
+} */
 
 .next-button {
   position: absolute;
