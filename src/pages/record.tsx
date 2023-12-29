@@ -1,7 +1,7 @@
-import React, { 
-  useRef, 
-  useState, 
-  useEffect 
+import React, {
+  useRef,
+  useState,
+  useEffect
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
@@ -14,7 +14,7 @@ const Record: React.FC = () => {
   const videoRef = useRef<HTMLVideoElement>(null);
   const mediaRecorderRef = useRef<MediaRecorder>();
 
-  const buttonTexts = ['Start Recording', 'Stop Recording'];  
+  const buttonTexts = ['Start Recording', 'Stop Recording'];
   const [isCapturing, setIsCapturing] = useState(false);
   const [showNextButton, setShowNextButton] = useState(false);
   const [buttonText, setButtonText] = useState(buttonTexts[0]);
@@ -43,9 +43,16 @@ const Record: React.FC = () => {
   };
 
   const handleStartRecordingClick = async () => {
+    const videoStreamer = videoRef.current;
+    const startButton = document.querySelector('.start-button');
+
     if (isCapturing) {
       setButtonText(buttonTexts[0]);
       handleStopRecording();
+      if (startButton && videoStreamer) {
+        startButton.classList.remove('start-button-recording');
+        videoStreamer.classList.remove('streamer-recording');
+      }
     } else {
       setButtonText(buttonTexts[1]);
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -55,6 +62,11 @@ const Record: React.FC = () => {
       mediaRecorderRef.current = new MediaRecorder(mediaStream, { mimeType: "video/webm" });
       mediaRecorderRef.current.addEventListener("dataavailable", handleDataAvailable);
       mediaRecorderRef.current.start();
+
+      if (startButton && videoStreamer) {
+        startButton.classList.add('start-button-recording');
+        videoStreamer.classList.add('streamer-recording');
+      }
     }
 
     setIsCapturing(!isCapturing);
@@ -66,23 +78,22 @@ const Record: React.FC = () => {
     setIsCapturing(false);
     setButtonText(buttonTexts[0]);
 
-    // Blob을 합치고 서버에 업로드
-    const blob = new Blob(recordedChunks, { type: 'video/webm' });
-    const formData = new FormData();
-    formData.append('video', blob);
+    // const blob = new Blob(recordedChunks, { type: 'video/webm' });
+    // const formData = new FormData();
+    // formData.append('video', blob);
 
-    axios.post('http://127.0.0.1:8000/upload/', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    })
-    .then(response => {
-      console.log('Upload successful', response.data);
-      // metirc score
-    })
-    .catch(error => {
-      console.error('Error uploading video', error);
-    });
+    // axios.post('http://127.0.0.1:8000/upload/', formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data'
+    //   }
+    // })
+    //   .then(response => {
+    //     console.log('Upload successful', response.data);
+    //     // metirc score
+    //   })
+    //   .catch(error => {
+    //     console.error('Error uploading video', error);
+    //   });
   };
 
   const handleNextButtonClick = () => {
@@ -92,7 +103,7 @@ const Record: React.FC = () => {
   return (
     <div className="record">
       <div className="header">Hi-Swing Project</div>
-      <video ref={videoRef} className="mb-4" autoPlay playsInline />
+      <video ref={videoRef} className="streamer" autoPlay playsInline />
 
       {/* Start/Stop button */}
       <div className="button-container">
