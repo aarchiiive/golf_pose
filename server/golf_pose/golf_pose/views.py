@@ -18,6 +18,6 @@ class VideoUploadView(APIView):
         # yolo = YOLO(f"{uuid.uuid4()}.mp4")
         
         # metric
-        # 
+        # score, message, images
         # return Response({"score": score, "message": "Video uploaded successfully."}, status=status.HTTP_201_CREATED)
         return Response({"message": "Video uploaded successfully.", "file_name": file_name}, status=status.HTTP_201_CREATED)
