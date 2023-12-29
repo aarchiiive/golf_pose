@@ -128,7 +128,7 @@ const Record: React.FC = () => {
       )}
 
       {/* Company logo */}
-      <div className="company-logo-container">
+      {/* <div className="company-logo-container">
         <a href="http://hurotics.com/" target="_blank" rel="noopener noreferrer">
           <img
             src={require('../assets/hurotics.png')}
@@ -136,7 +136,7 @@ const Record: React.FC = () => {
             className="company-logo"
           />
         </a>
-      </div>
+      </div> */}
 
     </div>
   );
