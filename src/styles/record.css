@@ -12,7 +12,7 @@ body {
   background-color: white;
 }
 
-video.mb-4 {
+video.streamer {
   margin-bottom: 20px;
   width: 90%;
   max-width: 600px;
@@ -27,14 +27,14 @@ button {
   height: 60px;
   padding: 10px 20px;
   border-radius: 30px;
-  margin-bottom: 10px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
-  box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff;
-  font-weight: semi-bold; 
+  box-shadow: 4px 4px 12px rgba(167, 170, 177, 0.4), /* Adjust transparency here */
+             -4px -4px 12px rgba(255, 255, 255, 0.8); /* Adjust transparency here */
+  font-weight: semi-bold;
   font-family: 'Poppins', Courier, monospace;
-  font-size: 16px;  
+  font-size: 16px;
 }
 
 button:hover {
@@ -60,12 +60,62 @@ button:focus {
   align-items: center;
 }
 
+.streamer-recording {
+  animation: streamer-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
+}
+
+@keyframes streamer-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
+  }
+
+  50% {
+    box-shadow: 0 0 12px 16px rgba(255, 0, 0, 0.1);
+  }
+  
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+  }
+}
+
 .button-container {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  margin-top: 40px;
+}
+
+.start-button {
+  margin-top: 20px;
+  margin-bottom: 20px;
+}
+
+@keyframes button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 12px 8px rgba(255, 0, 0, 0.1);
+    transform: scale(1.02);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    transform: scale(1);
+  }
+}
+
+.start-button-recording {
+  color: rgba(255, 255, 255, 1);
+  background-color: rgba(255, 0, 0, 0.65);
+  animation: button-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
+}
+
+.start-button-recording:hover {
+  background-color: rgba(255, 0, 0, 0.7); /* Example: slightly darker red on hover */
+  color: rgba(255, 255, 255, 0.8); /* Example: slightly transparent white color */
 }
 
 .next-button {
@@ -85,12 +135,13 @@ button:focus {
 }
 
 .company-logo-container {
-  position: absolute;
+  /* position: absolute; */
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  bottom: 32px;
+  /* bottom: 32px; */
+  margin-top: 32px;
 }
 
 .company-logo {
