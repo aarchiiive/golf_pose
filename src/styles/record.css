@@ -8,8 +8,33 @@ body {
   align-items: center;
   justify-content: center;
   height: 100vh;
-  overflow: hidden;
+  /* overflow: hidden; */
   background-color: white;
+}
+
+.record-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.preview-container {
+  position: absolute;
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 100vh;
+  overflow: hidden;
+}
+
+video.preview {
+  width: 100%;
+  border-radius: 20px;
 }
 
 video.streamer {
@@ -25,13 +50,14 @@ button {
   color: gray;
   width: 180px;
   height: 60px;
-  padding: 10px 20px;
   border-radius: 30px;
   border: none;
   cursor: pointer;
   transition: background-color 0.3s;
-  box-shadow: 4px 4px 12px rgba(167, 170, 177, 0.4), /* Adjust transparency here */
-             -4px -4px 12px rgba(255, 255, 255, 0.8); /* Adjust transparency here */
+  box-shadow: 4px 4px 12px rgba(167, 170, 177, 0.4),
+    /* Adjust transparency here */
+    -4px -4px 12px rgba(255, 255, 255, 0.8);
+  /* Adjust transparency here */
   font-weight: semi-bold;
   font-family: 'Poppins', Courier, monospace;
   font-size: 16px;
@@ -70,9 +96,11 @@ button:focus {
   0% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0.2);
   }
+
   50% {
     box-shadow: 0 0 12px 16px rgba(255, 0, 0, 0.1);
   }
+
   100% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
   }
@@ -86,7 +114,7 @@ button:focus {
   50% {
     box-shadow: 0 0 12px 16px rgba(255, 0, 0, 0.1);
   }
-  
+
   100% {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
   }
@@ -119,7 +147,7 @@ button:focus {
     box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
     transform: scale(1);
   }
-} 
+}
 
 @keyframes button-pulse {
   0% {
@@ -146,32 +174,70 @@ button:focus {
 }
 
 .start-button-recording:hover {
-  background-color: rgba(255, 0, 0, 0.7); /* Example: slightly darker red on hover */
-  color: rgba(255, 255, 255, 0.8); /* Example: slightly transparent white color */
+  background-color: rgba(255, 0, 0, 0.7);
+  /* Example: slightly darker red on hover */
+  color: rgba(255, 255, 255, 0.8);
+  /* Example: slightly transparent white color */
 }
 
-/* .streamer-recording, .start-button-recording {
-  -webkit-backface-visibility: hidden;
-  -webkit-transform: translate3d(0, 0, 0);
-  will-change: transform, box-shadow;
-} */
+.preview-button-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 20px;
+}
 
-.next-button {
-  position: absolute;
-  right: 4%;
-  /* padding: 10px 10px; */
-  width: 60px;
-  height: 60px;
-  /* margin-left: 10%; */
-  border-radius: 30px;
+.retry-button {
+  width: 140px;
+  height: 40px;
+  font-size: 16px;
+  margin-right: 10%;
   display: flex;
   justify-content: center;
   align-items: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(162, 162, 162);
 }
 
-.next-icon {
-  width: 40px;
+.retry-button:hover {
+  background-color: rgba(196, 196, 196, 0.6);
+}
+
+.next-button {
+  width: 140px;
   height: 40px;
+  /* border-radius: 30px; */
+  font-size: 16px;
+  margin-left: 10%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: rgb(255, 255, 255);
+  background-color: rgb(173, 214, 255);
+  -webkit-animation: next-button-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
+  animation: next-button-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
+}
+
+.next-button:hover {
+  background-color: rgba(173, 214, 255, 0.6);
+}
+
+@keyframes next-button-pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(211, 230, 249, 0.8);
+    transform: scale(1);
+  }
+
+  50% {
+    box-shadow: 0 0 16px 12px rgba(211, 230, 249, 0.4);
+    transform: scale(1.02);
+  }
+
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 0, 0, 0);
+    transform: scale(1);
+  }
 }
 
 .company-logo-container {
