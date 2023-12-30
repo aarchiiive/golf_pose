@@ -30,9 +30,8 @@ const Home = () => {
         <h1>H-Swing Project Arrived in CES 2024</h1>
       </div>
       <button
-        onClick={() => {
-          navigate('/record');
-        }}
+        className='home-start-button'
+        onClick={() => {navigate('/record');}}
       >Start</button>
       {/* Company logo */}
       {/* <div className="home-company-logo">
