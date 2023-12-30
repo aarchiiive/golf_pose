@@ -170,7 +170,7 @@ const Record: React.FC = () => {
             controls={false}
           ></video>
           <div className="preview-button-container">
-            <button className="retry-button" onClick={() => { setBackgroundOpacity(1) }}>
+            <button className="retry-button" onClick={handleRetryButtonClick}>
               Retry
             </button>
             <button className="next-button" onClick={handleNextButtonClick}>
@@ -181,7 +181,8 @@ const Record: React.FC = () => {
       )}
       <div className="record-container" style={{ opacity: backgroundOpacity }}>
         <div className="header">H-Swing Project</div>
-
+            
+        {/* Video streamer */}
         <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
 
         {/* Start/Stop button */}
