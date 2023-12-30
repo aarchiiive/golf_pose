@@ -1,9 +1,11 @@
 import React, {
   useRef,
   useState,
-  useEffect
+  useEffect,
+  useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+
 import axios from 'axios';
 
 import '../styles/record.css';
@@ -11,16 +13,22 @@ import '../styles/record.css';
 const Record: React.FC = () => {
   const navigate = useNavigate();
 
+  // refs
   const videoRef = useRef<HTMLVideoElement>(null);
-  const mediaRecorderRef = useRef<MediaRecorder>();
+  const recorderRef = useRef<MediaRecorder>();
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
-  const [isCapturing, setIsCapturing] = useState(false);
-  const [showNextButton, setShowNextButton] = useState(false);
-  const [buttonText, setButtonText] = useState(buttonTexts[0]);
-  const [recordedChunks, setRecordedChunks] = useState<Blob[]>([]);
 
+  // states
+  const [videoSrc, setVideoSrc] = useState<string | null>(null);
+  const [recordedChunk, setRecordedChunk] = useState<Blob | null>(null);
+  const [buttonText, setButtonText] = useState(buttonTexts[0]);
+  const [isCapturing, setIsCapturing] = useState(false);
+
+  // styles
+  const [backgroundOpacity, setBackgroundOpacity] = useState(1);
   const [videoStyle, setVideoStyle] = useState({});
+  const [previewVideoStyle, setPreviewVideoStyle] = useState({});
   const [nextButtonStyle, setNextButtonStyle] = useState({});
   const [nextIconStyle, setNextIconStyle] = useState({});
 
@@ -29,6 +37,10 @@ const Record: React.FC = () => {
 
     setVideoStyle({
       width: `${width * 0.75}px`,
+    });
+    setPreviewVideoStyle({
+      width: `${width * 0.9}px`,
+      // height: `${width * 0.75}px`,
     });
     setNextButtonStyle({
       right: `${width * 0.01}px`,
@@ -64,25 +76,18 @@ const Record: React.FC = () => {
     startVideoStream();
   }, []);
 
-  const handleDataAvailable = ({ data }: BlobEvent) => {
-    if (data.size > 0) {
-      setRecordedChunks(prev => [...prev, data]);
-    }
-  };
-
-  const handleStartRecordingClick = async () => {
-    const videoStreamer = videoRef.current;
+  // handling start/stop recording button
+  const handleRecording = async () => {
     const startButton = document.querySelector('.start-button');
+    setIsCapturing(!isCapturing);
 
-    if (isCapturing) {
-      setButtonText(buttonTexts[0]);
-      handleStopRecording();
-      if (startButton && videoStreamer) {
-        startButton.classList.remove('start-button-recording');
-        videoStreamer.classList.remove('streamer-recording');
-      }
-    } else {
+    console.log('handleRecording -> isCapturing : ', isCapturing);
+
+    if (!isCapturing) {
+      // Start recording
+      console.log('Recording started');
       setButtonText(buttonTexts[1]);
+
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
       videoRef.current!.srcObject = mediaStream;
       videoRef.current!.play();
@@ -93,26 +98,48 @@ const Record: React.FC = () => {
         options.mimeType = "video/mp4";
       }
 
-      mediaRecorderRef.current = new MediaRecorder(mediaStream, options);
-      mediaRecorderRef.current.addEventListener("dataavailable", handleDataAvailable);
-      mediaRecorderRef.current.start();
+      recorderRef.current = new MediaRecorder(mediaStream, options);
+      recorderRef.current.addEventListener("dataavailable", handleDataAvailable);
+      // recorderRef.current.onstop = handleStopRecording;
+      recorderRef.current.start();
 
-      if (startButton && videoStreamer) {
+      if (startButton && videoRef.current) {
         startButton.classList.add('start-button-recording');
-        videoStreamer.classList.add('streamer-recording');
+        videoRef.current.classList.add('streamer-recording');
+      }
+
+    } else {
+      // Stop recording
+      console.log('Recording stopped');
+
+      setButtonText(buttonTexts[0]);
+      setBackgroundOpacity(0.1);
+
+      recorderRef.current!.stop();
+
+      if (startButton && videoRef.current) {
+        startButton.classList.remove('start-button-recording');
+        videoRef.current.classList.remove('streamer-recording');
       }
     }
-
-    setIsCapturing(!isCapturing);
-    setShowNextButton(true);
   };
 
-  const handleStopRecording = () => {
-    mediaRecorderRef.current!.stop();
-    setIsCapturing(false);
-    setButtonText(buttonTexts[0]);
+  const handleDataAvailable = ({ data }: BlobEvent) => {
+    if (data.size > 0) {
+      const videoUrl = URL.createObjectURL(data);
+      setVideoSrc(videoUrl);
+      console.log('Save successfully');
+    }
+  };
 
-    // const blob = new Blob(recordedChunks, { type: 'video/webm' });
+  const handleRetryButtonClick = () => {
+    setVideoSrc(null);
+    setBackgroundOpacity(1);
+  }
+
+  const handleNextButtonClick = () => {
+    navigate('/loading');
+    // const blob = new Blob(recordedChunk, { type: 'video/webm' });
     // const formData = new FormData();
     // formData.append('video', blob);
 
@@ -128,42 +155,47 @@ const Record: React.FC = () => {
     //   .catch(error => {
     //     console.error('Error uploading video', error);
     //   });
-  };
-
-  const handleNextButtonClick = () => {
-    navigate('/loading');
   }
 
   return (
     <div className="record">
-      <div className="header">H-Swing Project</div>
-      <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-
-      {/* Start/Stop button */}
-      <div className="button-container">
-        <button
-          onClick={handleStartRecordingClick}
-          className="start-button"
-        >
-          {buttonText}
-        </button>
-      </div>
-
-      {/* Next button */}
-      {showNextButton && (
-        <button className="next-button" style={nextButtonStyle} onClick={handleNextButtonClick}>
-          <img
-            className="next-icon"
-            src={require('../assets/arrow_right.png')}
-            alt="Next"
-            style={nextIconStyle}
-          // onClick={handleNextButtonClick}
-          />
-        </button>
+      {videoSrc && (
+        <div className="preview-container">
+          <video
+            className="preview"
+            style={previewVideoStyle}
+            src={videoSrc}
+            loop
+            autoPlay
+            controls={false}
+          ></video>
+          <div className="preview-button-container">
+            <button className="retry-button" onClick={() => { setBackgroundOpacity(1) }}>
+              Retry
+            </button>
+            <button className="next-button" onClick={handleNextButtonClick}>
+              Next
+            </button>
+          </div>
+        </div>
       )}
+      <div className="record-container" style={{ opacity: backgroundOpacity }}>
+        <div className="header">H-Swing Project</div>
 
-      {/* Company logo */}
-      {/* <div className="company-logo-container">
+        <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
+
+        {/* Start/Stop button */}
+        <div className="button-container">
+          <button
+            onClick={handleRecording}
+            className="start-button"
+          >
+            {buttonText}
+          </button>
+        </div>
+
+        {/* Company logo */}
+        {/* <div className="company-logo-container">
         <a href="http://hurotics.com/" target="_blank" rel="noopener noreferrer">
           <img
             src={require('../assets/hurotics.png')}
@@ -172,7 +204,7 @@ const Record: React.FC = () => {
           />
         </a>
       </div> */}
-
+      </div>
     </div>
   );
 };
