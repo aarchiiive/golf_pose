@@ -1,3 +1,21 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('./fonts/poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./fonts/poppins/Poppins-Medium.ttf') format('truetype');
+  font-weight: medium;
+}
+
+/* @font-face {
+  font-family: 'Poppins';
+  src: url('./fonts/poppins/Poppins-SemiBold.ttf') format('truetype');
+  font-weight: semi-bold;
+} */
+
 body {
   overflow: hidden;
 }
@@ -58,7 +76,7 @@ button {
     /* Adjust transparency here */
     -4px -4px 12px rgba(255, 255, 255, 0.8);
   /* Adjust transparency here */
-  font-weight: semi-bold;
+  font-weight: normal;
   font-family: 'Poppins', Courier, monospace;
   font-size: 16px;
 }
@@ -75,7 +93,7 @@ button:focus {
 .header {
   font-family: 'Poppins', Courier, monospace;
   font-size: 30px;
-  font-weight: semi-bold;
+  font-weight: normal;
   color: rgb(61, 61, 61);
   margin-bottom: 40px;
 }
