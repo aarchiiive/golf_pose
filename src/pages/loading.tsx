@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import { Bars } from 'react-loader-spinner';
-import { BarLoader, RingLoader, ClipLoader } from 'react-spinners';
 
 import '../styles/loading.css';
 
