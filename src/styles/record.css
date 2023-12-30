@@ -81,13 +81,12 @@ button {
   font-size: 16px;
 }
 
-button:hover {
-  background-color: #f1f1f1;
-
-}
-
 button:focus {
   outline: none;
+}
+
+button:hover {
+  opacity: 0.6;
 }
 
 .header {
@@ -149,6 +148,7 @@ button:focus {
   margin-top: 20px;
   margin-bottom: 20px;
 }
+
 
 @-webkit-keyframes button-pulse {
   0% {
@@ -235,10 +235,6 @@ button:focus {
   background-color: rgb(173, 214, 255);
   -webkit-animation: next-button-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
   animation: next-button-pulse 2.8s infinite cubic-bezier(0.075, 0.2, 0.165, 1);
-}
-
-.next-button:hover {
-  background-color: rgba(173, 214, 255, 0.6);
 }
 
 @keyframes next-button-pulse {
