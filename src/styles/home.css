@@ -1,3 +1,8 @@
+@font-face {
+  font-family: 'Consolas';
+  src: url('./fonts/consolas/Consolas.ttf') format('truetype');
+}
+
 .home {
   display: flex;
   flex-direction: column;
@@ -45,7 +50,7 @@
 /* Add this to your existing CSS */
 .home-start-button {
   opacity: 0; /* Start with the button invisible */
-  transform: translateY(56px); /* Start position off-screen */
+  transform: translateY(72px); /* Start position off-screen */
   -webkit-animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
   animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
   animation-delay: 3.5s; /* Wait 3.5 seconds before animating */
