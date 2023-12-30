@@ -167,6 +167,7 @@ const Record: React.FC = () => {
             src={videoSrc}
             loop
             autoPlay
+            playsInline
             controls={false}
           ></video>
           <div className="preview-button-container">
