@@ -9,14 +9,14 @@
 }
 
 .typewriter {
-  text-align: center; /* Center text and cursor */
+  text-align: center;
 }
 
 .typewriter h1 {
   display: inline-block;
   overflow: hidden;
   border-right: .15em solid lightgray;
-  white-space: nowrap; /* Prevent line wrapping on larger screens */
+  white-space: nowrap;
   margin: 0 auto;
   margin-top: 10%;
   margin-bottom: 10%;
@@ -40,4 +40,21 @@
 
 .home-company-logo {
   margin-top: 16%;
+}
+
+/* Add this to your existing CSS */
+.home-start-button {
+  opacity: 0; /* Start with the button invisible */
+  transform: translateY(56px); /* Start position off-screen */
+  -webkit-animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
+  animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
+  animation-delay: 3.5s; /* Wait 3.5 seconds before animating */
+}
+
+/* Keyframes for the slide-up animation */
+@keyframes slideUp {
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
