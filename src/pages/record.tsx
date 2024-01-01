@@ -5,7 +5,7 @@ import React, {
   useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, animate } from 'framer-motion';
 import Skeleton from 'react-loading-skeleton';
 
 import axios from 'axios';
@@ -26,6 +26,7 @@ const Record: React.FC = () => {
   const [buttonText, setButtonText] = useState(buttonTexts[0]);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(true);
 
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
@@ -67,6 +68,7 @@ const Record: React.FC = () => {
         ease: [0.22, 0.61, 0.36, 1]
       }
     },
+
     animateFadeOut: {
       y: '0',
       opacity: 0,
@@ -92,7 +94,7 @@ const Record: React.FC = () => {
       opacity: 1,
     },
 
-    animationFadeIn: {
+    animateFadeIn: {
       x: '0',
       opacity: 1,
       transition: { 
@@ -100,8 +102,16 @@ const Record: React.FC = () => {
         ease: [0.22, 0.61, 0.36, 1]
       }
     },
-    animationFadeOut: {
+    animateFadeOut: {
       x: '-100vw',
+      opacity: 0,
+      transition: { 
+        duration: 0.8, 
+        ease: [0.22, 0.61, 0.36, 1]
+      }
+    },
+    animateRetryFadeOut: {
+      x: '100vw',
       opacity: 0,
       transition: { 
         duration: 0.8, 
@@ -181,9 +191,9 @@ const Record: React.FC = () => {
       console.log('Recording stopped');
 
       setButtonText(buttonTexts[0]);
-      setVisibleAnimation("animationFadeOut");
+      setVisibleAnimation("reverse");
       setTimeout(() => {
-        setPreviewAnimation("animationFadeIn");
+        setPreviewAnimation("animateFadeIn");
       }, 800);
 
       recorderRef.current!.stop();
@@ -204,7 +214,7 @@ const Record: React.FC = () => {
   };
 
   const handleRetryButtonClick = () => {
-    setPreviewAnimation("animationFadeOut");
+    setPreviewAnimation("animateRetryFadeOut");
     setTimeout(() => {
       setVisibleAnimation("animateFadeIn");
     }, 800);
@@ -230,7 +240,7 @@ const Record: React.FC = () => {
       // });
     }
     
-    setPreviewAnimation("animationFadeOut");
+    setPreviewAnimation("animateFadeOut");
     setTimeout(() => {
       navigate('/loading');
     }, 800);
@@ -277,6 +287,7 @@ const Record: React.FC = () => {
             variants={visibleVariants}
             initial="titleFadeIn"
             animate={visibleAnimation}
+            // animate={isStreaming ? "animateFadeIn" : "animateTitleFadeOut"}
           >
             <h1>
               H-Swing Project
@@ -297,6 +308,7 @@ const Record: React.FC = () => {
               variants={visibleVariants}
               initial="buttonFadeIn"
               animate={visibleAnimation}
+              // animate={isStreaming ? "animateFadeIn" : "animateButtonFadeOut"}
             >
               {buttonText}
             </motion.button>
