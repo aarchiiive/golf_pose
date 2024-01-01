@@ -5,6 +5,7 @@
 *.mp4
 *.jpg
 *.png
+*.pt
 
 # dependencies
 /node_modules
@@ -12,6 +13,21 @@
 .pnp.js
 
 /build
+/server/golf_pose/H-swing/results
+/server/golf_pose/H-swing/datset
+/server/golf_pose/H-swing/golfdb/dataset
+/server/golf_pose/H-swing/golfdb/models
+/server/golf_pose/H-swing/golfdb/results
+/server/golf_pose/H-swing/metric/junyuk
+/server/golf_pose/H-swing/metric/sy
+/server/golf_pose/H-swing/metric/Tigerwoods
+/server/golf_pose/H-swing/metric/Tigerwoods.pickle
+/server/golf_pose/H-swing/metric/junyuk4.pickle
+/server/golf_pose/H-swing/yolov8/Tigerwoods.pickle
+/server/golf_pose/H-swing/yolov8/junyuk4.pickle
+/server/golf_pose/H-swing/yolov8/output
+/server/golf_pose/H-swing/yolov8/dataset
+
 
 # testing
 /coverage
