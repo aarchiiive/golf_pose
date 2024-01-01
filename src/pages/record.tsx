@@ -284,7 +284,7 @@ const Record: React.FC = () => {
           </motion.div>
 
           <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} >
-            {isWebcamLoaded && (
+            {!isWebcamLoaded && (
               <Skeleton width="100%" height="100%" />
             )}
           </video>
