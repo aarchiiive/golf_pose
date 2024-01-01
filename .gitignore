@@ -23,10 +23,10 @@
 /server/golf_pose/H-swing/metric/Tigerwoods
 /server/golf_pose/H-swing/metric/Tigerwoods.pickle
 /server/golf_pose/H-swing/metric/junyuk4.pickle
-/server/golf_pose/H-swing/yolo/Tigerwoods.pickle
-/server/golf_pose/H-swing/yolo/junyuk4.pickle
-/server/golf_pose/H-swing/yolo/output
-/server/golf_pose/H-swing/yolo/dataset
+/server/golf_pose/H-swing/yolov8/Tigerwoods.pickle
+/server/golf_pose/H-swing/yolov8/junyuk4.pickle
+/server/golf_pose/H-swing/yolov8/output
+/server/golf_pose/H-swing/yolov8/dataset
 
 
 # testing
