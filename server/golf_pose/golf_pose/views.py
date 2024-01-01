@@ -15,9 +15,18 @@ from rest_framework.parsers import FileUploadParser
 from django.http import HttpResponse, FileResponse
 from django.core.files.storage import default_storage
 
+from .h_swing import (
+    GolfDB,
+    YOLOModel,
+    MetricAnalysis
+)
+
 logger = logging.getLogger(__name__)
+
 class VideoUploadView(APIView):
     device = 'cpu'
+    metric_path = 'golf_pose/h_swing/metric/pro'
+    
     def post(self, request): # 이메일, 비밀번호, 비디오 파일 
         start_time = time.time()
         video_file = request.FILES.get('video', None)
@@ -28,8 +37,21 @@ class VideoUploadView(APIView):
         file_path = os.path.join('uploads', file_name)
         default_storage.save(file_path, video_file)
         
-        yolo = YOLO('yolov8l.pt')
-        results = yolo.predict(file_path, device=self.device, conf=0.5, stream=True, vid_stride=30, save_frames=True)
+        golfDB = GolfDB(device=self.device)
+        yolo = YOLOModel(device=self.device)
+        metric_analyis = MetricAnalysis(self.metric_path)
+        
+        frames = golfDB(file_path)
+        keypoints, video = yolo(file_path, frames)
+        left_start, right_start = yolo.left_start, yolo.right_start
+        correction = metric_analyis(keypoints, frames, left_start, right_start)
+        
+        
+        # yolo = YOLO('yolov8l.pt')
+        # results = yolo(file_path, stream=True)
+        
+        # for res in results:
+        #     logger.info(res)
 
         logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
         
@@ -41,6 +63,7 @@ class VideoUploadView(APIView):
         # score, message, images
         # return Response({"score": score, "message": "Video uploaded successfully."}, status=status.HTTP_201_CREATED)
         return Response({"message": "Video uploaded successfully.", "file_name": file_name}, status=status.HTTP_201_CREATED)
+    
     
 class VideoToGifAPIView(APIView):
     def post(self, request):

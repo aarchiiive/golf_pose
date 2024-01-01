@@ -1,10 +1,10 @@
-import os.path as osp
+import logging
+
 import cv2
-import pandas as pd
 import numpy as np
+
 import torch
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
+from torch.utils.data import Dataset
 
 class SampleVideo(Dataset):
     def __init__(self, path, input_size=160, transform=None):
@@ -17,9 +17,16 @@ class SampleVideo(Dataset):
 
     def __getitem__(self, idx):
         cap = cv2.VideoCapture(self.path)
-        frame_size = [cap.get(cv2.CAP_PROP_FRAME_HEIGHT), cap.get(cv2.CAP_PROP_FRAME_WIDTH)]
+        
+        if cap.isOpened() == False:
+            logging.error(f"Error opening video stream or file: {self.path}")
+        
+        frame_size = [cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT)]
+        logging.info(f"frame size: {frame_size}")  
+        logging.info(f"frame count: {cap.get(cv2.CAP_PROP_FRAME_COUNT)}")
+        
         ratio = self.input_size / max(frame_size)
-        new_size = tuple([int(x * ratio) for x in frame_size])
+        new_size = (int(frame_size[0] * ratio), int(frame_size[1] * ratio))
         delta_w = self.input_size - new_size[1]
         delta_h = self.input_size - new_size[0]
         top, bottom = delta_h // 2, delta_h - (delta_h // 2)
@@ -29,16 +36,20 @@ class SampleVideo(Dataset):
         images = []
         for pos in range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))):
             _, img = cap.read()
-            resized = cv2.resize(img, (new_size[1], new_size[0]))
+            resized = cv2.resize(img, new_size)
             b_img = cv2.copyMakeBorder(resized, top, bottom, left, right, cv2.BORDER_CONSTANT,
                                        value=[0.406 * 255, 0.456 * 255, 0.485 * 255])  # ImageNet means (BGR)
 
+            logging.info(f"resized.shape: {resized.shape}")
+            logging.info(f"b_img.shape: {b_img.shape}")
             b_img_rgb = cv2.cvtColor(b_img, cv2.COLOR_BGR2RGB)
             images.append(b_img_rgb)
+            
         cap.release()
         labels = np.zeros(len(images)) # only for compatibility with transforms
         sample = {'images': np.asarray(images), 'labels': np.asarray(labels)}
         if self.transform:
+            logging.info(sample['images'].shape)
             sample = self.transform(sample)
         return sample
 
@@ -48,6 +59,9 @@ class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
     def __call__(self, sample):
         images, labels = sample['images'], sample['labels']
+        # logging.info(type(images))
+        # logging.info(images.shape)
+        # logging.info(labels.shape)
         images = images.transpose((0, 3, 1, 2))
         return {'images': torch.from_numpy(images).float().div(255.),
                 'labels': torch.from_numpy(labels).long()}

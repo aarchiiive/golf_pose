@@ -125,13 +125,13 @@ const Home = () => {
         className="box"
         animate={{
           scale: [1, 0.5, 0.4, 0],
-          rotate: [0, 180, 270, 0],
+          rotate: [0, 180, 270, 360],
           borderRadius: ["50%", "20%", "30%", "100%"],
         }}
         transition={{
-          ease: "easeInOut",
-          times: [0, 0.5, 0.75, 1],
-          duration: 2,
+          ease: [0.22, 0.61, 0.36, 1],
+          times: [0, 0.44, 0.8, 1],
+          duration: 2.4,
         }}
         onAnimationComplete={() => { setStartTypeWriting(true) }}
       />

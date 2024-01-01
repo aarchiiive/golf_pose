@@ -2,6 +2,7 @@ import React, {
   useRef,
   useState,
   useEffect,
+  useContext,
   useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -10,10 +11,12 @@ import Skeleton from 'react-loading-skeleton';
 
 import axios from 'axios';
 
+import SwingResultsContext from '../context/swingResultsContext';
 import '../styles/record.css';
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
+  const swingResultsContext = useContext(SwingResultsContext);
 
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -224,20 +227,19 @@ const Record: React.FC = () => {
     if (videoSrc) {
       const blob = await fetch(videoSrc);
       const videoBlob = await blob.blob();
-
       const formData = new FormData();
       formData.append('video', videoBlob, 'video.webm');
 
-      // axios.post('http://127.0.0.1:8000/upload/', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data'
-      //   }
-      // }).then(response => {
-      //   console.log('Upload successful', response.data);
-      //   // metirc score
-      // }).catch(error => {
-      //   console.error('Error uploading video', error);
-      // });
+      axios.post('http://127.0.0.1:8000/upload/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        console.log('Upload successful', response.data);
+        // metirc score
+      }).catch(error => {
+        console.error('Error uploading video', error);
+      });
     }
     
     setPreviewAnimation("animateFadeOut");

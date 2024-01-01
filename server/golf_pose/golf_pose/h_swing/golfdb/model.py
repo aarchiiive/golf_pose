@@ -1,10 +1,14 @@
+import os
+import logging
+
+import math
+
 import torch
 import torch.nn as nn
 from torch.autograd import Variable
-import math
 
 class EventDetector(nn.Module):
-    def __init__(self, pretrain, width_mult, lstm_layers, lstm_hidden, bidirectional=True, dropout=True):
+    def __init__(self, pretrain, width_mult, lstm_layers, lstm_hidden, bidirectional=True, dropout=True, device='cpu'):
         super(EventDetector, self).__init__()
         self.width_mult = width_mult
         self.lstm_layers = lstm_layers
@@ -13,7 +17,9 @@ class EventDetector(nn.Module):
         self.dropout = dropout
 
         net = MobileNetV2(width_mult=width_mult)
-        state_dict_mobilenet = torch.load('mobilenet_v2.pth.tar')
+        # state_dict_mobilenet = torch.load('mobilenet_v2.pth.tar')
+        state_dict_mobilenet = torch.load('golf_pose/h_swing/mobilenet_v2.pth.tar', map_location=torch.device(device))
+        
         if pretrain:
             net.load_state_dict(state_dict_mobilenet)
 

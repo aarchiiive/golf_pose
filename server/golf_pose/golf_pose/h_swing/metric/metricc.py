@@ -1,17 +1,10 @@
-import pickle
-import pandas as pd
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.gridspec as gridspec
-import copy
-import cv2
 import os
-import argparse
-from scipy.stats import linregress
-from collections import defaultdict
+import copy
+import pickle
 
+import cv2
+import numpy as np
+import pandas as pd
 
 #############################################################################################
 def read_pkl(video_name):

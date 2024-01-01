@@ -1,19 +1,12 @@
-import pickle
+import os
+from collections import defaultdict
+
 import pandas as pd
 import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt 
-from mpl_toolkits.mplot3d import Axes3D
-import matplotlib.gridspec as gridspec
-import copy
-import cv2
-import os
-import argparse
-from scipy.stats import linregress
+
 from .metricc import *
-from collections import defaultdict
-import pprint
-import json
+
+
 
 class MetricAnalysis():
     def __init__(self, pro_path):
@@ -33,7 +26,8 @@ class MetricAnalysis():
         self.mode = None
         self.sequence = None
         self.correction = defaultdict(dict)
-        self.pp = pprint.PrettyPrinter(indent=1, width= 160)
+        # self.pp = pprint.PrettyPrinter(indent=1, width= 160)
+        
         for i in range(1,21):
             self.pro_name = 'metric_list' + str(i) + '.pickle'
             self.load_pro()

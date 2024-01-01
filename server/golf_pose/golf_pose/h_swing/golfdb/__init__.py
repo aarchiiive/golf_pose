@@ -1,0 +1,1 @@
+from .golfdb import GolfDB

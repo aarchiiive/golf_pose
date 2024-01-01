@@ -1,26 +1,32 @@
-import argparse
-import cv2
-import torch
-from torch.utils.data import Dataset, DataLoader
-from torchvision import transforms
-from .dataloader import ToTensor, Normalize, SampleVideo
-from .model import EventDetector
-import numpy as np
-import torch.nn.functional as F
 import os
 import time
 
-class GolfDB():
+import cv2
+import torch
+import numpy as np
+
+import torch.nn.functional as F
+from torchvision import transforms
+from torch.utils.data import DataLoader
+from .dataloader import ToTensor, Normalize, SampleVideo
+
+from .model import EventDetector
+
+class GolfDB:
     def __init__(self, device='cuda', mode = None ,seq_length=64):
+        self.device = torch.device(device)    
         self.mode = mode
         self.seq_length = seq_length
-        self.model = EventDetector(pretrain=True,
-                          width_mult=1.,
-                          lstm_layers=1,
-                          lstm_hidden=256,
-                          bidirectional=True,
-                          dropout=False)
-        self.load_weights(self.model, device)
+        self.model = EventDetector(
+            pretrain=True,
+            width_mult=1.,
+            lstm_layers=1,
+            lstm_hidden=256,
+            bidirectional=True,
+            dropout=False,
+            device=device,
+        )
+        self.load_weights(self.model)
         self.confidence = []
         self.batch = 0
         self.event_names = {
@@ -37,10 +43,11 @@ class GolfDB():
     def __call__(self, video_path):
         return self.forward(video_path)
 
-    def load_weights(self, model, device):
-        save_dict = torch.load('swingnet_1800.pth.tar')
+    def load_weights(self, model):
+        # save_dict = torch.load('swingnet_1800.pth.tar')
+        save_dict = torch.load('golf_pose/h_swing/swingnet_1800.pth.tar', map_location=self.device)
         model.load_state_dict(save_dict['model_state_dict'])
-        model.to(device)
+        model.to(self.device)
         model.eval()
 
     def forward(self, video_path):

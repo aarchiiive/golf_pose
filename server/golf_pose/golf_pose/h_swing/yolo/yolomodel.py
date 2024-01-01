@@ -1,13 +1,11 @@
-from typing import Any
-from ultralytics import YOLO
-from PIL import Image
-import imageio
-import numpy as np
 import os
-import pickle
-import cv2
 import copy
 import time
+
+import cv2
+import numpy as np
+
+from ultralytics import YOLO
 
 class YOLOModel():
     def __init__(self, device = 'cuda', mode = None):

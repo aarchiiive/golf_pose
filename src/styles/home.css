@@ -76,9 +76,9 @@
 .box {
   position: absolute;
   z-index: 1;
+  top: calc(50vh - 80vh);
   width: 160vh;
   height: 160vh;
-  margin-top: 20px;
   background-color: black;
 }
 
