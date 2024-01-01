@@ -218,16 +218,16 @@ const Record: React.FC = () => {
       const formData = new FormData();
       formData.append('video', videoBlob, 'video.webm');
 
-      axios.post('http://127.0.0.1:8000/upload/', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(response => {
-        console.log('Upload successful', response.data);
-        // metirc score
-      }).catch(error => {
-        console.error('Error uploading video', error);
-      });
+      // axios.post('http://127.0.0.1:8000/upload/', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data'
+      //   }
+      // }).then(response => {
+      //   console.log('Upload successful', response.data);
+      //   // metirc score
+      // }).catch(error => {
+      //   console.error('Error uploading video', error);
+      // });
     }
     
     setPreviewAnimation("animationFadeOut");
