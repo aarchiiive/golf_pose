@@ -230,7 +230,15 @@ const Record: React.FC = () => {
       const formData = new FormData();
       formData.append('video', videoBlob, 'video.webm');
 
-      axios.post('http://127.0.0.1:8000/upload/', formData, {
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+      console.log(process.env.REACT_APP_API_URL);
+
+      axios.post(`${process.env.REACT_APP_API_URL}/upload`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
