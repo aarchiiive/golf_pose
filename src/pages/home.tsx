@@ -121,24 +121,6 @@ const Home = () => {
         )}
       </AnimatePresence>
 
-      {/* <div className="marquee marquee-top">
-        <div className="marquee-content">
-          {marqueeContent}
-        </div>
-      </div>  */}
-
-      {/* <div className="typewriter" ref={typewriterRef}>
-        <h1>H-Swing Project Arrived in CES 2024</h1>
-      </div>
-
-      <button
-        className='home-start-button'
-        ref={startButtonRef}
-        onClick={handleStartButtonClick}
-      >
-        Start
-      </button> */}
-
       <motion.div
         className="box"
         animate={{
@@ -163,11 +145,6 @@ const Home = () => {
             className="company-logo"
           />
         </a>
-      </div> */}
-      {/* <div className="marquee marquee-bottom">
-        <div className="marquee-content marquee-reverse">
-          {marqueeContent}
-        </div>
       </div> */}
     </div>
   );

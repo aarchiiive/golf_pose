@@ -45,13 +45,13 @@ body {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
 }
 
 video.preview {
-  width: 100%;
+  width: 50vw;
   border-radius: 20px;
 }
 
@@ -89,12 +89,15 @@ button:hover {
   opacity: 0.6;
 }
 
-.header {
+.project-title {
+  margin-bottom: 40px;
+}
+
+.project-title h1 {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 30px;
+  font-size: 5vw;
   font-weight: normal;
   color: rgb(61, 61, 61);
-  margin-bottom: 40px;
 }
 
 .video-container {
@@ -203,14 +206,14 @@ button:hover {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 20px;
+  margin-top: 6vh;
 }
 
 .retry-button {
   width: 140px;
   height: 40px;
   font-size: 16px;
-  margin-right: 10%;
+  margin-right: 6vw;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -227,7 +230,7 @@ button:hover {
   height: 40px;
   /* border-radius: 30px; */
   font-size: 16px;
-  margin-left: 10%;
+  margin-left: 6vw;
   display: flex;
   justify-content: center;
   align-items: center;
