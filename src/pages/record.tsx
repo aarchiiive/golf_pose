@@ -6,6 +6,7 @@ import React, {
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
+import Skeleton from 'react-loading-skeleton';
 
 import axios from 'axios';
 
@@ -282,7 +283,11 @@ const Record: React.FC = () => {
             </h1>
           </motion.div>
 
-          <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
+          <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} >
+            {isWebcamLoaded && (
+              <Skeleton width="100%" height="100%" />
+            )}
+          </video>
 
           {/* Start/Stop button */}
           <div className="button-container">
