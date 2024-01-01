@@ -137,24 +137,29 @@ const Record: React.FC = () => {
     setBackgroundOpacity(1);
   }
 
-  const handleNextButtonClick = () => {
+  const handleNextButtonClick = async () => {
     navigate('/loading');
     // const blob = new Blob(recordedChunk, { type: 'video/webm' });
     // const formData = new FormData();
     // formData.append('video', blob);
+    if (videoSrc) {
+      const blob = await fetch(videoSrc);
+      const videoBlob = await blob.blob();
 
-    // axios.post('http://127.0.0.1:8000/upload/', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data'
-    //   }
-    // })
-    //   .then(response => {
-    //     console.log('Upload successful', response.data);
-    //     // metirc score
-    //   })
-    //   .catch(error => {
-    //     console.error('Error uploading video', error);
-    //   });
+      const formData = new FormData();
+      formData.append('video', videoBlob, 'video.webm');
+
+      axios.post('http://127.0.0.1:8000/upload/', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        console.log('Upload successful', response.data);
+        // metirc score
+      }).catch(error => {
+        console.error('Error uploading video', error);
+      });
+    }
   }
 
   return (
