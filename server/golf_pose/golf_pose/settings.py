@@ -113,7 +113,7 @@ CORS_ALLOW_METHODS = (
 
 CORS_ALLOW_ALL_ORIGINS = True
 
-APPEND_SLASH = False
+# APPEND_SLASH = False
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/
