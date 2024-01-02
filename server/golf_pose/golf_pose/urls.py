@@ -18,11 +18,11 @@ from django.urls import path
 
 from .views import (
     VideoUploadView,
-    VideoToGifAPIView,
+    # VideoToGifAPIView,
 )
 
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('upload/', VideoUploadView.as_view(), name='upload'),
-    path('video-to-gif/', VideoToGifAPIView.as_view(), name='video-to-gif'),
+    # path('video-to-gif/', VideoToGifAPIView.as_view(), name='video-to-gif'),
 ]
