@@ -15,6 +15,7 @@ class EventDetector(nn.Module):
         self.lstm_hidden = lstm_hidden
         self.bidirectional = bidirectional
         self.dropout = dropout
+        self.device = torch.device(device)
 
         net = MobileNetV2(width_mult=width_mult)
         # state_dict_mobilenet = torch.load('mobilenet_v2.pth.tar')
@@ -36,11 +37,11 @@ class EventDetector(nn.Module):
 
     def init_hidden(self, batch_size):
         if self.bidirectional:
-            return (Variable(torch.zeros(2*self.lstm_layers, batch_size, self.lstm_hidden).cuda(), requires_grad=True),
-                    Variable(torch.zeros(2*self.lstm_layers, batch_size, self.lstm_hidden).cuda(), requires_grad=True))
+            return (Variable(torch.zeros(2*self.lstm_layers, batch_size, self.lstm_hidden).to(self.device), requires_grad=True),
+                    Variable(torch.zeros(2*self.lstm_layers, batch_size, self.lstm_hidden).to(self.device), requires_grad=True))
         else:
-            return (Variable(torch.zeros(self.lstm_layers, batch_size, self.lstm_hidden).cuda(), requires_grad=True),
-                    Variable(torch.zeros(self.lstm_layers, batch_size, self.lstm_hidden).cuda(), requires_grad=True))
+            return (Variable(torch.zeros(self.lstm_layers, batch_size, self.lstm_hidden).to(self.device), requires_grad=True),
+                    Variable(torch.zeros(self.lstm_layers, batch_size, self.lstm_hidden).to(self.device), requires_grad=True))
 
     def forward(self, x, lengths=None):
         batch_size, timesteps, C, H, W = x.size()
