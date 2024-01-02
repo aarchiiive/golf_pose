@@ -59,7 +59,7 @@ class GolfDB:
         self.dataset = SampleVideo(video_path, transform=transforms.Compose([ToTensor(),
                                         Normalize([0.485, 0.456, 0.406],
                                         [0.229, 0.224, 0.225])]))
-        self.dataloader = dl = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
+        self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
         self.cap = cv2.VideoCapture(video_path)
         probs = self.cal_probability()
         events = self.cal_confidence(probs)
@@ -81,7 +81,7 @@ class GolfDB:
                     image_batch = images[:, self.batch * self.seq_length:, :, :, :]
                 else:
                     image_batch = images[:, self.batch * self.seq_length:(self.batch + 1) * self.seq_length, :, :, :]
-                logits = self.model(image_batch.cuda())
+                logits = self.model(image_batch.to(self.device))
                 if self.batch == 0:
                     probs = F.softmax(logits.data, dim=1).cpu().numpy()
                 else:
