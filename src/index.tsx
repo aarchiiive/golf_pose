@@ -5,6 +5,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/home';
 import Record from './pages/record';
 import Loading from './pages/loading';
+import Results from './pages/results';
 
 ReactDOM.render(
   <Router basename={process.env.PUBLIC_URL}>
@@ -12,6 +13,7 @@ ReactDOM.render(
       <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
       <Route path={`${process.env.PUBLIC_URL}/record`} element={<Record />} />
       <Route path={`${process.env.PUBLIC_URL}/loading`} element={<Loading />} />
+      <Route path={`${process.env.PUBLIC_URL}/results`} element={<Results />} />
     </Routes>
   </Router>,
   document.getElementById('root')
