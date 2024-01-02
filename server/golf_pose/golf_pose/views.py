@@ -23,7 +23,6 @@ from .h_swing import (
 
 logger = logging.getLogger(__name__)
 
-
 class VideoUploadView(APIView):
     device = 'cpu'
     metric_path = 'golf_pose/h_swing/metric/pro'
@@ -42,16 +41,22 @@ class VideoUploadView(APIView):
         
         self.convert_video(file_path, converted_file_path)
         
-        golfDB = GolfDB(device=self.device)
-        yolo = YOLOModel(device=self.device)
-        metric_analyis = MetricAnalysis(self.metric_path)
-        
-        frames = golfDB(converted_file_path)
-        keypoints, video = yolo(converted_file_path, frames)
-        left_start, right_start = yolo.left_start, yolo.right_start
-        correction = metric_analyis(keypoints, frames, left_start, right_start)
-
-        logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
+        try:
+            golfDB = GolfDB(device=self.device)
+            yolo = YOLOModel(device=self.device)
+            metric_analyis = MetricAnalysis(self.metric_path)
+            
+            frames = golfDB(converted_file_path)
+            keypoints, video = yolo(converted_file_path, frames)
+            left_start, right_start = yolo.left_start, yolo.right_start
+            correction = metric_analyis(keypoints, frames, left_start, right_start)
+        except Exception as e:
+            logger.error(f"Error occurred during inference: {e}")
+            return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        finally:
+            os.remove(file_path)
+            os.remove(converted_file_path)
+            logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
         
         # score, message, images
         # return Response({"score": score, "message": "Video uploaded successfully."}, status=status.HTTP_201_CREATED)
