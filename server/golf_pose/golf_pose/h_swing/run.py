@@ -1,7 +1,7 @@
 import time
 
 from golfdb.golfdb import GolfDB
-from yolo.yolomodel import YOLOModel
+from server.golf_pose.golf_pose.h_swing.yolo.yolo_model import YOLOModel
 from metric.metric_analysis import MetricAnalysis
 
 golfdb = GolfDB()
