@@ -32,6 +32,8 @@ class SampleVideo(Dataset):
 
         # preprocess and return frames
         images = []
+        
+        logging.info(f"Total frames: {int(cap.get(cv2.CAP_PROP_FRAME_COUNT))}")
         for pos in range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))):
             _, img = cap.read()
             resized = cv2.resize(img, new_size)
