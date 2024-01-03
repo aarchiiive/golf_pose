@@ -144,6 +144,12 @@ const Record: React.FC = () => {
     // Function to start video stream
     const startVideoStream = async () => {
       try {
+        const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
+
+        const constraints = {
+          video: isMobile ? { facingMode: "environment" } : true
+        };
+
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
@@ -222,7 +228,7 @@ const Record: React.FC = () => {
       setVisibleAnimation("animateFadeIn");
     }, 800);
   }
-
+  // gunicorn --bind 0.0.0.0:8000 --timeout 86400 golf_pose.wsgi:application
   const handleNextButtonClick = async () => {
     if (videoSrc) {
       const blob = await fetch(videoSrc);
