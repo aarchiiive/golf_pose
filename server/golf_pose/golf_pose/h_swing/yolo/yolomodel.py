@@ -1,6 +1,7 @@
 import os
 import copy
 import time
+import logging
 
 import cv2
 import numpy as np
@@ -49,8 +50,12 @@ class YOLOModel:
         self.event_dict = self._make_event_dict() 
         # self._save_video()
         for frame, image in enumerate(self.image_frames):
+            logging.info(f"Frame : {frame}/{self.frame_count}")
+            logging.info(f"Frame count : {self.frame_count}")
             image = cv2.resize(image,(860,480))
-            self.results = self.model(image, stream = True, max_det = 1, device = self.device)
+            
+            self.results = self.model(image, stream=True, max_det=1, device=self.device)
+            
             for _ , r in enumerate(self.results):
                 keypoint = self._save_kpts(r)
                 if (keypoint[16][0] - keypoint[10][0]) > 0 :
@@ -58,6 +63,7 @@ class YOLOModel:
                 self._get_lines(frame, keypoint)
                 self._save_keypoints(image, keypoint, frame)
         # self.video_writer.release()
+        
         if self.not_sorted == 1:
             self.make_sorted_events()
             self.event_dict = self.new_event
