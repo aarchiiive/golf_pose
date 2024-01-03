@@ -48,12 +48,8 @@ class GolfDB:
         return self.forward(video_path)
 
     def load_weights(self):
-<<<<<<< HEAD
-        save_dict = torch.load('weight/swingnet_1800.pth.tar', map_location=self.device)
-=======
         # save_dict = torch.load('swingnet_1800.pth.tar')
         save_dict = torch.load('golf_pose/h_swing/swingnet_1800.pth.tar', map_location=self.device)
->>>>>>> 9199fd53a58f9e100acc0fa32e22f9c76e609c45
         self.model.load_state_dict(save_dict['model_state_dict'])
         self.model.to(self.device)
         self.model.eval()
