@@ -69,27 +69,10 @@ class VideoUploadView(APIView):
             os.remove(converted_file_path)
             logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
             
-        # try:
-        #     golfDB = GolfDB(device=self.device)
-        #     yolo = YOLOModel(device=self.device)
-        #     metric_analyis = MetricAnalysis(self.metric_path)
-            
-        #     frames = golfDB(converted_file_path)
-        #     keypoints, video = yolo(converted_file_path, frames)
-        #     left_start, right_start = yolo.left_start, yolo.right_start
-        #     correction = metric_analyis(keypoints, frames, left_start, right_start)
-        # except Exception as e:
-        #     logger.error(f"Error occurred during inference: {e}")
-        #     return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-        # finally:
-        #     os.remove(converted_file_path)
-        #     logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
-            
-        os.remove(converted_file_path)
         logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
+        logger.info(f"Correction: {correction}")
         
-        # score, message, images
-        # return Response({"score": score, "message": "Video uploaded successfully."}, status=status.HTTP_201_CREATED)
+        
         return Response({"message": "Video uploaded successfully.", "file_name": file_name}, status=status.HTTP_201_CREATED)
     
     def convert_video(self, input_path, output_path):
@@ -108,4 +91,6 @@ class VideoUploadView(APIView):
         except subprocess.CalledProcessError as e:
             print(f"An error occurred during video conversion: {e.stderr}")
             raise e
+        finally:
+            os.remove(input_path)
     
