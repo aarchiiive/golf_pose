@@ -10,7 +10,7 @@ from ultralytics import YOLO
 
 class YOLOModel:
     def __init__(self, device = 'cuda', mode = None):
-        self.model = YOLO('weight/yolov8l-pose.pt')  
+        self.model = YOLO('weight/yolov8n-pose.pt')  
         self.device = device
         self.mode = mode
         self.event = None
