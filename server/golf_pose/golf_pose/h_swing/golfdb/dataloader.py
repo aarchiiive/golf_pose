@@ -48,7 +48,6 @@ class SampleVideo(Dataset):
         return sample
 
 
-
 class ToTensor(object):
     """Convert ndarrays in sample to Tensors."""
     def __call__(self, sample):

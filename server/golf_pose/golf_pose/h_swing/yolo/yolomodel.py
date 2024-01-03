@@ -10,7 +10,7 @@ from ultralytics import YOLO
 
 class YOLOModel:
     def __init__(self, device = 'cuda', mode = None):
-        self.model = YOLO('weight/yolov8n-pose.pt')  
+        self.model = YOLO('weight/yolov8m-pose.pt')  
         self.device = device
         self.mode = mode
         self.event = None
@@ -50,7 +50,7 @@ class YOLOModel:
         self.event_dict = self._make_event_dict() 
         # self._save_video()
         for frame, image in enumerate(self.image_frames):
-            logging.info(f"Frame : {frame}/{self.frame_count}")
+            logging.info(f"Frame : {frame+1}/{self.frame_count}")
             logging.info(f"Frame count : {self.frame_count}")
             image = cv2.resize(image,(860,480))
             
