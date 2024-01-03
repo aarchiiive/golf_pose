@@ -45,8 +45,11 @@ class VideoUploadView(APIView):
         yolo = YOLOModel(device=self.device)
         metric_analyis = MetricAnalysis(self.metric_path)
         
-        frames = golfDB(converted_file_path)
-        keypoints, video = yolo(converted_file_path, frames)
+        frames, not_sorted = golfDB(converted_file_path)
+        if not_sorted == 0:
+            keypoints, video = yolo(converted_file_path, frames, not_sorted)
+        elif not_sorted == 1:
+            keypoints, video, frames = yolo(converted_file_path, frames, not_sorted)
         left_start, right_start = yolo.left_start, yolo.right_start
         correction = metric_analyis(keypoints, frames, left_start, right_start)
             
