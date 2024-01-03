@@ -26,7 +26,7 @@ class GolfDB:
             dropout=False,
             device=device,
         )
-        self.load_weights(self.model)
+        self.load_weights()
         self.confidence = []
         self.batch = 0
         self.event_names = {
@@ -43,12 +43,12 @@ class GolfDB:
     def __call__(self, video_path):
         return self.forward(video_path)
 
-    def load_weights(self, model):
+    def load_weights(self):
         # save_dict = torch.load('swingnet_1800.pth.tar')
         save_dict = torch.load('golf_pose/h_swing/swingnet_1800.pth.tar', map_location=self.device)
-        model.load_state_dict(save_dict['model_state_dict'])
-        model.to(self.device)
-        model.eval()
+        self.model.load_state_dict(save_dict['model_state_dict'])
+        self.model.to(self.device)
+        self.model.eval()
 
     def forward(self, video_path):
         self.video_path = video_path
