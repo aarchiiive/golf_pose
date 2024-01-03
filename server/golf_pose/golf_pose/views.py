@@ -54,7 +54,6 @@ class VideoUploadView(APIView):
             logger.error(f"Error occurred during inference: {e}")
             return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         finally:
-            os.remove(file_path)
             os.remove(converted_file_path)
             logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
         
