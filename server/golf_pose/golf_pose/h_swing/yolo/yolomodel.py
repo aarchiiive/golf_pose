@@ -7,6 +7,7 @@ import cv2
 import numpy as np
 
 from ultralytics import YOLO
+from PIL import Image
 
 class YOLOModel:
     def __init__(self, device = 'cuda', mode = None):
@@ -36,15 +37,14 @@ class YOLOModel:
         self.colors = [(255, 204, 102), (153, 102, 204), (102, 204, 102)]
         self.thickness = 3
 
-    def __call__(self, video_path, event, not_sorted):
-        return self.forward(video_path, event, not_sorted)
+    def __call__(self, video_path, event):
+        return self.forward(video_path, event)
     
-    def forward(self, video_path, event, not_sorted):
-        # try: 
-        #     self.video_name = video_path.split('.')[0].split('/')[-1]
-        # except:
-        #     self.video_name = video_path.split('.')[-1]
-        self.not_sorted = not_sorted
+    def forward(self, video_path, event):
+        try: 
+            self.video_name = video_path.split('.')[0].split('/')[-1]
+        except:
+            self.video_name = video_path.split('.')[-1]
         self.image_frames = self._get_images_from_video(video_path)
         self.event = event
         self.event_dict = self._make_event_dict() 
@@ -52,25 +52,23 @@ class YOLOModel:
         for frame, image in enumerate(self.image_frames):
             logging.info(f"Frame : {frame+1}/{self.frame_count}")
             logging.info(f"Frame count : {self.frame_count}")
-            image = cv2.resize(image,(860,480))
-            
+            image = cv2.resize(image,(480,860))
             self.results = self.model(image, half=True, stream=True, max_det=1, device=self.device)
-            
             for _ , r in enumerate(self.results):
-                keypoint = self._save_kpts(r)
-                if (keypoint[16][0] - keypoint[10][0]) > 0 :
-                    self.left_frame.append(frame)
-                self._get_lines(frame, keypoint)
-                self._save_keypoints(image, keypoint, frame)
-        # self.video_writer.release()
-        
-        if self.not_sorted == 1:
-            self.make_sorted_events()
-            self.event_dict = self.new_event
-            return self.keypoints, self.video, self.event_dict
-        elif self.not_sorted == 0:
-            return self.keypoints, self.video
-    
+                im_array = r.plot()  # plot a BGR numpy array of predictions
+                im = Image.fromarray(im_array[..., ::-1])  # RGB PIL image
+                im.show()  # show image
+                im.save(frame + '.jpg')
+        #         keypoint = self._save_kpts(r)
+        #         if (keypoint[16][0] - keypoint[10][0]) > 0 :
+        #             self.left_frame.append(frame)
+        #         self._get_lines(frame, keypoint)
+        #         self._save_keypoints(image, keypoint, frame)
+        # # self.video_writer.release()
+        # self.make_sorted_events()
+        # self.event_dict = self.new_event
+        # return self.keypoints, self.video, self.event_dict
+
     def make_sorted_events(self):
         for frame, keypoint in enumerate(self.keypoints):
             wrist_keypoint = keypoint[10]
@@ -81,6 +79,7 @@ class YOLOModel:
             max_right = (np.array(self.keypoints)[:,10,0]).max()
             x_dif = before_keypoint[0] - wrist_keypoint[0]
             y_dif = before_keypoint[1] - wrist_keypoint[1]
+            
             if x_dif >= 8 and len(self.new_event) == 0 and frame != 0:
                 self.new_event[0] = frame - 1
             else: self.new_event[0] = 10
@@ -92,7 +91,7 @@ class YOLOModel:
                 self.new_event[5] = frame + 1
             if abs(max_right - wrist_keypoint[0]) < 1 and len(self.new_event) == 4:
                 self.new_event[6] = frame
-       
+            
         self.new_event[1] = self.new_event[0] + (self.new_event[2] - self.new_event[0]) // 2
         self.new_event[4] = self.new_event[5] - 3
         self.new_event[7] = self.new_event[6] + 5
@@ -112,20 +111,16 @@ class YOLOModel:
         return self.image_frames
 
     def _get_lines(self, frame, keypoint):
-        if self.not_sorted == 0 :
-            if frame == 0:
-                self.left_start = list(map(int, keypoint[16]))
-                self.right_start = list(map(int, keypoint[15]))
-                self.radius = int((keypoint[1][0] - keypoint[2][0]) * 1.5)
-            elif frame == self.event_dict[0]:
-                self.left_start = list(map(int, keypoint[16]))
-                self.right_start = list(map(int, keypoint[15]))
-                self.radius = int((keypoint[1][0] - keypoint[2][0]) * 1.5)
-        elif self.not_sorted == 1 :
-            if frame == 0 :
-                self.left_start = list(map(int, keypoint[16]))
-                self.right_start = list(map(int, keypoint[15]))
-                self.radius = int((keypoint[1][0] - keypoint[2][0]) * 1.5)
+
+        if frame == 0:
+            self.left_start = list(map(int, keypoint[16]))
+            self.right_start = list(map(int, keypoint[15]))
+            self.radius = int((keypoint[1][0] - keypoint[2][0]) * 1.5)
+        elif frame == self.event_dict[0]:
+            self.left_start = list(map(int, keypoint[16]))
+            self.right_start = list(map(int, keypoint[15]))
+            self.radius = int((keypoint[1][0] - keypoint[2][0]) * 1.5)
+
 
     def _draw_kpts(self, keypoint, img):
         for j,c in enumerate(self.connections):
@@ -157,7 +152,7 @@ class YOLOModel:
         if isinstance(self.mode, str) == True:
             self._save_images(img, frame)
 
-    def _save_images(self,image, index):
+    def _save_images(self, image, index):
         save_path = os.path.join('results',self.video_name)
         os.makedirs(save_path, exist_ok=True)
         cv2.imwrite(os.path.join(save_path ,  str(index) + '.png'), image)
