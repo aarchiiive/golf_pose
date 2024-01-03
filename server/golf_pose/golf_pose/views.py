@@ -24,7 +24,7 @@ from .h_swing import (
 logger = logging.getLogger(__name__)
 
 class VideoUploadView(APIView):
-    device = 'cpu'
+    device = 'cuda:0'
     metric_path = 'golf_pose/h_swing/metric/pro'
     
     def post(self, request):
