@@ -80,6 +80,7 @@ class VideoUploadView(APIView):
         command = [
             'ffmpeg',
             '-i', input_path,
+            '-r', '30',
             '-c:v', 'libx264',
             '-preset', 'fast',
             '-crf', '22',
