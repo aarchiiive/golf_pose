@@ -87,7 +87,6 @@ class VideoUploadView(APIView):
         ]
         try:
             result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            os.remove(input_path)
             return result
         except subprocess.CalledProcessError as e:
             print(f"An error occurred during video conversion: {e.stderr}")
