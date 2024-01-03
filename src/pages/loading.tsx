@@ -7,19 +7,14 @@ import { Bars } from 'react-loader-spinner';
 import '../styles/loading.css';
 
 const Loading = () => {
+  const navigate = useNavigate();
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
-  // useEffect(() => {
-  //   const fetchData = async () => {
-  //     await new Promise((resolve) => setTimeout(resolve, 3000)); // 3초간 로딩을 시뮬레이션
-  //     // 로딩이 완료되면 다른 페이지로 이동하도록 구현할 수 있습니다.
-  //     window.location.href = '/other-page'; // 다른 페이지로 이동
-  //   };
-
-  //   fetchData();
-  // }, []);
 
   useEffect(() => {
-    // setVisibleAnimation("animateFadeOut");
+    setTimeout(() => {
+      setVisibleAnimation("animateFadeOut");
+    }, 2000);
+    navigate('/results');
   }, []);
 
   const visibleVariants = {
