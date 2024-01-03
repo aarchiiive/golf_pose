@@ -7,7 +7,7 @@ import numpy as np
 
 from ultralytics import YOLO
 
-class YOLOModel():
+class YOLOModel:
     def __init__(self, device = 'cuda', mode = None):
         self.model = YOLO('weight/yolov8l-pose.pt')  
         self.device = device
@@ -39,15 +39,15 @@ class YOLOModel():
         return self.forward(video_path, event, not_sorted)
     
     def forward(self, video_path, event, not_sorted):
-        try: 
-            self.video_name = video_path.split('.')[0].split('/')[-1]
-        except:
-            self.video_name = video_path.split('.')[-1]
+        # try: 
+        #     self.video_name = video_path.split('.')[0].split('/')[-1]
+        # except:
+        #     self.video_name = video_path.split('.')[-1]
         self.not_sorted = not_sorted
         self.image_frames = self._get_images_from_video(video_path)
         self.event = event
         self.event_dict = self._make_event_dict() 
-        self._save_video()
+        # self._save_video()
         for frame, image in enumerate(self.image_frames):
             image = cv2.resize(image,(860,480))
             self.results = self.model(image, stream = True, max_det = 1, device = self.device)
@@ -57,8 +57,8 @@ class YOLOModel():
                     self.left_frame.append(frame)
                 self._get_lines(frame, keypoint)
                 self._save_keypoints(image, keypoint, frame)
-        self.video_writer.release()
-        if self.not_sorted == 1 :
+        # self.video_writer.release()
+        if self.not_sorted == 1:
             self.make_sorted_events()
             self.event_dict = self.new_event
             return self.keypoints, self.video, self.event_dict
@@ -147,7 +147,7 @@ class YOLOModel():
     def _save_keypoints(self, image, keypoint, frame):
         img = self._draw_kpts(keypoint, copy.deepcopy(image))
         self.video.append(img)
-        self.video_writer.write(img)
+        # self.video_writer.write(img)
         if isinstance(self.mode, str) == True:
             self._save_images(img, frame)
 
