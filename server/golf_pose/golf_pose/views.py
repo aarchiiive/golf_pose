@@ -36,6 +36,10 @@ class VideoUploadView(APIView):
     device = 'cuda:0'
     metric_path = 'golf_pose/h_swing/metric/pro'
     
+    golfdb = GolfDB(device=device)
+    yolo = YOLOModel(device=device)
+    metric_analyis = MetricAnalysis(metric_path)
+    
     def post(self, request):
         start_time = time.time()
         video_file = request.FILES.get('video', None)
@@ -51,17 +55,14 @@ class VideoUploadView(APIView):
         self.convert_video(file_path, converted_file_path)
         
         try:
-            golfDB = GolfDB(device=self.device)
-            yolo = YOLOModel(device=self.device)
-            metric_analyis = MetricAnalysis(self.metric_path)
-            
-            frames, not_sorted = golfDB(converted_file_path)
+            frames, not_sorted = self.golfdb(converted_file_path)
             if not_sorted == 0:
-                keypoints, video = yolo(converted_file_path, frames, not_sorted)
+                keypoints, video = self.yolo(converted_file_path, frames, not_sorted)
             elif not_sorted == 1:
-                keypoints, video, frames = yolo(converted_file_path, frames, not_sorted)
-            left_start, right_start = yolo.left_start, yolo.right_start
-            correction = metric_analyis(keypoints, frames, left_start, right_start)
+                keypoints, video, frames = self.yolo(converted_file_path, frames, not_sorted)
+            left_start, right_start = self.yolo.left_start, self.yolo.right_start
+            correction = self.metric_analyis(keypoints, frames, left_start, right_start)
+            
         except Exception as e:
             logger.error(f"Error occurred during inference: {e}")
             return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
