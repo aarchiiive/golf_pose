@@ -53,7 +53,6 @@ class VideoUploadView(APIView):
         converted_file_path = os.path.join('uploads', f"{uuid.uuid4()}_converted.mp4")
         
         self.convert_video(file_path, converted_file_path)
-        
         try:
             frames, not_sorted = self.golfdb(converted_file_path)
             if not_sorted == 0:
@@ -67,12 +66,11 @@ class VideoUploadView(APIView):
             logger.error(f"Error occurred during inference: {e}")
             return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         finally:
-            os.remove(converted_file_path)
+            # os.remove(converted_file_path)
             logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
             
         logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
         logger.info(f"Correction: {correction}")
-        
         
         return Response({"message": "Video uploaded successfully.", "file_name": file_name}, status=status.HTTP_201_CREATED)
     
@@ -93,5 +91,5 @@ class VideoUploadView(APIView):
             print(f"An error occurred during video conversion: {e.stderr}")
             raise e
         finally:
-            os.remove(input_path)
-    
+            pass
+            # os.remove(input_path)
