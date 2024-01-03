@@ -41,17 +41,24 @@ class VideoUploadView(APIView):
         
         self.convert_video(file_path, converted_file_path)
         
-        golfDB = GolfDB(device=self.device)
-        yolo = YOLOModel(device=self.device)
-        metric_analyis = MetricAnalysis(self.metric_path)
-        
-        frames, not_sorted = golfDB(converted_file_path)
-        if not_sorted == 0:
-            keypoints, video = yolo(converted_file_path, frames, not_sorted)
-        elif not_sorted == 1:
-            keypoints, video, frames = yolo(converted_file_path, frames, not_sorted)
-        left_start, right_start = yolo.left_start, yolo.right_start
-        correction = metric_analyis(keypoints, frames, left_start, right_start)
+        try:
+            golfDB = GolfDB(device=self.device)
+            yolo = YOLOModel(device=self.device)
+            metric_analyis = MetricAnalysis(self.metric_path)
+            
+            frames, not_sorted = golfDB(converted_file_path)
+            if not_sorted == 0:
+                keypoints, video = yolo(converted_file_path, frames, not_sorted)
+            elif not_sorted == 1:
+                keypoints, video, frames = yolo(converted_file_path, frames, not_sorted)
+            left_start, right_start = yolo.left_start, yolo.right_start
+            correction = metric_analyis(keypoints, frames, left_start, right_start)
+        except Exception as e:
+            logger.error(f"Error occurred during inference: {e}")
+            return Response({"message": "Error occurred during inference."}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+        finally:
+            os.remove(converted_file_path)
+            logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
             
         # try:
         #     golfDB = GolfDB(device=self.device)
