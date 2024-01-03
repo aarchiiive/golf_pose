@@ -33,6 +33,7 @@ class GolfDB:
         self.events = None
         self.cap = None
         self.not_sorted = 0
+        self.sorted_events = None
         self.event_names = {
             0: '0',
             1: '1',
@@ -68,13 +69,16 @@ class GolfDB:
         self.cal_confidence()
         if isinstance(self.mode, str) == True:
             self.save_images()
-        if not self.is_sorted(self.events):
-            self.not_sorted = 1
-        return self.events, self.not_sorted
+        if not self.is_sorted():
+            return self.sorted_events
+        else:
+            return self.events
     
-    def is_sorted(self, list):
-        sorted_list = sorted(list)
-        return (sorted_list == list).all()
+    def is_sorted(self):
+        print(self.events)
+        self.sorted_events = sorted(self.events)
+        print(self.sorted_events)
+        return (self.sorted_events == self.events).all()
 
     def cal_confidence(self): 
         self.events = np.argmax(self.probs, axis=0)[:-1]
