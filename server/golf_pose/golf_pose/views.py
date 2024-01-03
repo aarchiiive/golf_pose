@@ -23,6 +23,15 @@ from .h_swing import (
 
 logger = logging.getLogger(__name__)
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+
+class RootView(APIView):
+    def get(self, request, format=None):
+        content = {'message': 'Welcome to the Golf Pose application!'}
+        return Response(content)
+
+
 class VideoUploadView(APIView):
     device = 'cuda:0'
     metric_path = 'golf_pose/h_swing/metric/pro'

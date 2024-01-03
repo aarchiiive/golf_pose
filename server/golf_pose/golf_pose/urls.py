@@ -17,11 +17,13 @@ from django.contrib import admin
 from django.urls import path
 
 from .views import (
+    RootView,
     VideoUploadView,
     # VideoToGifAPIView,
 )
 
 urlpatterns = [
+    path("", RootView.as_view(), name="root"),
     path("admin/", admin.site.urls),
     path('upload/', VideoUploadView.as_view(), name='upload'),
     # path('video-to-gif/', VideoToGifAPIView.as_view(), name='video-to-gif'),
