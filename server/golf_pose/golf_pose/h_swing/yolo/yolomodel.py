@@ -54,7 +54,7 @@ class YOLOModel:
             logging.info(f"Frame count : {self.frame_count}")
             image = cv2.resize(image,(860,480))
             
-            self.results = self.model(image, stream=True, max_det=1, device=self.device)
+            self.results = self.model(image, half=True, stream=True, max_det=1, device=self.device)
             
             for _ , r in enumerate(self.results):
                 keypoint = self._save_kpts(r)
