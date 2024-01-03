@@ -104,8 +104,11 @@ class MetricAnalysis():
                     self.score = int((1 - ((self.pro-self.usr)/30))*100)
                 except:
                     self.score = 0
+                if self.score < 0:
+                    self.score = 0
             else: 
                 self.score = 100
+
         elif index in [16, 19]:
             self.pro = int(self.pro_list[index])
             self.usr = int(self.usr_list[index])
@@ -116,23 +119,30 @@ class MetricAnalysis():
                     self.score = int((1 - (self.usr-self.pro)/30)*100)
                 except:
                     self.score = 0
+                if self.score < 0:
+                    self.score = 0
+
         else:
             self.pro = round(self.pro_list[index],1)
             self.usr = round(self.usr_list[index],1)
             self.angle = self.usr - self.pro
             if self.angle > 0 :
                 try:
-                    self.score = int((1-(self.angle/180))*100) if index in [0, 3, 6, 9] else int((1-(self.angle/45))*100)
+                    self.score = int((1-(self.angle/120))*90) if index in [0, 3, 4, 6, 7, 9, 10] else int((1-(self.angle/30))*100)
                 except:
+                    self.score = 0
+                if self.score < 0:
                     self.score = 0
                 self.mode = 'higher'
             elif self.angle < 0 :
                 self.angle = self.angle * -1
                 try:
-                    self.score = int((1-(self.angle/180))*100) if index in [0, 3, 6, 9] else int((1-(self.angle/45))*100)
+                    self.score = int((1-(self.angle/120))*90) if index in [0, 3, 4, 6, 7, 9, 10] else int((1-(self.angle/30))*100)
                 except:
                     self.score = 0
                 self.mode = 'lower'
+                if self.score < 0:
+                    self.score = 0
             else:
                 self.mode = 'perfect'
 
@@ -183,22 +193,22 @@ class MetricAnalysis():
         elif index in [1, 4, 7, 10, 13]:
             if self.mode == 'higher':
                 if self.score >= 90:
-                    self.correction[self.sequence]['messages'].append("During {}, position of your right shoulder is perfect.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, position of your right arm is perfect.".format(self.sequence))
                 elif  50 < self.score < 90:
-                    self.correction[self.sequence]['messages'].append("During {}, lower your right shoulder more.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, lower your right arm more.".format(self.sequence))
                 else:
-                    self.correction[self.sequence]['messages'].append("During {}, lower your right shoulder much more.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, lower your right arm much more.".format(self.sequence))
                 self.correction[self.sequence]['scores'].append(self.score)
             elif self.mode == 'lower':
                 if self.score >= 90:
-                    self.correction[self.sequence]['messages'].append("During {}, position of your right shoulder is perfect.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, position of your right arm is perfect.".format(self.sequence))
                 elif  50 < self.score < 90:
-                    self.correction[self.sequence]['messages'].append("During {}, lift your right shoulder more.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, lift your right arm more.".format(self.sequence))
                 else:
-                    self.correction[self.sequence]['messages'].append("During {}, lift your right shoulder much more.".format(self.sequence))
+                    self.correction[self.sequence]['messages'].append("During {}, lift your right arm much more.".format(self.sequence))
                 self.correction[self.sequence]['scores'].append(self.score)
             else:
-                self.correction[self.sequence]['messages'].append("During {}, position of your right shoulder is perfect.".format(self.sequence))
+                self.correction[self.sequence]['messages'].append("During {}, position of your right arm is perfect.".format(self.sequence))
                 self.correction[self.sequence]['scores'].append(self.score)
         
         elif index in [2, 5, 8, 11, 14]:

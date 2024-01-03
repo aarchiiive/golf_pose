@@ -13,7 +13,7 @@ from .dataloader import ToTensor, Normalize, SampleVideo
 from .model import EventDetector
 
 class GolfDB:
-    def __init__(self, device='cuda', mode = None ,seq_length=64):
+    def __init__(self, device='cuda', mode = None ,seq_length=32):
         self.device = torch.device(device)    
         self.mode = mode
         self.seq_length = seq_length
@@ -26,29 +26,32 @@ class GolfDB:
             dropout=False,
             device=device,
         )
-        self.load_weights(self.model)
+        self.load_weights()
         self.confidence = []
         self.batch = 0
+        self.probs = None
+        self.events = None
+        self.cap = None
+        self.not_sorted = 0
         self.event_names = {
-            0: 'Address',
-            1: 'Toe-up',
-            2: 'Mid-backswing (arm parallel)',
-            3: 'Top',
-            4: 'Mid-downswing (arm parallel)',
-            5: 'Impact',
-            6: 'Mid-follow-through (shaft parallel)',
-            7: 'Finish'
+            0: '0',
+            1: '1',
+            2: '2',
+            3: '3',
+            4: '4',
+            5: '5',
+            6: '6',
+            7: '7'
         }
 
     def __call__(self, video_path):
         return self.forward(video_path)
 
-    def load_weights(self, model):
-        # save_dict = torch.load('swingnet_1800.pth.tar')
-        save_dict = torch.load('golf_pose/h_swing/swingnet_1800.pth.tar', map_location=self.device)
-        model.load_state_dict(save_dict['model_state_dict'])
-        model.to(self.device)
-        model.eval()
+    def load_weights(self):
+        save_dict = torch.load('weight/swingnet_1800.pth.tar', map_location=self.device)
+        self.model.load_state_dict(save_dict['model_state_dict'])
+        self.model.to(self.device)
+        self.model.eval()
 
     def forward(self, video_path):
         self.video_path = video_path
@@ -61,17 +64,22 @@ class GolfDB:
                                         [0.229, 0.224, 0.225])]))
         self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
         self.cap = cv2.VideoCapture(video_path)
-        probs = self.cal_probability()
-        events = self.cal_confidence(probs)
+        self.cal_probability()
+        self.cal_confidence()
         if isinstance(self.mode, str) == True:
-            self.save_images(events)
-        return events
+            self.save_images()
+        if not self.is_sorted(self.events):
+            self.not_sorted = 1
+        return self.events, self.not_sorted
     
-    def cal_confidence(self, probs): 
-        events = np.argmax(probs, axis=0)[:-1]
-        for i, e in enumerate(events):
-            self.confidence.append(probs[e, i])
-        return events
+    def is_sorted(self, list):
+        sorted_list = sorted(list)
+        return (sorted_list == list).all()
+
+    def cal_confidence(self): 
+        self.events = np.argmax(self.probs, axis=0)[:-1]
+        for i, e in enumerate(self.events):
+            self.confidence.append(self.probs[e, i])
     
     def cal_probability(self):
         for sample in self.dataloader:
@@ -81,16 +89,15 @@ class GolfDB:
                     image_batch = images[:, self.batch * self.seq_length:, :, :, :]
                 else:
                     image_batch = images[:, self.batch * self.seq_length:(self.batch + 1) * self.seq_length, :, :, :]
-                logits = self.model(image_batch.to(self.device))
+                logits = self.model(image_batch.cuda())
                 if self.batch == 0:
-                    probs = F.softmax(logits.data, dim=1).cpu().numpy()
+                    self.probs = F.softmax(logits.data, dim=1).cpu().numpy()
                 else:
-                    probs = np.append(probs, F.softmax(logits.data, dim=1).cpu().numpy(), 0)
+                    self.probs = np.append(self.probs, F.softmax(logits.data, dim=1).cpu().numpy(), 0)
                 self.batch += 1
-        return probs
     
-    def save_images(self, events):
-        for i, e in enumerate(events):
+    def save_images(self):
+        for i, e in enumerate(self.events):
             self.cap.set(cv2.CAP_PROP_POS_FRAMES, e)
             _, img = self.cap.read()
             cv2.putText(img, '{:.3f}'.format(self.confidence[i]), (20, 20), cv2.FONT_HERSHEY_DUPLEX, 0.75, (0, 0, 255))
@@ -98,14 +105,4 @@ class GolfDB:
             os.makedirs(save_path, exist_ok=True)
             cv2.imwrite(os.path.join(save_path, self.event_names[i] + '.png'), img)
 
-
-if __name__ == '__main__':
-    # model = GolfDB('dataset/junyuk4.mp4')
-    model = GolfDB(device='cuda')
-    # model = GolfDB('dataset/Tigerwoods.mp4',device='cuda', mode = 'save_image')
-    start_time = time.time()
-    events = model('dataset/junyuk4.mp4')
-    end_time = time.time()
-    print('inference_time:{}s'.format(int(end_time)-int(start_time)))
-    print(events)
 

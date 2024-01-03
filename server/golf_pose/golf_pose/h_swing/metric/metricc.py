@@ -230,7 +230,6 @@ def back_right_shoulder(kps, img, event_dict):
         angle = get_angle_from_2vectors(vector1,vector2)
         angle_list.append(angle)
     mean = np.mean(angle_list)
-    max = np.max(angle_list)
     return img, mean
 
 def back_rotate(kps, img, event_dict):
@@ -306,7 +305,6 @@ def down_right_shoulder(kps, img, event_dict):
         angle = get_angle_from_2vectors(vector1,vector2)
         angle_list.append(angle)
     mean = np.mean(angle_list)
-    max = np.max(angle_list)
     return img, mean
 
 def down_rotate(kps, img, event_dict):
@@ -345,7 +343,6 @@ def impact_right_shoulder(kps, img, event_dict):
         angle = get_angle_from_2vectors(vector1,vector2)
         angle_list.append(angle)
     mean = np.mean(angle_list)
-    max = np.max(angle_list)
     return img, mean
 
 def impact_rotate(kps, img, event_dict):
