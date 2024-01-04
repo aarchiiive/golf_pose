@@ -50,6 +50,14 @@ body {
   height: 100vh;
 }
 
+.canvas {
+  margin-bottom: 20px;
+  width: 90%;
+  max-width: 600px;
+  border-radius: 20px;
+  background-color: #474747;
+}
+
 video.preview {
   width: 90%;
   max-width: 600px;
