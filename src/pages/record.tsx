@@ -6,13 +6,19 @@ import React, {
   useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import Webcam from 'react-webcam';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 import Skeleton from 'react-loading-skeleton';
 
 import axios from 'axios';
 
-import SwingResultsContext from '../context/swingResultsContext';
 import '../styles/record.css';
+
+import Loading from './loading';
+import PoseDetection from '../components/poseDetection';
+import { visibleVariants, previewVariants } from '../animations/record';
+import SwingResultsContext from '../context/swingResultsContext';
+
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
@@ -21,6 +27,7 @@ const Record: React.FC = () => {
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const recorderRef = useRef<MediaRecorder>();
+  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
 
@@ -29,99 +36,13 @@ const Record: React.FC = () => {
   const [buttonText, setButtonText] = useState(buttonTexts[0]);
   const [isCapturing, setIsCapturing] = useState(false);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
-  const [isStreaming, setIsStreaming] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
 
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
   const [previewAnimation, setPreviewAnimation] = useState("hidden");
   const [videoStyle, setVideoStyle] = useState({});
   const [previewVideoStyle, setPreviewVideoStyle] = useState({});
-
-  const visibleVariants = {
-    titleFadeIn: {
-      y: '-10vh',
-      opacity: 0,
-    },
-    buttonFadeIn: {
-      y: '10vh',
-      opacity: 0,
-    },
-    containerFadeIn: {
-      opacity: 0,
-    },
-
-    titleFadeOut: {
-      y: '-10vh',
-      opacity: 1,
-    },
-    buttonFadeOut: {
-      y: '10vh',
-      opacity: 1,
-    },
-
-    containerFadeOut: {
-      opacity: 1,
-    },
-
-    animateFadeIn: {
-      y: '0',
-      opacity: 1,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-
-    animateFadeOut: {
-      y: '0',
-      opacity: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-  };
-
-  const previewVariants = {
-    hidden: {
-      x: '100vw',
-      opacity: 0,
-    },
-
-    containerFadeIn: {
-      x: '100vw',
-      opacity: 0,
-    },
-    containerFadeOut: {
-      x: '0',
-      opacity: 1,
-    },
-
-    animateFadeIn: {
-      x: '0',
-      opacity: 1,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-    animateFadeOut: {
-      x: '-100vw',
-      opacity: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-    animateRetryFadeOut: {
-      x: '100vw',
-      opacity: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-  };
 
   const updateStyles = () => {
     const width = window.innerWidth;
@@ -167,8 +88,6 @@ const Record: React.FC = () => {
   const handleRecording = async () => {
     const startButton = document.querySelector('.start-button');
     setIsCapturing(!isCapturing);
-
-    console.log('handleRecording -> isCapturing : ', isCapturing);
 
     if (!isCapturing) {
       // Start recording
@@ -236,112 +155,99 @@ const Record: React.FC = () => {
       const formData = new FormData();
       formData.append('video', videoBlob, 'video.webm');
 
-      console.log(`${process.env.REACT_APP_API_URL}/upload/`);
-      console.log(`${process.env.REACT_APP_API_URL}/upload/`);
-      console.log(`${process.env.REACT_APP_API_URL}/upload/`);
-      console.log(`${process.env.REACT_APP_API_URL}/upload/`);
+      setPreviewAnimation("animateFadeOut");
+
+      setTimeout(() => {
+        setIsLoading(true);
+      }, 800);  
 
       axios.post(`${process.env.REACT_APP_API_URL}/upload/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        console.log('Upload successful', response.data);
+        console.log('Upload successfully', response.data);
+        // setIsLoading(false);
+        // navigate('/results');
         // metirc score
       }).catch(error => {
         console.error('Error uploading video', error);
+        // setIsLoading(false);
+        // navigate('/results');
       });
     }
-    
-    setPreviewAnimation("animateFadeOut");
-    setTimeout(() => {
-      navigate('/loading');
-    }, 800);
   }
 
   return (
-    <div className="record">
-      {videoSrc && (
-        <motion.div
-          className="preview-container"
-          variants={previewVariants}
-          initial="hidden"
-          animate={previewAnimation}
-        >
-          <video
-            className="preview"
-            style={previewVideoStyle}
-            src={videoSrc}
-            loop
-            autoPlay
-            playsInline
-            controls={false}
-          ></video>
-          <div className="preview-button-container">
-            <button className="retry-button" onClick={handleRetryButtonClick}>
-              Retry
-            </button>
-            <button className="next-button" onClick={handleNextButtonClick}>
-              Next
-            </button>
-          </div>
-        </motion.div>
+    <>
+      {isLoading && (
+        <Loading />
       )}
-
-      {isWebcamLoaded && (
-        <motion.div
-          className="record-container"
-          variants={visibleVariants}
-          initial="containerFadeIn"
-          animate={visibleAnimation}
-        >
+      <div className="record">
+        {isWebcamLoaded && (
           <motion.div
-            className="project-title"
+            className="record-container"
             variants={visibleVariants}
-            initial="titleFadeIn"
+            initial="containerFadeIn"
             animate={visibleAnimation}
-            // animate={isStreaming ? "animateFadeIn" : "animateTitleFadeOut"}
           >
-            <h1>
-              H-Swing Project
-            </h1>
-          </motion.div>
-
-          <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} >
-            {!isWebcamLoaded && (
-              <Skeleton width="100%" height="100%" />
-            )}
-          </video>
-
-          {/* Start/Stop button */}
-          <div className="button-container">
-            <motion.button
-              onClick={handleRecording}
-              className="start-button"
+            <motion.div
+              className="project-title"
               variants={visibleVariants}
-              initial="buttonFadeIn"
+              initial="titleFadeIn"
               animate={visibleAnimation}
-              // animate={isStreaming ? "animateFadeIn" : "animateButtonFadeOut"}
             >
-              {buttonText}
-            </motion.button>
-          </div>
+              <h1>
+                H-Swing Project
+              </h1>
+            </motion.div>
 
-        </motion.div>
-      )}
+            <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
 
-      {/* Company logo */}
-      {/* <div className="company-logo-container">
-        <a href="http://hurotics.com/" target="_blank" rel="noopener noreferrer">
-          <img
-            src={require('../assets/hurotics.png')}
-            alt="Company Logo"
-            className="company-logo"
-          />
-        </a>
-      </div> */}
-      {/* </div> */}
-    </div>
+            {/* Start/Stop button */}
+            <div className="button-container">
+              <motion.button
+                onClick={handleRecording}
+                className="start-button"
+                variants={visibleVariants}
+                initial="buttonFadeIn"
+                animate={visibleAnimation}
+              >
+                {buttonText}
+              </motion.button>
+            </div>
+
+          </motion.div>
+        )}
+
+        {!isLoading && videoSrc && (
+          <motion.div
+            className="preview-container"
+            variants={previewVariants}
+            initial="hidden"
+            animate={previewAnimation}
+          >
+            <video
+              className="preview"
+              style={previewVideoStyle}
+              src={videoSrc}
+              loop
+              autoPlay
+              playsInline
+              controls={false}
+            ></video>
+            <div className="preview-button-container">
+              <button className="retry-button" onClick={handleRetryButtonClick}>
+                Retry
+              </button>
+              <button className="next-button" onClick={handleNextButtonClick}>
+                Next
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </div>
+    </>
   );
 };
 
