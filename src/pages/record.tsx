@@ -127,7 +127,7 @@ const Record: React.FC = () => {
       camera.start();
     }
 
-  }, [onResults]);
+  }, []);
 
   // handling start/stop recording button
   const handleRecording = async () => {
