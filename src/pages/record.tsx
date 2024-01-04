@@ -83,14 +83,10 @@ const Record: React.FC = () => {
     const startVideoStream = async () => {
       try {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
-
-        const constraints = {
-          video: isMobile ? { facingMode: "environment" } : true
-        };
-
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
+          detectPose();
         }
       } catch (error) {
         console.error('Error accessing media devices.', error);
@@ -101,7 +97,7 @@ const Record: React.FC = () => {
     setIsWebcamLoaded(true);
   }, []);
 
-  useEffect(() => {
+  const detectPose = () => {
     const pose = new Pose({
       locateFile: (file) => {
         return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
@@ -129,8 +125,7 @@ const Record: React.FC = () => {
       });
       camera.start();
     }
-
-  }, [videoRef, onResults]);
+  };
 
   // handling start/stop recording button
   const handleRecording = async () => {
