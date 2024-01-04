@@ -3,19 +3,24 @@ import React, {
   useState,
   useEffect,
   useContext,
+  useCallback,
   useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
-import Webcam from 'react-webcam';
-import { motion, AnimatePresence, animate } from 'framer-motion';
-import Skeleton from 'react-loading-skeleton';
 
 import axios from 'axios';
+import Webcam from 'react-webcam';
+import { motion, AnimatePresence, animate } from 'framer-motion';
+
+import { Pose, Results, POSE_CONNECTIONS } from "@mediapipe/pose";
+import { Camera } from "@mediapipe/camera_utils";
+import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
+import { drawCanvas } from '../components/poseDetection';
 
 import '../styles/record.css';
 
 import Loading from './loading';
-import PoseDetection from '../components/poseDetection';
+// import PoseDetection from '../components/poseDetection';
 import { visibleVariants, previewVariants } from '../animations/record';
 import SwingResultsContext from '../context/swingResultsContext';
 
@@ -27,7 +32,9 @@ const Record: React.FC = () => {
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const recorderRef = useRef<MediaRecorder>();
+  const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const resultsRef = useRef<Results>();
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
 
@@ -54,6 +61,13 @@ const Record: React.FC = () => {
       width: `${width * 0.9}px`,
     });
   };
+
+  const onResults = useCallback((results: Results) => {
+    resultsRef.current = results;
+    
+    const canvasCtx = canvasRef.current!.getContext("2d");
+    if (canvasCtx) drawCanvas(canvasCtx, results);
+  }, []);
 
   useEffect(() => {
     updateStyles();
@@ -83,6 +97,37 @@ const Record: React.FC = () => {
     startVideoStream();
     setIsWebcamLoaded(true);
   }, []);
+
+  useEffect(() => {
+    const pose = new Pose({
+      locateFile: (file) => {
+        return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
+      }
+    });
+
+    pose.setOptions({
+      modelComplexity: 1,
+      smoothLandmarks: true,
+      enableSegmentation: false,
+      smoothSegmentation: false,
+      minDetectionConfidence: 0.5,
+      minTrackingConfidence: 0.5,
+    });
+
+    pose.onResults(onResults);
+
+    if (videoRef.current) {
+      const camera = new Camera(videoRef.current, {
+        onFrame: async () => {
+          await pose.send({ image: videoRef.current! });
+        },
+        width: 1280,
+        height: 720,
+      });
+      camera.start();
+    }
+
+  }, [onResults]);
 
   // handling start/stop recording button
   const handleRecording = async () => {
@@ -147,6 +192,7 @@ const Record: React.FC = () => {
       setVisibleAnimation("animateFadeIn");
     }, 800);
   }
+
   // gunicorn --bind 0.0.0.0:8000 --timeout 86400 golf_pose.wsgi:application
   const handleNextButtonClick = async () => {
     if (videoSrc) {
@@ -203,6 +249,7 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
+            <canvas ref={canvasRef} className="canvas"/>
 
             {/* Start/Stop button */}
             <div className="button-container">
