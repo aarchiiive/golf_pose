@@ -13,7 +13,7 @@ export interface SwingResults {
     impact: SwingMotion;
     finish: SwingMotion;
     frames: number[];
-    video: Blob | null;
+    video: string | null;
 }
 
 const SwingResultsContext = React.createContext<{
