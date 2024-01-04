@@ -31,7 +31,6 @@ class GolfDB:
         self.batch = 0
         self.probs = None
         self.events = None
-        self.cap = None
         self.not_sorted = 0
         self.sorted_events = None
         self.event_names = {
@@ -45,8 +44,8 @@ class GolfDB:
             7: '7'
         }
 
-    def __call__(self, video_path):
-        return self.forward(video_path)
+    def __call__(self, video_path, video_frame):
+        return self.forward(video_path, video_frame)
 
     def load_weights(self):
         save_dict = torch.load('weight/swingnet_1800.pth.tar', map_location=self.device)
@@ -54,30 +53,28 @@ class GolfDB:
         self.model.to(self.device)
         self.model.eval()
 
-    def forward(self, video_path):
-        self.video_path = video_path
-        try: 
-            self.video_name = video_path.split('.')[0].split('/')[-1]
-        except:
-            self.video_name = video_path.split('.')[-1]
-        self.dataset = SampleVideo(video_path, transform=transforms.Compose([ToTensor(),
+    def forward(self, video_array, video_frame):
+        self.dataset = SampleVideo(video_array, transform=transforms.Compose([ToTensor(),
                                         Normalize([0.485, 0.456, 0.406],
                                         [0.229, 0.224, 0.225])]))
         self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
-        self.cap = cv2.VideoCapture(video_path)
         self.cal_probability()
         self.cal_confidence()
-        if isinstance(self.mode, str) == True:
-            self.save_images()
         if not self.is_sorted():
+            sorted_events = [0] * 8
+            # for i, index in enumerate(self.sorted_events):
+            #     sorted_events[i] = self.sorted_events[i] + index
+            # print(sorted_events)
             return self.sorted_events
         else:
+            events = [0] * 8
+            # for i, index in enumerate(self.events):
+            #     events[i] = self.events[i] + index
+            # print(events)
             return self.events
     
     def is_sorted(self):
-        print(self.events)
         self.sorted_events = sorted(self.events)
-        print(self.sorted_events)
         return (self.sorted_events == self.events).all()
 
     def cal_confidence(self): 
@@ -100,13 +97,6 @@ class GolfDB:
                     self.probs = np.append(self.probs, F.softmax(logits.data, dim=1).cpu().numpy(), 0)
                 self.batch += 1
     
-    def save_images(self):
-        for i, e in enumerate(self.events):
-            self.cap.set(cv2.CAP_PROP_POS_FRAMES, e)
-            _, img = self.cap.read()
-            cv2.putText(img, '{:.3f}'.format(self.confidence[i]), (20, 20), cv2.FONT_HERSHEY_DUPLEX, 0.75, (0, 0, 255))
-            save_path = os.path.join('results', self.video_name)
-            os.makedirs(save_path, exist_ok=True)
-            cv2.imwrite(os.path.join(save_path, self.event_names[i] + '.png'), img)
+
 
 
