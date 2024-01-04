@@ -12,11 +12,6 @@ import axios from 'axios';
 import Webcam from 'react-webcam';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 
-import { Pose, Results, POSE_CONNECTIONS } from "@mediapipe/pose";
-import { Camera } from "@mediapipe/camera_utils";
-import { drawConnectors, drawLandmarks } from "@mediapipe/drawing_utils";
-import { drawCanvas } from '../components/poseDetection';
-
 import '../styles/record.css';
 
 import Loading from './loading';
@@ -34,7 +29,6 @@ const Record: React.FC = () => {
   const recorderRef = useRef<MediaRecorder>();
   const webcamRef = useRef<Webcam>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const resultsRef = useRef<Results>();
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
 
@@ -62,13 +56,6 @@ const Record: React.FC = () => {
     });
   };
 
-  const onResults = useCallback((results: Results) => {
-    if (canvasRef.current && results) {
-      const canvasCtx = canvasRef.current.getContext("2d");
-      if (canvasCtx) drawCanvas(canvasCtx, results);
-    }
-  }, []);
-
   useEffect(() => {
     updateStyles();
     window.addEventListener('resize', updateStyles);
@@ -83,7 +70,6 @@ const Record: React.FC = () => {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
-          detectPose();
         }
       } catch (error) {
         console.error('Error accessing media devices.', error);
@@ -93,36 +79,6 @@ const Record: React.FC = () => {
     startVideoStream();
     setIsWebcamLoaded(true);
   }, []);
-
-  const detectPose = () => {
-    const pose = new Pose({
-      locateFile: (file) => {
-        return `https://cdn.jsdelivr.net/npm/@mediapipe/pose/${file}`;
-      }
-    });
-
-    pose.setOptions({
-      modelComplexity: 1,
-      smoothLandmarks: true,
-      enableSegmentation: false,
-      smoothSegmentation: false,
-      minDetectionConfidence: 0.5,
-      minTrackingConfidence: 0.5,
-    });
-
-    pose.onResults(onResults);
-
-    if (videoRef.current) {
-      const camera = new Camera(videoRef.current, {
-        onFrame: async () => {
-          await pose.send({ image: videoRef.current! });
-        },
-        width: videoRef.current.videoWidth,
-        height: videoRef.current.videoHeight,
-      });
-      camera.start();
-    }
-  };
 
   // handling start/stop recording button
   const handleRecording = async () => {
@@ -244,13 +200,13 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            <canvas 
+            {/* <canvas 
             ref={canvasRef} 
             className="canvas" 
             width={videoRef.current?.videoWidth} 
             height={videoRef.current?.videoHeight} 
             // style={videoStyle}
-            />
+            /> */}
 
             {/* Start/Stop button */}
             <div className="button-container">

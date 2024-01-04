@@ -62,16 +62,18 @@ video.preview {
   width: 90%;
   max-width: 600px;
   border-radius: 20px;
-  box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff;
+  transform: scaleX(-1);
+  /* box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff; */
 }
 
 video.streamer {
-  display: none;
+  /* display: none; */
   margin-bottom: 20px;
   width: 90%;
   max-width: 600px;
   border-radius: 20px;
-  box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff;
+  transform: scaleX(-1);
+  /* box-shadow: 8px 8px 15px #a7aab1, -8px -8px 15px #ffffff; */
 }
 
 button {
