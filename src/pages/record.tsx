@@ -249,7 +249,7 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            <canvas ref={canvasRef} className="canvas"/>
+            <canvas ref={canvasRef} className="canvas" style={videoStyle}/>
 
             {/* Start/Stop button */}
             <div className="button-container">
