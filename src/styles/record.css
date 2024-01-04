@@ -52,9 +52,8 @@ body {
 
 .canvas {
   margin-bottom: 20px;
-  /* width: 90%; */
-  /* max-width: 600px; */
-  height: 50vh;
+  width: 90%;
+  max-width: 600px;
   border-radius: 20px;
   background-color: #474747;
 }

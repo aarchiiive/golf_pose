@@ -26,9 +26,6 @@ import SwingResultsContext from '../context/swingResultsContext';
 
 
 const Record: React.FC = () => {
-  const poseVideoWidth = 1280;
-  const poseVideoHeight = 960;
-
   const navigate = useNavigate();
   const swingResultsContext = useContext(SwingResultsContext);
 
@@ -86,7 +83,6 @@ const Record: React.FC = () => {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
-          videoRef.current.style.transform = 'scaleX(-1)';
           detectPose();
         }
       } catch (error) {
@@ -121,8 +117,8 @@ const Record: React.FC = () => {
         onFrame: async () => {
           await pose.send({ image: videoRef.current! });
         },
-        width: poseVideoWidth,
-        height: poseVideoHeight,
+        width: videoRef.current.videoWidth,
+        height: videoRef.current.videoHeight,
       });
       camera.start();
     }
@@ -248,7 +244,7 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            <canvas ref={canvasRef} className="canvas" width={poseVideoWidth} height={poseVideoHeight}/>
+            <canvas ref={canvasRef} className="canvas" width={videoRef.current?.videoWidth} height={videoRef.current?.videoHeight} />
 
             {/* Start/Stop button */}
             <div className="button-container">
