@@ -17,12 +17,35 @@ import '../styles/record.css';
 import Loading from './loading';
 // import PoseDetection from '../components/poseDetection';
 import { visibleVariants, previewVariants } from '../animations/record';
-import SwingResultsContext from '../context/swingResultsContext';
 
+export interface SwingMotion {
+  messages: string[];
+  scores: number[];
+}
+
+export interface SwingResults {
+  toe_up: SwingMotion;
+  backswing: SwingMotion;
+  top: SwingMotion;
+  downswing: SwingMotion;
+  impact: SwingMotion;
+  finish: SwingMotion;
+  frames: number[];
+  video: string | null;
+}
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
-  const swingResultsContext = useContext(SwingResultsContext);
+  const initialSwingResults: SwingResults = {
+    toe_up: { messages: [], scores: [] },
+    backswing: { messages: [], scores: [] },
+    top: { messages: [], scores: [] },
+    downswing: { messages: [], scores: [] },
+    impact: { messages: [], scores: [] },
+    finish: { messages: [], scores: [] },
+    frames: [],
+    video: null,
+  };
 
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -38,6 +61,7 @@ const Record: React.FC = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [swingResults, setSwingResults] = useState<SwingResults>(initialSwingResults);
 
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
@@ -163,17 +187,25 @@ const Record: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        console.log('Upload successfully', response.data);
-        // setIsLoading(false);
-        // navigate('/results');
-        // metirc score
+        // console.log('Upload successfully', response.data);
+        const { video, frames, correction } = response.data;
+        setSwingResults({
+          ...swingResults,
+          video,
+          frames,
+          ...correction,
+        });
+        setIsLoading(false);
       }).catch(error => {
         console.error('Error uploading video', error);
-        // setIsLoading(false);
-        // navigate('/results');
+        setIsLoading(false);
       });
     }
   }
+
+  useEffect(() => {
+    console.log('Swing results: ', swingResults);
+  }, [swingResults]);
 
   return (
     <>
@@ -200,13 +232,6 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            {/* <canvas 
-            ref={canvasRef} 
-            className="canvas" 
-            width={videoRef.current?.videoWidth} 
-            height={videoRef.current?.videoHeight} 
-            // style={videoStyle}
-            /> */}
 
             {/* Start/Stop button */}
             <div className="button-container">
@@ -250,6 +275,24 @@ const Record: React.FC = () => {
             </div>
           </motion.div>
         )}
+
+        {/* Show swing results */}
+        {!isLoading && swingResults.video && (
+          <div
+            className="preview-container"
+          >
+            <video
+              className="result"
+              style={previewVideoStyle}
+              src={`data:video/mp4;base64,${swingResults.video}`}
+              loop
+              autoPlay
+              playsInline
+              controls={false}
+            ></video>
+          </div>
+        )}
+
       </div>
     </>
   );
