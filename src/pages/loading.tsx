@@ -9,12 +9,21 @@ import '../styles/loading.css';
 const Loading = () => {
   const navigate = useNavigate();
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
+  const [dotCount, setDotCount] = useState(0);
+
+  const loadingText = 'Loading' + '.'.repeat(dotCount);
 
   useEffect(() => {
-    setTimeout(() => {
-      setVisibleAnimation("animateFadeOut");
-    }, 2000);
-    navigate('/results');
+    // setTimeout(() => {
+    //   setVisibleAnimation("animateFadeOut");
+    // }, 2000);
+    // navigate('/results');
+
+    const interval = setInterval(() => { 
+      setDotCount(prevDotCount => (prevDotCount + 1) % 6);
+    }, 1500 / 5);
+
+    return () => clearInterval(interval);
   }, []);
 
   const visibleVariants = {
@@ -64,7 +73,7 @@ const Loading = () => {
         wrapperClass=""
         visible={true}
       />
-      <div className="loading-text">Loading...</div>
+      <div className="loading-text">{loadingText}</div>
     </motion.div>
   );
 };
