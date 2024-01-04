@@ -27,7 +27,7 @@ import SwingResultsContext from '../context/swingResultsContext';
 
 const Record: React.FC = () => {
   const poseVideoWidth = 1280;
-  const poseVideoHeight = 720;
+  const poseVideoHeight = 960;
 
   const navigate = useNavigate();
   const swingResultsContext = useContext(SwingResultsContext);
@@ -86,6 +86,7 @@ const Record: React.FC = () => {
         const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
         if (videoRef.current) {
           videoRef.current.srcObject = mediaStream;
+          videoRef.current.style.transform = 'scaleX(-1)';
           detectPose();
         }
       } catch (error) {
