@@ -79,6 +79,7 @@ export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
   const height = ctx.canvas.height;
 
   console.log('width: ', width);  
+  console.log('height: ', height);
 
   ctx.save();
   ctx.clearRect(0, 0, width, height);
@@ -96,7 +97,8 @@ export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
         lineWidth: 2,
       });
       drawLandmarks(ctx, [landmarks], {
-        color: "#FFE69D",
+        color: '#FFE69D', // 빈 원의 내부 색
+        fillColor: 'transparent', // 빈 원의 내부 색
         lineWidth: 1,
         radius: 2,
       });
