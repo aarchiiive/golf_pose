@@ -5,7 +5,7 @@ import React, {
   useContext,
   ReactNode
 } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 import Skeleton from 'react-loading-skeleton';
 
@@ -14,17 +14,32 @@ import axios from 'axios';
 import SwingResultsContext from '../context/swingResultsContext';
 import '../styles/results.css';
 
+interface SwingResultHeaderProps {
+  name: string;
+}
+
 interface SwingActionProps {
   name: string;
   children: ReactNode;
 }
 
+interface SwingTableRowProps {
+  message: string;
+  score: number;
+}
+
+const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
+  return (
+    <div className="results-header">
+      <h1>{name}</h1>
+    </div>
+  );
+};
+
 const SwingResult: React.FC<SwingActionProps> = ({ name, children }) => {
   return (
     <div className="swing-action">
-      <div className="results-header">
-        <h1>{name}</h1>
-      </div>
+      <SwingResultHeader name={name} />
       <div className="video-container">
         {/* 비디오 컨텐츠 */}
       </div>
@@ -35,8 +50,38 @@ const SwingResult: React.FC<SwingActionProps> = ({ name, children }) => {
   );
 };
 
+const SwingTableRow: React.FC<SwingTableRowProps> = ({ message, score }) => {
+  return (
+    <div className="score-table-row">
+      <div className="message">
+        {message}
+      </div>
+      <div className="score">
+        {score}
+      </div>
+    </div>
+  );
+}
+
 const Results: React.FC = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
+
+  useEffect(() => {
+    const unlisten = () => {
+      window.onpopstate = (e: PopStateEvent) => {
+        navigate('/record');
+      };
+    };
+
+    unlisten();
+
+    return () => {
+      window.onpopstate = null;
+    };
+  }, [navigate]);
 
   const visibleVariants = {
     containerFadeIn: {
@@ -74,37 +119,14 @@ const Results: React.FC = () => {
       animate={visibleAnimation}
     >
       <>
-        <div className="results-header">
-          <h1>Toe Up</h1>
-        </div>
+        <SwingResultHeader name="Toe Up" />
         <div className="video-container">
         </div>
         <div className="score-table-container">
           <div className="score-table">
-            <div className="score-table-row">
-              <div className="message">
-                Perfect Swing!
-              </div>
-              <div className="score">
-                94
-              </div>
-            </div>
-            <div className="score-table-row">
-              <div className="message">
-                Position of your right arm is perfect!
-              </div>
-              <div className="score">
-                96
-              </div>
-            </div>
-            <div className="score-table-row">
-              <div className="message">
-                Rotation of your upper body is perfect!
-              </div>
-              <div className="score">
-                92
-              </div>
-            </div>
+            <SwingTableRow message="Perfect Swing!" score={94} />
+            <SwingTableRow message="Position of your right arm is perfect!" score={96} />
+            <SwingTableRow message="Rotation of your upper body is perfect!" score={92} />
           </div>
         </div>
       </>
