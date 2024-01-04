@@ -26,6 +26,9 @@ import SwingResultsContext from '../context/swingResultsContext';
 
 
 const Record: React.FC = () => {
+  const poseVideoWidth = 1280;
+  const poseVideoHeight = 720;
+
   const navigate = useNavigate();
   const swingResultsContext = useContext(SwingResultsContext);
 
@@ -63,10 +66,10 @@ const Record: React.FC = () => {
   };
 
   const onResults = useCallback((results: Results) => {
-    resultsRef.current = results;
-    
-    const canvasCtx = canvasRef.current!.getContext("2d");
-    if (canvasCtx) drawCanvas(canvasCtx, results);
+    if (canvasRef.current && results) {
+      const canvasCtx = canvasRef.current.getContext("2d");
+      if (canvasCtx) drawCanvas(canvasCtx, results);
+    }
   }, []);
 
   useEffect(() => {
@@ -121,13 +124,13 @@ const Record: React.FC = () => {
         onFrame: async () => {
           await pose.send({ image: videoRef.current! });
         },
-        width: 1280,
-        height: 720,
+        width: poseVideoWidth,
+        height: poseVideoHeight,
       });
       camera.start();
     }
 
-  }, []);
+  }, [videoRef, onResults]);
 
   // handling start/stop recording button
   const handleRecording = async () => {
@@ -249,7 +252,7 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            <canvas ref={canvasRef} className="canvas" style={videoStyle}/>
+            <canvas ref={canvasRef} className="canvas" width={poseVideoWidth} height={poseVideoHeight}/>
 
             {/* Start/Stop button */}
             <div className="button-container">
