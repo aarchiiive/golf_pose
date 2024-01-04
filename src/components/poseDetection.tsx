@@ -90,19 +90,39 @@ export const drawCanvas = (ctx: CanvasRenderingContext2D, results: Results) => {
   ctx.drawImage(results.image, 0, 0, width, height);
   // 손의 묘사
   if (results.poseLandmarks) {
-    // 골격 묘사
-    for (const landmarks of results.poseLandmarks) {
-      drawConnectors(ctx, [landmarks], POSE_CONNECTIONS, {
+
+    drawConnectors(
+      ctx, results.poseLandmarks, POSE_CONNECTIONS,
+      {
         color: "#CBCBCB",
-        lineWidth: 2,
-      });
-      drawLandmarks(ctx, [landmarks], {
+        lineWidth: 6,
+      }
+    );
+    drawLandmarks(
+      ctx, results.poseLandmarks,
+      {
         color: '#FFE69D', // 빈 원의 내부 색
         fillColor: 'transparent', // 빈 원의 내부 색
         lineWidth: 4,
         radius: 8,
-      });
-    }
+      }
+    );
+    ctx.restore();
+
+
+    // 골격 묘사
+    // for (const landmarks of results.poseLandmarks) {
+    //   drawConnectors(ctx, [landmarks], POSE_CONNECTIONS, {
+    //     color: "#CBCBCB",
+    //     lineWidth: 2,
+    //   });
+    //   drawLandmarks(ctx, [landmarks], {
+    //     color: '#FFE69D', // 빈 원의 내부 색
+    //     fillColor: 'transparent', // 빈 원의 내부 색
+    //     lineWidth: 4,
+    //     radius: 8,
+    //   });
+    // }
   }
   ctx.restore();
 };
