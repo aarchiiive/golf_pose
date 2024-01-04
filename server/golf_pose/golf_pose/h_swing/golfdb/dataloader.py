@@ -7,8 +7,10 @@ import torch
 from torch.utils.data import Dataset
 
 class SampleVideo(Dataset):
-    def __init__(self, path, input_size=160, transform=None):
-        self.path = path
+    def __init__(self, video_array, input_size=160, transform=None):
+        self.video_array = video_array
+        self.width = np.array(self.video_array).shape[1]
+        self.height = np.array(self.video_array).shape[2]
         self.input_size = input_size
         self.transform = transform
 
@@ -16,13 +18,7 @@ class SampleVideo(Dataset):
         return 1
 
     def __getitem__(self, idx):
-        cap = cv2.VideoCapture(self.path)
-        
-        if cap.isOpened() == False:
-            logging.error(f"Error opening video stream or file: {self.path}")
-        
-        frame_size = [cap.get(cv2.CAP_PROP_FRAME_WIDTH), cap.get(cv2.CAP_PROP_FRAME_HEIGHT)]
-        
+        frame_size = [self.width, self.height]
         ratio = self.input_size / max(frame_size)
         new_size = (int(frame_size[0] * ratio), int(frame_size[1] * ratio))
         delta_w = self.input_size - new_size[1]
@@ -33,16 +29,13 @@ class SampleVideo(Dataset):
         # preprocess and return frames
         images = []
         
-        logging.info(f"Total frames: {int(cap.get(cv2.CAP_PROP_FRAME_COUNT))}")
-        for pos in range(int(cap.get(cv2.CAP_PROP_FRAME_COUNT))):
-            _, img = cap.read()
+        logging.info(f"Total frames: {len(self.video_array)}")
+        for img in self.video_array:
             resized = cv2.resize(img, new_size)
             b_img = cv2.copyMakeBorder(resized, top, bottom, left, right, cv2.BORDER_CONSTANT,
                                        value=[0.406 * 255, 0.456 * 255, 0.485 * 255])  # ImageNet means (BGR)
             b_img_rgb = cv2.cvtColor(b_img, cv2.COLOR_BGR2RGB)
             images.append(b_img_rgb)
-            
-        cap.release()
         labels = np.zeros(len(images)) # only for compatibility with transforms
         sample = {'images': np.asarray(images), 'labels': np.asarray(labels)}
         if self.transform:
