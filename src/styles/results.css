@@ -137,7 +137,6 @@ video.result {
   border-radius: 30px;
   font-family: 'Poppins', Courier, monospace;
   font-weight: normal;
-  font-size: 20px;
   background-color: rgb(215, 241, 255);
   /* box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
     -4px -4px 12px rgba(255, 255, 255, 0.8); */
@@ -147,7 +146,7 @@ video.result {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 60px;
+  height: 28px;
 }
 
 .swing-results-table-message {
