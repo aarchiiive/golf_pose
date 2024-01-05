@@ -87,13 +87,13 @@ video.result {
 
 .message {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 12px;
+  font-size: 0.5vw;
   font-weight: normal;
 }
 
 .score {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 12px;
+  font-size: 0.5vw;
   font-weight: normal;
 }
 
