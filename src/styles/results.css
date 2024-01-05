@@ -4,6 +4,7 @@
   align-items: center;
   justify-content: center;
   width: 100%;
+  overflow: visible;
 }
 
 .results-header {
@@ -20,12 +21,19 @@
 }
 
 .video-container {
-  width: 70vw;
-  height: 48vh;
+  /* width: 70vw;
+  height: 48vh; */
   border-radius: 20px;
-  background-color: rgb(234, 234, 234);
+  /* background-color: rgb(234, 234, 234);
   box-shadow: 4px 4px 12px rgba(167, 170, 177, 0.4),
-    -4px -4px 12px rgba(255, 255, 255, 0.8);
+    -4px -4px 12px rgba(255, 255, 255, 0.8); */
+}
+
+video.result {
+  width: 90%;
+  max-width: 600px;
+  border-radius: 20px;
+  /* box-shadow: 4px 4px 15px #aee1fb, -8px -8px 15px #ffffff; */
 }
 
 .score-table-container {
@@ -62,6 +70,10 @@
   border-bottom: none;
 }
 
+.swing-results-table {
+  margin-top: 20px;
+}
+
 .message {
   font-family: 'Poppins', Courier, monospace;
   font-size: 1rem;
@@ -74,4 +86,70 @@
   font-size: 1rem;
   font-weight: Regular;
   margin: 0;
+}
+
+.scroll-menu-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  height: 10vh;
+  /* padding-top: 5vh; */
+  margin-top: 6vh;
+}
+
+.scroll-prev-button, .scroll-next-button {
+  position: absolute;
+  width: 8vw;
+  height: 8vw;
+  border-radius: 8vw;
+  font-size: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scroll-prev-button {
+  left: 2vw; /* Adjust as needed */
+}
+
+.scroll-next-button {
+  right: 2vw; /* Adjust as needed */
+}
+
+.next-button-icon {
+  width: 5vw;
+  height: 5vw;
+}
+
+.swing-results-table {
+  font-family: 'Poppins', Courier, monospace;
+  width: 60vw;
+  max-height: 600px;
+  padding: 0.5vh 4vw;
+  border-radius: 30px;
+  background-color: rgba(204, 237, 255, 0.6);
+  box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
+    -4px -4px 12px rgba(255, 255, 255, 0.8);
+}
+
+.message-score-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.swing-results-table-message {
+  /* margin-right: auto; */
+  flex-grow: 1;
+}
+
+.swing-results-table-score {
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+hr {
+  width: 100%;
+  border: 1px solid rgb(195, 195, 195);
 }
