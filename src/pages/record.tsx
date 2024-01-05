@@ -7,51 +7,32 @@ import React, {
   useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
+// libraries
 import axios from 'axios';
 import Webcam from 'react-webcam';
 import { motion, AnimatePresence, animate } from 'framer-motion';
 
+// styles
 import '../styles/record.css';
-
-import Loading from './loading';
-// import PoseDetection from '../components/poseDetection';
 import { visibleVariants, previewVariants } from '../animations/record';
 
-export interface SwingMotion {
-  messages: string[];
-  scores: number[];
-}
+// redux
+import { AppState } from '../store';
+import { setSwingResults } from '../actions/swingResultsActions';
 
-export interface SwingResults {
-  toe_up: SwingMotion;
-  backswing: SwingMotion;
-  top: SwingMotion;
-  downswing: SwingMotion;
-  impact: SwingMotion;
-  finish: SwingMotion;
-  frames: number[];
-  video: string | null;
-}
+// loading
+import Loading from './loading';
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
-  const initialSwingResults: SwingResults = {
-    toe_up: { messages: [], scores: [] },
-    backswing: { messages: [], scores: [] },
-    top: { messages: [], scores: [] },
-    downswing: { messages: [], scores: [] },
-    impact: { messages: [], scores: [] },
-    finish: { messages: [], scores: [] },
-    frames: [],
-    video: null,
-  };
+  const dispatch = useDispatch();
+  const swingResults = useSelector((state: AppState) => state.swingResults);
 
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const recorderRef = useRef<MediaRecorder>();
-  const webcamRef = useRef<Webcam>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
 
@@ -61,7 +42,6 @@ const Record: React.FC = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [swingResults, setSwingResults] = useState<SwingResults>(initialSwingResults);
 
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
@@ -187,14 +167,14 @@ const Record: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        // console.log('Upload successfully', response.data);
+        console.log('Upload successfully', response.data);
         const { video, frames, correction } = response.data;
-        setSwingResults({
+        dispatch(setSwingResults({
           ...swingResults,
           video,
           frames,
           ...correction,
-        });
+        }));
         setIsLoading(false);
       }).catch(error => {
         console.error('Error uploading video', error);
@@ -205,6 +185,9 @@ const Record: React.FC = () => {
 
   useEffect(() => {
     console.log('Swing results: ', swingResults);
+    if (swingResults.video) {
+      navigate('/results');
+    }
   }, [swingResults]);
 
   return (
@@ -277,7 +260,7 @@ const Record: React.FC = () => {
         )}
 
         {/* Show swing results */}
-        {!isLoading && swingResults.video && (
+        {/* {!isLoading && swingResults.video && (
           <div
             className="preview-container"
           >
@@ -291,7 +274,7 @@ const Record: React.FC = () => {
               controls={false}
             ></video>
           </div>
-        )}
+        )} */}
 
       </div>
     </>
