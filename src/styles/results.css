@@ -30,8 +30,8 @@
 }
 
 video.result {
-  width: 90%;
-  max-width: 600px;
+  width: 600px;
+  /* max-width: 600px; */
   border-radius: 20px;
   /* box-shadow: 4px 4px 15px #aee1fb, -8px -8px 15px #ffffff; */
 }
@@ -95,7 +95,7 @@ video.result {
   justify-content: center;
   height: 10vh;
   /* padding-top: 5vh; */
-  margin-top: 6vh;
+  margin-top: 8vh;
 }
 
 .scroll-prev-button, .scroll-next-button {
@@ -129,14 +129,15 @@ video.result {
   padding: 0.5vh 4vw;
   border-radius: 30px;
   background-color: rgba(204, 237, 255, 0.6);
-  box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
-    -4px -4px 12px rgba(255, 255, 255, 0.8);
+  /* box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
+    -4px -4px 12px rgba(255, 255, 255, 0.8); */
 }
 
 .message-score-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  height: 60px;
 }
 
 .swing-results-table-message {
@@ -151,5 +152,5 @@ video.result {
 
 hr {
   width: 100%;
-  border: 1px solid rgb(195, 195, 195);
+  border: 1px solid rgb(219, 219, 219);
 }
