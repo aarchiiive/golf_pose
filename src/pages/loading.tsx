@@ -14,11 +14,6 @@ const Loading = () => {
   const loadingText = 'Loading' + '.'.repeat(dotCount);
 
   useEffect(() => {
-    // setTimeout(() => {
-    //   setVisibleAnimation("animateFadeOut");
-    // }, 2000);
-    // navigate('/results');
-
     const interval = setInterval(() => { 
       setDotCount(prevDotCount => (prevDotCount + 1) % 6);
     }, 1500 / 5);
