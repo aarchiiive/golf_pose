@@ -27,7 +27,7 @@
 
 .results-header h1 {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 20px;
+  font-size: 24px;
   font-weight: normal;
 }
 
@@ -54,7 +54,7 @@ video.result {
   justify-content: center;
   height: 10vh;
   /* padding-top: 5vh; */
-  margin-top: 10vh;
+  margin-top: 12vh;
 }
 
 .score-table {
@@ -87,16 +87,14 @@ video.result {
 
 .message {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 1rem;
-  font-weight: Regular;
-  margin: 0;
+  font-size: 12px;
+  font-weight: normal;
 }
 
 .score {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 1rem;
-  font-weight: Regular;
-  margin: 0;
+  font-size: 12px;
+  font-weight: normal;
 }
 
 .scroll-menu-container {
@@ -114,7 +112,6 @@ video.result {
   width: 8vw;
   height: 8vw;
   border-radius: 8vw;
-  font-size: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
