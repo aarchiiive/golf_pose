@@ -104,7 +104,7 @@ video.result {
   justify-content: center;
   height: 10vh;
   /* padding-top: 5vh; */
-  margin-top: 8vh;
+  margin-top: 14vh;
 }
 
 .scroll-prev-button, .scroll-next-button {
@@ -146,15 +146,21 @@ video.result {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 28px;
+  height: 36px;
 }
 
 .swing-results-table-message {
   /* margin-right: auto; */
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 16px;
+  font-weight: normal;
   flex-grow: 1;
 }
 
 .swing-results-table-score {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 16px;
+  font-weight: normal;
   white-space: nowrap;
   flex-shrink: 0;
 }
