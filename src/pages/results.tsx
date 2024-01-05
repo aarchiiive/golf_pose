@@ -117,7 +117,7 @@ const Results: React.FC = () => {
     const width = window.innerWidth;
 
     setResultsVideoStyle({
-      width: `${width * 0.9}px`,
+      width: `${width * 0.5}px`,
     });
   };
 
