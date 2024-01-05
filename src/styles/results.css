@@ -1,3 +1,15 @@
+@font-face {
+  font-family: 'Poppins';
+  src: url('./fonts/poppins/Poppins-Regular.ttf') format('truetype');
+  font-weight: normal;
+}
+
+@font-face {
+  font-family: 'Poppins';
+  src: url('./fonts/poppins/Poppins-Medium.ttf') format('truetype');
+  font-weight: medium;
+}
+
 .results-container {
   display: flex;
   flex-direction: column;
@@ -9,15 +21,14 @@
 
 .results-header {
   margin-top: 2vh;
-  margin-bottom: 4vh;
+  margin-bottom: 2vh;
   align-items: center;
 }
 
 .results-header h1 {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 2.5rem;
-  font-weight: Regular;
-  margin: 0;
+  font-size: 20px;
+  font-weight: normal;
 }
 
 .video-container {
@@ -123,12 +134,14 @@ video.result {
 }
 
 .swing-results-table {
-  font-family: 'Poppins', Courier, monospace;
   width: 60vw;
   max-height: 600px;
   padding: 0.5vh 4vw;
   border-radius: 30px;
-  background-color: rgba(204, 237, 255, 0.6);
+  font-family: 'Poppins', Courier, monospace;
+  font-weight: normal;
+  font-size: 20px;
+  background-color: rgb(215, 241, 255);
   /* box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
     -4px -4px 12px rgba(255, 255, 255, 0.8); */
 }
@@ -152,5 +165,5 @@ video.result {
 
 hr {
   width: 100%;
-  border: 1px solid rgb(219, 219, 219);
+  border: 1px solid rgb(245, 245, 245);
 }
