@@ -30,7 +30,7 @@
 }
 
 video.result {
-  width: 600px;
+  /* width: 600px; */
   /* max-width: 600px; */
   border-radius: 20px;
   /* box-shadow: 4px 4px 15px #aee1fb, -8px -8px 15px #ffffff; */
@@ -43,7 +43,7 @@ video.result {
   justify-content: center;
   height: 10vh;
   /* padding-top: 5vh; */
-  margin-top: 8vh;
+  margin-top: 10vh;
 }
 
 .score-table {
