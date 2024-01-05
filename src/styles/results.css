@@ -152,14 +152,14 @@ video.result {
 .swing-results-table-message {
   /* margin-right: auto; */
   font-family: 'Poppins', Courier, monospace;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: normal;
   flex-grow: 1;
 }
 
 .swing-results-table-score {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 16px;
+  font-size: 12px;
   font-weight: normal;
   white-space: nowrap;
   flex-shrink: 0;
