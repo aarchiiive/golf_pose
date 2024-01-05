@@ -146,7 +146,9 @@ video.result {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  height: 36px;
+  /* height: 36px; */
+  margin-top: 1vh;
+  margin-bottom: 1vh;
 }
 
 .swing-results-table-message {
