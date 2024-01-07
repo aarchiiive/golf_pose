@@ -5,10 +5,16 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Bars } from 'react-loader-spinner';
 
 import '../styles/loading.css';
+import { visibleVariants } from '../animations/loading';
 
-const Loading = () => {
+interface LoadingProps {
+  visibleAnimation: string;
+}
+
+// Loading 컴포넌트에 타입 적용
+const Loading: React.FC<LoadingProps> = ({ visibleAnimation }) => {
   const navigate = useNavigate();
-  const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
+  // const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
   const [dotCount, setDotCount] = useState(0);
 
   const loadingText = 'Loading' + '.'.repeat(dotCount);
@@ -20,34 +26,6 @@ const Loading = () => {
 
     return () => clearInterval(interval);
   }, []);
-
-  const visibleVariants = {
-    containerFadeIn: {
-      x: '100vw',
-      opacity: 0,
-    },
-    containerFadeOut: {
-      x: '0',
-      opacity: 1,
-    },
-
-    animateFadeIn: {
-      x: '0',
-      opacity: 1,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-    animateFadeOut: {
-      x: '-100vw',
-      opacity: 0,
-      transition: { 
-        duration: 0.8, 
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-  };
 
   return (
     <motion.div
