@@ -46,6 +46,7 @@ const Record: React.FC = () => {
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
   const [previewAnimation, setPreviewAnimation] = useState("hidden");
+  const [loadingAnimation, setLoadingAnimation] = useState("animateFadeIn");
   const [videoStyle, setVideoStyle] = useState({});
   const [previewVideoStyle, setPreviewVideoStyle] = useState({});
 
@@ -83,6 +84,23 @@ const Record: React.FC = () => {
     startVideoStream();
     setIsWebcamLoaded(true);
   }, []);
+
+  useEffect(() => {
+    console.log('Swing results: ', swingResults);
+    if (swingResults.video) {
+      setLoadingAnimation("animateFadeOut");
+      setTimeout(() => {
+        setIsLoading(false);
+        navigate('/results');
+      }, 800);
+    } else {
+      setLoadingAnimation("animateFadeOut");
+      setTimeout(() => {
+        setIsLoading(false);
+        setVisibleAnimation("animateFadeIn");
+      }, 800);
+    }
+  }, [swingResults]);
 
   // handling start/stop recording button
   const handleRecording = async () => {
@@ -167,7 +185,6 @@ const Record: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        console.log('Upload successfully', response.data);
         const { video, frames, correction } = response.data;
         dispatch(setSwingResults({
           ...swingResults,
@@ -175,25 +192,16 @@ const Record: React.FC = () => {
           frames,
           ...correction,
         }));
-        setIsLoading(false);
       }).catch(error => {
         console.error('Error uploading video', error);
-        setIsLoading(false);
       });
     }
   }
 
-  useEffect(() => {
-    console.log('Swing results: ', swingResults);
-    if (swingResults.video) {
-      navigate('/results');
-    }
-  }, [swingResults]);
-
   return (
     <>
       {isLoading && (
-        <Loading />
+        <Loading visibleAnimation={loadingAnimation}/>
       )}
       <div className="record">
         {isWebcamLoaded && (
@@ -239,6 +247,9 @@ const Record: React.FC = () => {
             initial="hidden"
             animate={previewAnimation}
           >
+            <div className="preview-title">
+              <h1>Use this video?</h1>
+            </div>
             <video
               className="preview"
               style={previewVideoStyle}
