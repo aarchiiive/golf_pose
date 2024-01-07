@@ -58,6 +58,16 @@ body {
   background-color: #474747;
 }
 
+.preview-title {
+  margin-bottom: 10px;
+}
+
+.preview-title h1 {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 32px;
+  font-weight: normal;
+}
+
 video.preview {
   width: 90%;
   max-width: 600px;
