@@ -28,16 +28,6 @@ interface SwingResultHeaderProps {
   name: string;
 }
 
-interface SwingActionProps {
-  name: string;
-  children: ReactNode;
-}
-
-interface SwingTableRowProps {
-  message: string;
-  score: number;
-}
-
 const swingPhases: (keyof SwingResults)[] = ['toe_up', 'backswing', 'top', 'downswing', 'impact', 'finish'];
 
 const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
@@ -47,30 +37,6 @@ const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
     </div>
   );
 };
-
-const SwingResult: React.FC<SwingActionProps> = ({ name, children }) => {
-  return (
-    <div className="swing-action">
-      {/* <SwingResultHeader name={name} /> */}
-      <div className="score-table-container">
-        {children}
-      </div>
-    </div>
-  );
-};
-
-const SwingTableRow: React.FC<SwingTableRowProps> = ({ message, score }) => {
-  return (
-    <div className="score-table-row">
-      <div className="message">
-        {message}
-      </div>
-      <div className="score">
-        {score}
-      </div>
-    </div>
-  );
-}
 
 const SwingResultsTable: React.FC<{ motion: SwingMotion; className?: string }> = ({ motion, className }) => {
   return (
