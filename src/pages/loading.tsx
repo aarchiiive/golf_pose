@@ -8,13 +8,13 @@ import '../styles/loading.css';
 import { visibleVariants } from '../animations/loading';
 
 interface LoadingProps {
-  visibleAnimation: string;
+  animate: string;
 }
 
 // Loading 컴포넌트에 타입 적용
-const Loading: React.FC<LoadingProps> = ({ visibleAnimation }) => {
+const Loading: React.FC<LoadingProps> = ({ animate }) => {
   const navigate = useNavigate();
-  // const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
+  // const [animate, setanimate] = useState("animateFadeIn");
   const [dotCount, setDotCount] = useState(0);
 
   const loadingText = 'Loading' + '.'.repeat(dotCount);
@@ -27,12 +27,16 @@ const Loading: React.FC<LoadingProps> = ({ visibleAnimation }) => {
     return () => clearInterval(interval);
   }, []);
 
+  useEffect(() => {
+    console.log('animate: ', animate);
+  }, [animate]);
+
   return (
     <motion.div
       className="loading-container"
       variants={visibleVariants}
       initial="containerFadeIn"
-      animate={visibleAnimation}
+      animate={animate}
     >
       {/* <div className="loader"></div> */}
       {/* <RingLoader color="#b1b1b1" loading={true} size={100} /> */}
