@@ -25,3 +25,23 @@ export const visibleVariants = {
     }
   },
 };
+
+export const tableVariants = {
+  hidden: { opacity: 0 },
+  animateFadeInRight: { 
+    opacity: 1,
+    x: [50, 0],
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 0.61, 0.36, 1]
+    }
+  },
+  animateFadeInLeft: { 
+    opacity: 1, 
+    x: [-50, 0],
+    transition: {
+      duration: 0.8,
+      ease: [0.22, 0.61, 0.36, 1]
+    }
+  },
+};
