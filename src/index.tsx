@@ -15,7 +15,6 @@ ReactDOM.render(
       <Routes>
         <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
         <Route path={`${process.env.PUBLIC_URL}/record`} element={<Record />} />
-        <Route path={`${process.env.PUBLIC_URL}/loading`} element={<Loading />} />
         <Route path={`${process.env.PUBLIC_URL}/results`} element={<Results />} />
       </Routes>
     </Router>
