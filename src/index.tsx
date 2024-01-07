@@ -7,6 +7,7 @@ import { store } from './store';
 import Home from './pages/home';
 import Record from './pages/record';
 import Loading from './pages/loading';
+import Error from './pages/error';
 import Results from './pages/results';
 
 ReactDOM.render(
@@ -16,6 +17,7 @@ ReactDOM.render(
         <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
         <Route path={`${process.env.PUBLIC_URL}/record`} element={<Record />} />
         <Route path={`${process.env.PUBLIC_URL}/results`} element={<Results />} />
+        <Route path={`${process.env.PUBLIC_URL}/error`} element={<Error />} />
       </Routes>
     </Router>
   </Provider>,
