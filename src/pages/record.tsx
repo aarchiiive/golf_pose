@@ -2,9 +2,6 @@ import React, {
   useRef,
   useState,
   useEffect,
-  useContext,
-  useCallback,
-  useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
@@ -12,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // libraries
 import axios from 'axios';
 import Webcam from 'react-webcam';
-import { motion, AnimatePresence, animate } from 'framer-motion';
+import { motion } from 'framer-motion';
 
 // styles
 import '../styles/record.css';
@@ -24,10 +21,6 @@ import { setSwingResults } from '../actions/swingResultsActions';
 
 // loading
 import Loading from './loading';
-
-// error
-import Error from './error';
-
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
@@ -101,7 +94,6 @@ const Record: React.FC = () => {
       if (responseCode === 200) {
         navigate("/results");
       } else if ([204, 400, 404, 500].includes(responseCode!)) {
-        // setVisibleAnimation("animateFadeIn");
         setPreviewAnimation("hidden");
         navigate('/error');
       }
