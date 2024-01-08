@@ -123,7 +123,7 @@ const Results: React.FC = () => {
       initial="containerFadeIn"
       animate={visibleAnimation}
     >
-      <SwingResultHeader name="Swing Results" />
+      <SwingResultHeader name={`Swing Results - ${currentSwingPhase}`} />
       <video
         className="result"
         style={resultsVideoStyle}
@@ -133,10 +133,12 @@ const Results: React.FC = () => {
         playsInline
         controls={false}
       ></video>
-      <div className="swing-results-table-title">
+      {/* <div className="swing-results-table-title">
         <h2>{currentSwingPhase}</h2>
-      </div>
-      <div className="scroll-menu-container">
+      </div> */}
+
+      {currentTableIndex < 6 && (
+        <div className="scroll-menu-container">
         <button className="scroll-prev-button" onClick={handlePrevious} disabled={currentTableIndex === 0}>
           <img className="next-button-icon" src={PrevButtonIcon} />
         </button>
@@ -145,11 +147,13 @@ const Results: React.FC = () => {
           swingMotion={swingResults[filteredKeys[currentTableIndex]] as SwingMotion} 
           tableIndex={currentTableIndex}/>
         </ScrollMenu>
-        <button className="scroll-next-button" onClick={handleNext} disabled={currentTableIndex === totalTables - 1}>
+        <button className="scroll-next-button" onClick={handleNext} disabled={currentTableIndex === totalTables}>
           <img className="next-button-icon" src={NextButtonIcon} />
         </button>
       </div>
-      {(currentTableIndex === 5) && (
+      )}
+
+      {(currentTableIndex === 6) && (
         <button
           className='try-again-button'
           onClick={() => navigate('/record')}
@@ -157,6 +161,7 @@ const Results: React.FC = () => {
           Try Again
         </button>
       )}
+
     </motion.div>
   );
 };
