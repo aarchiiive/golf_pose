@@ -21,7 +21,7 @@
 
 .results-header {
   margin-top: 2vh;
-  margin-bottom: 2vh;
+  margin-bottom: 0.5vh;
   align-items: center;
 }
 
@@ -45,7 +45,7 @@ video.result {
 }
 
 .swing-results-table-title {
-  margin-top: 2vh;
+  margin-top: 0.5vh;
 }
 
 .swing-results-table-title h2 {
@@ -167,13 +167,13 @@ hr {
 
 .try-again-button {
   width: 28vw;
-  height: 4vh;
+  height: 6vh;
   border-radius: 8vh;
   display: flex;
   align-items: center;
   justify-content: center;
   margin-top: 2vh;
-  color: rgba(81, 81, 81, 0.8);
-  background-color: rgba(255, 251, 34, 0.636);
-  box-shadow: 2px 2px 12px rgba(254, 252, 125, 0.4);
+  /* color: rgba(81, 81, 81, 0.8); */
+  /* background-color: rgba(255, 251, 34, 0.636);
+  box-shadow: 2px 2px 12px rgba(254, 252, 125, 0.4); */
 }
