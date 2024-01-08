@@ -271,17 +271,3 @@ button:hover {
     transform: scale(1);
   }
 }
-
-.company-logo-container {
-  /* position: absolute; */
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  /* bottom: 32px; */
-  margin-top: 32px;
-}
-
-.company-logo {
-  width: 40px;
-}
