@@ -13,64 +13,48 @@
   background-color: white;
 }
 
-.typewriter {
-  text-align: center;
+.huorotics-logo {
+  width: 72vw;
+  height: auto;
+  margin-bottom: 2vh;
+  align-items: center;
+  justify-content: center;
 }
 
-.typewriter h1 {
-  display: inline-block;
-  overflow: hidden;
-  border-right: .15em solid lightgray;
-  white-space: nowrap;
-  opacity: 0;
-  margin: 0 auto;
-  margin-top: 10%;
-  margin-bottom: 10%;
-  letter-spacing: .15em;
-  font-family: Consolas, monospace;
-  font-weight: 500;
-  /* animation: typing 3.5s steps(60, end), blink-caret .75s step-end infinite; */
+.huorotics-logo img {
+  width: 100%;
+  height: auto;
 }
 
-.typewriter-start h1 {
-  opacity: 1;
-  animation: typing 3.5s steps(60, end), blink-caret .75s step-end infinite;
+.ces-logo {
+  width: 24vw;
+  align-items: center;
+  justify-content: center;
+  display: flex;
+  flex-direction: row;
+  
 }
 
-/* Typewriter typing effect */
-@keyframes typing {
-  from { width: 0; }
-  to { width: 100%; }
+.ces-logo img {
+  width: 100%;
+  height: auto;
 }
 
-/* Typewriter cursor effect */
-@keyframes blink-caret {
-  from, to { border-color: transparent; }
-  50% { border-color: rgb(142, 142, 142); }
-}
-
-.home-company-logo {
-  margin-top: 16%;
+.ces-logo text {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 24px;
+  font-weight: normal;
+  color: rgb(67, 67, 67);
+  margin-right: 2vw;
+  margin-top: 2vh;
+  margin-bottom: 2vh;
 }
 
 /* Add this to your existing CSS */
 .home-start-button {
+  margin-top: 2vh;
   opacity: 0; /* Start with the button invisible */
   transform: translateY(72px); /* Start position off-screen */
-}
-
-.home-start-button-fade-in {
-  -webkit-animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
-  animation: slideUp 1s cubic-bezier(0.075, 0.88, 0.42, 1) forwards;
-  animation-delay: 3.5s; /* Wait 3.5 seconds before animating */
-}
-
-/* Keyframes for the slide-up animation */
-@keyframes slideUp {
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
 }
 
 .box {

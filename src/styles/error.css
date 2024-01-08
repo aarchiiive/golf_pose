@@ -1,0 +1,52 @@
+.error-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100vh;
+}
+
+.error-text {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 5vw;
+  font-weight: normal;
+  color: rgb(71, 71, 71);
+  margin-bottom: 2vh;
+}
+
+.error-guideline-image {
+  width: 40vw;
+  border-radius: 20px;
+  margin-bottom: 2vh;
+}
+
+.error-guideline-container {
+  background-color: transparent;
+  padding: 2vh 2vw;
+  border: 2px solid rgb(164, 164, 164);
+  border-radius: 20px;
+  margin-bottom: 2vh;
+}
+
+.error-guideline-text {
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 16px;
+  font-weight: normal;
+  color: rgb(71, 71, 71);
+}
+
+.error-retry-button {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  font-size: 16px;
+  width: 160px;
+  height: 60px;
+  border-radius: 30px;
+  color: rgba(255, 255, 255, 0.8);
+  background-color: rgba(118, 207, 254, 0.6);
+  box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
+    -4px -4px 12px rgba(255, 255, 255, 0.8);
+  margin-top: 2vh;
+}

@@ -5,28 +5,31 @@ import React, {
   useContext,
   ReactNode
 } from 'react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { motion, AnimatePresence, animate } from 'framer-motion';
-import Skeleton from 'react-loading-skeleton';
+import { useNavigate } from 'react-router-dom';
 
-import axios from 'axios';
+// redux
+import { useSelector } from 'react-redux';
+import { AppState } from '../store';
 
-import SwingResultsContext from '../context/swingResultsContext';
+// libraries
+import { motion } from 'framer-motion';
+import { ScrollMenu } from 'react-horizontal-scrolling-menu';
+import 'react-horizontal-scrolling-menu/dist/styles.css';
+
+// styles
 import '../styles/results.css';
+import NextButtonIcon from '../assets/arrow_right.png';
+import PrevButtonIcon from '../assets/arrow_left.png';
+import { visibleVariants, tableVariants } from '../animations/results';
+
+// interfaces
+import { SwingResults, SwingMotion } from '../interfaces/swingResults';
 
 interface SwingResultHeaderProps {
   name: string;
 }
 
-interface SwingActionProps {
-  name: string;
-  children: ReactNode;
-}
-
-interface SwingTableRowProps {
-  message: string;
-  score: number;
-}
+const swingPhases: (keyof SwingResults)[] = ['toe_up', 'backswing', 'top', 'downswing', 'impact', 'finish'];
 
 const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
   return (
@@ -36,80 +39,82 @@ const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
   );
 };
 
-const SwingResult: React.FC<SwingActionProps> = ({ name, children }) => {
+const SwingResultsTable: React.FC<{ 
+  swingMotion: SwingMotion; 
+  className?: string; 
+  tableIndex: number 
+}> = ({ 
+  swingMotion, 
+  className, 
+  tableIndex }) => {
+
   return (
-    <div className="swing-action">
-      <SwingResultHeader name={name} />
-      <div className="video-container">
-        {/* 비디오 컨텐츠 */}
-      </div>
-      <div className="score-table-container">
-        {children}
-      </div>
+    <div
+      className={`swing-results-table`}
+    >
+      {swingMotion.messages.map((message, index) => (
+        <>
+          <div key={index} className="message-score-container">
+            <p className="swing-results-table-message">{message}</p>
+            <p className="swing-results-table-score">{swingMotion.scores[index]}</p>
+          </div>
+          {index < swingMotion.messages.length - 1 && <hr />}
+        </>
+      ))}
     </div>
   );
 };
 
-const SwingTableRow: React.FC<SwingTableRowProps> = ({ message, score }) => {
-  return (
-    <div className="score-table-row">
-      <div className="message">
-        {message}
-      </div>
-      <div className="score">
-        {score}
-      </div>
-    </div>
-  );
-}
-
 const Results: React.FC = () => {
   const navigate = useNavigate();
-  const location = useLocation();
+  const swingResults = useSelector((state: AppState) => state.swingResults);
+  const filteredKeys = Object.keys(swingResults).filter(key => key !== 'frames' && key !== 'video');
+  const totalTables = filteredKeys.length;
 
+  const [resultsVideoStyle, setResultsVideoStyle] = useState({});
+  const [currentTableIndex, setCurrentTableIndex] = useState(0);
+  const [currentSwingPhase, setCurrentSwingPhase] = useState("");
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
 
   useEffect(() => {
-    const unlisten = () => {
-      window.onpopstate = (e: PopStateEvent) => {
-        navigate('/record');
-      };
-    };
-
-    unlisten();
-
-    return () => {
-      window.onpopstate = null;
-    };
-  }, [navigate]);
-
-  const visibleVariants = {
-    containerFadeIn: {
-      x: '100vw',
-      opacity: 0,
-    },
-    containerFadeOut: {
-      x: '0',
-      opacity: 1,
-    },
-
-    animateFadeIn: {
-      x: '0',
-      opacity: 1,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
-    animateFadeOut: {
-      x: '-100vw',
-      opacity: 0,
-      transition: {
-        duration: 0.8,
-        ease: [0.22, 0.61, 0.36, 1]
-      }
-    },
+    console.log(filteredKeys);
+    console.log(currentTableIndex);
+  }, [currentTableIndex]);
+  
+  const handleNext = () => {
+    if (currentTableIndex < totalTables) {
+      setCurrentTableIndex(currentIndex => currentIndex + 1);
+    }
   };
+
+  const handlePrevious = () => {
+    if (currentTableIndex > 0) {
+      setCurrentTableIndex(currentIndex => currentIndex - 1);
+    }
+  };
+
+  const updateStyles = () => {
+    const width = window.innerWidth;
+
+    setResultsVideoStyle({
+      width: `${width * 0.36}px`,
+    });
+  };
+
+  useEffect(() => {
+    updateStyles();
+    window.addEventListener('resize', updateStyles);
+    return () => window.removeEventListener('resize', updateStyles);
+  }, []);
+
+  useEffect(() => {
+    const phase = swingPhases[currentTableIndex];
+    if (phase) {
+      const phaseWithoutUnderscore = phase.replace(/_/g, ' ');
+      const formattedPhase = phaseWithoutUnderscore.charAt(0).toUpperCase() + phaseWithoutUnderscore.slice(1);
+      setCurrentSwingPhase(formattedPhase);
+    }
+  }, [currentTableIndex]);
 
   return (
     <motion.div
@@ -118,21 +123,47 @@ const Results: React.FC = () => {
       initial="containerFadeIn"
       animate={visibleAnimation}
     >
-      <>
-        <SwingResultHeader name="Toe Up" />
-        <div className="video-container">
-        </div>
-        <div className="score-table-container">
-          <div className="score-table">
-            <SwingTableRow message="Perfect Swing!" score={94} />
-            <SwingTableRow message="Position of your right arm is perfect!" score={96} />
-            <SwingTableRow message="Rotation of your upper body is perfect!" score={92} />
-          </div>
-        </div>
-      </>
+      <SwingResultHeader name={`Swing Results - ${currentSwingPhase}`} />
+      <video
+        className="result"
+        style={resultsVideoStyle}
+        src={`data:video/mp4;base64,${swingResults.video}`}
+        loop
+        autoPlay
+        playsInline
+        controls={false}
+      ></video>
+      {/* <div className="swing-results-table-title">
+        <h2>{currentSwingPhase}</h2>
+      </div> */}
+
+      {currentTableIndex < 6 && (
+        <div className="scroll-menu-container">
+        <button className="scroll-prev-button" onClick={handlePrevious} disabled={currentTableIndex === 0}>
+          <img className="next-button-icon" src={PrevButtonIcon} />
+        </button>
+        <ScrollMenu>
+          <SwingResultsTable 
+          swingMotion={swingResults[filteredKeys[currentTableIndex]] as SwingMotion} 
+          tableIndex={currentTableIndex}/>
+        </ScrollMenu>
+        <button className="scroll-next-button" onClick={handleNext} disabled={currentTableIndex === totalTables}>
+          <img className="next-button-icon" src={NextButtonIcon} />
+        </button>
+      </div>
+      )}
+
+      {(currentTableIndex === 6) && (
+        <button
+          className='try-again-button'
+          onClick={() => navigate('/record')}
+        >
+          Try Again
+        </button>
+      )}
+
     </motion.div>
   );
-
 };
 
 export default Results;

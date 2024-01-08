@@ -11,7 +11,6 @@ const App = () => {
       <Routes>
         <Route path={`${process.env.PUBLIC_URL}/`} element={<Home />} />
         <Route path={`${process.env.PUBLIC_URL}/record`} element={<Record />} />
-        <Route path={`${process.env.PUBLIC_URL}/loading`} element={<Loading />} />
       </Routes>
     </Router>
   );

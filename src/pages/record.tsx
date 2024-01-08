@@ -2,33 +2,34 @@ import React, {
   useRef,
   useState,
   useEffect,
-  useContext,
-  useCallback,
-  useReducer
 } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 
+// libraries
 import axios from 'axios';
 import Webcam from 'react-webcam';
-import { motion, AnimatePresence, animate } from 'framer-motion';
+import { motion } from 'framer-motion';
 
+// styles
 import '../styles/record.css';
-
-import Loading from './loading';
-// import PoseDetection from '../components/poseDetection';
 import { visibleVariants, previewVariants } from '../animations/record';
-import SwingResultsContext from '../context/swingResultsContext';
 
+// redux
+import { AppState } from '../store';
+import { setSwingResults } from '../actions/swingResultsActions';
+
+// loading
+import Loading from './loading';
 
 const Record: React.FC = () => {
   const navigate = useNavigate();
-  const swingResultsContext = useContext(SwingResultsContext);
+  const dispatch = useDispatch();
+  const swingResults = useSelector((state: AppState) => state.swingResults);
 
   // refs
   const videoRef = useRef<HTMLVideoElement>(null);
   const recorderRef = useRef<MediaRecorder>();
-  const webcamRef = useRef<Webcam>(null);
-  const canvasRef = useRef<HTMLCanvasElement>(null);
 
   const buttonTexts = ['Start Recording', 'Stop Recording'];
 
@@ -38,10 +39,12 @@ const Record: React.FC = () => {
   const [isCapturing, setIsCapturing] = useState(false);
   const [isWebcamLoaded, setIsWebcamLoaded] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [responseCode, setResponseCode] = useState<number | null>(null);
 
   // styles
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
   const [previewAnimation, setPreviewAnimation] = useState("hidden");
+  const [loadingAnimation, setLoadingAnimation] = useState("animateFadeIn");
   const [videoStyle, setVideoStyle] = useState({});
   const [previewVideoStyle, setPreviewVideoStyle] = useState({});
 
@@ -52,7 +55,7 @@ const Record: React.FC = () => {
       width: `${width * 0.75}px`,
     });
     setPreviewVideoStyle({
-      width: `${width * 0.9}px`,
+      width: `${width * 0.8}px`,
     });
   };
 
@@ -62,8 +65,9 @@ const Record: React.FC = () => {
     return () => window.removeEventListener('resize', updateStyles);
   }, []);
 
+  // Start video stream
   useEffect(() => {
-    // Function to start video stream
+    
     const startVideoStream = async () => {
       try {
         const isMobile = /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent);
@@ -80,6 +84,23 @@ const Record: React.FC = () => {
     setIsWebcamLoaded(true);
   }, []);
 
+  // Get swing results from server
+  useEffect(() => {
+    console.log('Swing results: ', swingResults);
+
+    setLoadingAnimation("animateFadeOut");
+    setTimeout(() => {
+      setIsLoading(false);
+      if (responseCode === 200) {
+        navigate("/results");
+      } else if ([204, 400, 404, 500].includes(responseCode!)) {
+        setPreviewAnimation("hidden");
+        navigate('/error');
+      }
+    }
+    , 800);
+  }, [swingResults]);
+
   // handling start/stop recording button
   const handleRecording = async () => {
     const startButton = document.querySelector('.start-button');
@@ -87,8 +108,6 @@ const Record: React.FC = () => {
 
     if (!isCapturing) {
       // Start recording
-      console.log('Recording started');
-
       setButtonText(buttonTexts[1]);
 
       const mediaStream = await navigator.mediaDevices.getUserMedia({ video: true });
@@ -97,7 +116,6 @@ const Record: React.FC = () => {
 
       let options = { mimeType: "video/webm" };
       if (!MediaRecorder.isTypeSupported(options.mimeType)) {
-        console.log(`${options.mimeType} is not supported, switching to video/mp4.`);
         options.mimeType = "video/mp4";
       }
 
@@ -112,8 +130,6 @@ const Record: React.FC = () => {
 
     } else {
       // Stop recording
-      console.log('Recording stopped');
-
       setButtonText(buttonTexts[0]);
       setVisibleAnimation("reverse");
       setTimeout(() => {
@@ -133,7 +149,6 @@ const Record: React.FC = () => {
     if (data.size > 0) {
       const videoUrl = URL.createObjectURL(data);
       setVideoSrc(videoUrl);
-      console.log('Save successfully');
     }
   };
 
@@ -144,7 +159,6 @@ const Record: React.FC = () => {
     }, 800);
   }
 
-  // gunicorn --bind 0.0.0.0:8000 --timeout 86400 golf_pose.wsgi:application
   const handleNextButtonClick = async () => {
     if (videoSrc) {
       const blob = await fetch(videoSrc);
@@ -156,6 +170,7 @@ const Record: React.FC = () => {
 
       setTimeout(() => {
         setIsLoading(true);
+        setLoadingAnimation("animateFadeIn");
       }, 800);  
 
       axios.post(`${process.env.REACT_APP_API_URL}/upload/`, formData, {
@@ -163,14 +178,16 @@ const Record: React.FC = () => {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        console.log('Upload successfully', response.data);
-        // setIsLoading(false);
-        // navigate('/results');
-        // metirc score
+        setResponseCode(response.status);
+        const { video, frames, correction } = response.data;
+          dispatch(setSwingResults({
+            ...swingResults,
+            video,
+            frames,
+            ...correction,
+          }));
       }).catch(error => {
         console.error('Error uploading video', error);
-        // setIsLoading(false);
-        // navigate('/results');
       });
     }
   }
@@ -178,8 +195,9 @@ const Record: React.FC = () => {
   return (
     <>
       {isLoading && (
-        <Loading />
+        <Loading animate={loadingAnimation}/>
       )}
+
       <div className="record">
         {isWebcamLoaded && (
           <motion.div
@@ -200,13 +218,6 @@ const Record: React.FC = () => {
             </motion.div>
 
             <video ref={videoRef} className="streamer" autoPlay playsInline style={videoStyle} />
-            {/* <canvas 
-            ref={canvasRef} 
-            className="canvas" 
-            width={videoRef.current?.videoWidth} 
-            height={videoRef.current?.videoHeight} 
-            // style={videoStyle}
-            /> */}
 
             {/* Start/Stop button */}
             <div className="button-container">
@@ -231,6 +242,9 @@ const Record: React.FC = () => {
             initial="hidden"
             animate={previewAnimation}
           >
+            <div className="preview-title">
+              <h1>Use this video?</h1>
+            </div>
             <video
               className="preview"
               style={previewVideoStyle}
