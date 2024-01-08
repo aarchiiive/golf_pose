@@ -47,37 +47,10 @@ const SwingResultsTable: React.FC<{
   swingMotion, 
   className, 
   tableIndex }) => {
-  // const [prevTableIndex, setPrevTableIndex] = useState(tableIndex);
-  // const [animationState, setAnimationState] = useState("hidden");
-
-  // useEffect(() => {
-  //   if (tableIndex > prevTableIndex) {
-  //     setAnimationState("animateFadeInRight");
-  //   } else if (tableIndex < prevTableIndex) {
-  //     setAnimationState("animateFadeInLeft");
-  //   } else {
-  //     setAnimationState("hidden");
-  //   }
-    
-  //   console.log('tableIndex: ', tableIndex);
-  //   console.log('prevTableIndex: ', prevTableIndex);
-
-  //   setTimeout(() => {
-  //     if (tableIndex > prevTableIndex) {
-  //       setAnimationState("animateFadeInRight");
-  //     } else if (tableIndex < prevTableIndex) {
-  //       setAnimationState("animateFadeInLeft");
-  //     }
-  //   }, 600);
-  //   setPrevTableIndex(tableIndex);
-  // }, [tableIndex, prevTableIndex]);
 
   return (
     <div
       className={`swing-results-table ${className || ''}`}
-      // variants={tableVariants}
-      // initial="animateFadeInLeft"
-      // animate={animationState}
     >
       {swingMotion.messages.map((message, index) => (
         <>
@@ -171,6 +144,12 @@ const Results: React.FC = () => {
           <img className="next-button-icon" src={NextButtonIcon} />
         </button>
       </div>
+      <button
+        className='try-again-button'
+        onClick={() => navigate('/record')}
+      >
+        Try Again
+      </button>
 
     </motion.div>
   );
