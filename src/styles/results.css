@@ -84,10 +84,10 @@ video.result {
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: center;
-  height: 10vh;
+  /* justify-content: center; */
+  /* height: 10vh; */
   /* padding-top: 5vh; */
-  margin-top: 6vh;
+  /* margin-top: 6vh; */
 }
 
 .scroll-prev-button, .scroll-next-button {
@@ -166,12 +166,14 @@ hr {
 }
 
 .try-again-button {
-  width: 20vw;
+  width: 28vw;
   height: 4vh;
   border-radius: 8vh;
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 8vh;
-  background-color: rgb(255, 255, 255);
+  margin-top: 2vh;
+  color: rgba(81, 81, 81, 0.8);
+  background-color: rgba(255, 251, 34, 0.636);
+  box-shadow: 2px 2px 12px rgba(254, 252, 125, 0.4);
 }
