@@ -171,7 +171,7 @@ def draw_points(kps, img, check_joint, index, mode = None,line = None):
     return point
 #######################################################################################
 
-def toe_up_right_arm(kps, img, event_dict):
+def toe_up_right_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [6, 8, 10]
     angle_list = []
     for i in range(event_dict[1]-3, event_dict[1]+1):      
@@ -183,7 +183,7 @@ def toe_up_right_arm(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img, mean
 
-def toe_up_right_shoulder(kps, img, event_dict):
+def toe_up_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
     for i in range(event_dict[1]-3, event_dict[1]+1):      
@@ -195,7 +195,8 @@ def toe_up_right_shoulder(kps, img, event_dict):
     mean = np.mean(angle_list)
     max = np.max(angle_list)
     return img, mean
-def toe_up_rotate(kps, img, event_dict):
+
+def toe_up_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
     for i in range(event_dict[1]-3, event_dict[1]+1):      
@@ -208,7 +209,7 @@ def toe_up_rotate(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def back_left_arm(kps, img, event_dict):
+def back_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
     for i in range(event_dict[1],event_dict[2]):      
@@ -220,7 +221,7 @@ def back_left_arm(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img,mean
 
-def back_right_shoulder(kps, img, event_dict):
+def back_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
     for i in range(event_dict[1], event_dict[2]):      
@@ -232,7 +233,7 @@ def back_right_shoulder(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img, mean
 
-def back_rotate(kps, img, event_dict):
+def back_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
     for i in range(event_dict[1], event_dict[2]):      
@@ -245,7 +246,7 @@ def back_rotate(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def top_left_arm(kps, img, event_dict):
+def top_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
     for i in range(event_dict[2], event_dict[3]):      
@@ -257,7 +258,7 @@ def top_left_arm(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img,mean
 
-def top_right_shoulder(kps, img, event_dict):
+def top_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
     for i in range(event_dict[2], event_dict[3]):      
@@ -270,7 +271,7 @@ def top_right_shoulder(kps, img, event_dict):
     max = np.max(angle_list)
     return img, mean
 
-def top_rotate(kps, img, event_dict):
+def top_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
     for i in range(event_dict[2], event_dict[3]):      
@@ -283,7 +284,7 @@ def top_rotate(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def down_left_arm(kps, img, event_dict):
+def down_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
     for i in range(event_dict[3], event_dict[4]):      
@@ -295,7 +296,7 @@ def down_left_arm(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img,mean
 
-def down_right_shoulder(kps, img, event_dict):
+def down_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
     for i in range(event_dict[3], event_dict[4]):      
@@ -307,7 +308,7 @@ def down_right_shoulder(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img, mean
 
-def down_rotate(kps, img, event_dict):
+def down_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
     for i in range(event_dict[3], event_dict[4]):      
@@ -320,7 +321,7 @@ def down_rotate(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def down_rotate_lower(kps, img, event_dict):
+def down_rotate_lower(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [13, 11, 12]
     angle_list = []
     for i in range(event_dict[3], event_dict[4]):      
@@ -333,7 +334,7 @@ def down_rotate_lower(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def impact_right_shoulder(kps, img, event_dict):
+def impact_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
     for i in range(event_dict[4], event_dict[5]):      
@@ -345,7 +346,7 @@ def impact_right_shoulder(kps, img, event_dict):
     mean = np.mean(angle_list)
     return img, mean
 
-def impact_rotate(kps, img, event_dict):
+def impact_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
     for i in range(event_dict[4], event_dict[5]):      
@@ -358,7 +359,7 @@ def impact_rotate(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def impact_rotate_lower(kps, img, event_dict):
+def impact_rotate_lower(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [13, 11, 12]
     angle_list = []
     for i in range(event_dict[4], event_dict[5]):      
@@ -371,7 +372,7 @@ def impact_rotate_lower(kps, img, event_dict):
     max = np.max(angle_list)
     return img, max-min
 
-def impact_head(kps, img, event_dict):
+def impact_head(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 0
     y_position_list = []
     for i in range(event_dict[4], event_dict[5]):      
@@ -381,7 +382,7 @@ def impact_head(kps, img, event_dict):
     max = np.max(y_position_list)
     return img, max-min
 
-def finish_center(kps, img, event_dict, right_start):
+def finish_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 11
     x_position_list = []
     for i in range(event_dict[5], event_dict[6]+1):
@@ -390,7 +391,7 @@ def finish_center(kps, img, event_dict, right_start):
     min = np.min(x_position_list)
     return img, min
 
-def back_center(kps, img, event_dict, left_start):
+def back_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 14
     x_position_list = []
     for i in range(event_dict[0], event_dict[3]):
@@ -399,7 +400,7 @@ def back_center(kps, img, event_dict, left_start):
     min = np.min(x_position_list)
     return img, min
 
-def down_center(kps, img, event_dict, right_start):
+def down_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 13
     x_position_list = []
     for i in range(event_dict[3], event_dict[5]):
