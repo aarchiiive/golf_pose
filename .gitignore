@@ -4,7 +4,7 @@
 *.pem
 *.mp4
 *.jpg
-*.png
+# *.png
 *.pt
 
 # dependencies
