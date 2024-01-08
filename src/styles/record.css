@@ -221,7 +221,7 @@ button:hover {
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
-  margin-top: 6vh;
+  margin-top: 4vh;
 }
 
 .retry-button {
