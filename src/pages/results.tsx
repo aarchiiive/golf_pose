@@ -50,7 +50,7 @@ const SwingResultsTable: React.FC<{
 
   return (
     <div
-      className={`swing-results-table ${className || ''}`}
+      className={`swing-results-table`}
     >
       {swingMotion.messages.map((message, index) => (
         <>
