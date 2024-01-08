@@ -72,12 +72,17 @@ const Results: React.FC = () => {
   const totalTables = filteredKeys.length;
 
   const [resultsVideoStyle, setResultsVideoStyle] = useState({});
-  const [currentTableIndex, setCurrentTableIndex] = useState(1);
+  const [currentTableIndex, setCurrentTableIndex] = useState(0);
   const [currentSwingPhase, setCurrentSwingPhase] = useState("");
   const [visibleAnimation, setVisibleAnimation] = useState("animateFadeIn");
+
+  useEffect(() => {
+    console.log(filteredKeys);
+    console.log(currentTableIndex);
+  }, [currentTableIndex]);
   
   const handleNext = () => {
-    if (currentTableIndex < totalTables - 1) {
+    if (currentTableIndex < totalTables) {
       setCurrentTableIndex(currentIndex => currentIndex + 1);
     }
   };
@@ -103,7 +108,7 @@ const Results: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    const phase = swingPhases[currentTableIndex - 1];
+    const phase = swingPhases[currentTableIndex];
     if (phase) {
       const phaseWithoutUnderscore = phase.replace(/_/g, ' ');
       const formattedPhase = phaseWithoutUnderscore.charAt(0).toUpperCase() + phaseWithoutUnderscore.slice(1);
@@ -132,7 +137,7 @@ const Results: React.FC = () => {
         <h2>{currentSwingPhase}</h2>
       </div>
       <div className="scroll-menu-container">
-        <button className="scroll-prev-button" onClick={handlePrevious} disabled={currentTableIndex === 1}>
+        <button className="scroll-prev-button" onClick={handlePrevious} disabled={currentTableIndex === 0}>
           <img className="next-button-icon" src={PrevButtonIcon} />
         </button>
         <ScrollMenu>
@@ -144,13 +149,14 @@ const Results: React.FC = () => {
           <img className="next-button-icon" src={NextButtonIcon} />
         </button>
       </div>
-      <button
-        className='try-again-button'
-        onClick={() => navigate('/record')}
-      >
-        Try Again
-      </button>
-
+      {(currentTableIndex === 5) && (
+        <button
+          className='try-again-button'
+          onClick={() => navigate('/record')}
+        >
+          Try Again
+        </button>
+      )}
     </motion.div>
   );
 };

@@ -71,10 +71,7 @@ video.result {
   display: flex;
   flex-direction: row;
   align-items: center;
-  /* justify-content: center; */
-  /* height: 10vh; */
-  /* padding-top: 5vh; */
-  /* margin-top: 6vh; */
+  height: 320px;
 }
 
 .scroll-prev-button, .scroll-next-button {
