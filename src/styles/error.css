@@ -8,14 +8,14 @@
 
 .error-text {
   font-family: 'Poppins', Courier, monospace;
-  font-size: 28px;
+  font-size: 5vw;
   font-weight: normal;
   color: rgb(71, 71, 71);
   margin-bottom: 2vh;
 }
 
 .error-guideline-image {
-  width: 32vw;
+  width: 40vw;
   border-radius: 20px;
   margin-bottom: 2vh;
 }
@@ -40,12 +40,12 @@
   flex-direction: row;
   align-items: center;
   justify-content: center;
-  width: 20vw;
-  height: 5vh;
-  border-radius: 5vh;
+  width: 140px;
+  height: 60px;
+  border-radius: 30px;
   color: rgba(255, 255, 255, 0.8);
   background-color: rgba(118, 207, 254, 0.6);
   box-shadow: 4px 4px 12px rgba(204, 237, 255, 0.6),
     -4px -4px 12px rgba(255, 255, 255, 0.8);
-  margin-bottom: 2vh;
+  margin-top: 2vh;
 }
