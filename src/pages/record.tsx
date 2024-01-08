@@ -55,7 +55,7 @@ const Record: React.FC = () => {
       width: `${width * 0.75}px`,
     });
     setPreviewVideoStyle({
-      width: `${width * 0.9}px`,
+      width: `${width * 0.8}px`,
     });
   };
 

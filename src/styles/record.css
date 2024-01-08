@@ -70,7 +70,6 @@ video.preview {
 }
 
 video.streamer {
-  /* display: none; */
   margin-bottom: 20px;
   width: 90%;
   max-width: 600px;
