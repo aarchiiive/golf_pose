@@ -33,6 +33,7 @@ class GolfDB:
         self.events = None
         self.not_sorted = 0
         self.sorted_events = None
+        self.seen_events = {}
         self.event_names = {
             0: '0',
             1: '1',
@@ -60,19 +61,25 @@ class GolfDB:
         self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
         self.cal_probability()
         self.cal_confidence()
+        
         if not self.is_sorted():
-            sorted_events = [0] * 8
-            # for i, index in enumerate(self.sorted_events):
-            #     sorted_events[i] = self.sorted_events[i] + index
-            # print(sorted_events)
+            # self.sorted_events = [3,3,57,61,78,129,136,136,139]
+            # self.sorted_events = self.modify_list(self.sorted_events)
+            # print(self.sorted_events)
             return self.sorted_events
         else:
-            events = [0] * 8
-            # for i, index in enumerate(self.events):
-            #     events[i] = self.events[i] + index
-            # print(events)
+            self.events = self.modify_list(self.events)
             return self.events
     
+    def modify_list(self, lst):
+        for i, num in enumerate(lst):
+            if num in self.seen_events: 
+                idx = self.seen_events[num] 
+                average = (lst[idx - 1] + lst[idx + 1]) / 2  
+                lst[idx] = average
+            self.seen_events[num] = i 
+        return lst
+
     def is_sorted(self):
         self.sorted_events = sorted(self.events)
         return (self.sorted_events == self.events).all()
