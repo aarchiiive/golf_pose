@@ -4,6 +4,10 @@ import React, { useRef, useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 
 import '../styles/home.css';
+import huroticsLogo from '../assets/hurotics_logo.png';
+import cesLogo from '../assets/ces_logo.png';
+
+import { visibleVariants } from '../animations/home';
 
 const Home = () => {
   const navigate = useNavigate();
@@ -11,25 +15,10 @@ const Home = () => {
   const startButtonRef = useRef<HTMLButtonElement>(null);
   const marqueeContent = Array(240).fill("CES 2024").join(" ");
 
-  const [startTypeWriting, setStartTypeWriting] = useState(false);
+  const [buttonAnimation, setButtonAnimation] = useState("buttonInitial");
+  const [huroticsLogoAnimation, setHuroticsLogoAnimation] = useState("hidden");
+  const [cesLogoAnimation, setCesLogoAnimation] = useState("hidden");
   const [isFadeOut, setIsFadeOut] = useState(false);
-
-  const fadeOutVariants = {
-    initial: {
-      y: 0,
-      opacity: 1,
-    },
-    exitTop: {
-      y: -100,
-      opacity: 0,
-      transition: { duration: 0.4, ease: 'easeInOut' }
-    },
-    exitBottom: {
-      y: 100,
-      opacity: 0,
-      transition: { duration: 0.4, ease: 'easeInOut' }
-    }
-  };
 
   useEffect(() => {
     const adjustFontSize = () => {
@@ -40,21 +29,11 @@ const Home = () => {
       }
     };
 
-    // Adjust font size on mount and window resize
     adjustFontSize();
     window.addEventListener('resize', adjustFontSize);
 
-    // Cleanup listener
     return () => window.removeEventListener('resize', adjustFontSize);
   }, []);
-
-  useEffect(() => {
-    console.log('startTypeWriting: ', startTypeWriting);
-    if (startTypeWriting && typewriterRef.current && startButtonRef.current) {
-      typewriterRef.current.classList.add('typewriter-start');
-      startButtonRef.current.classList.add('home-start-button-fade-in');
-    }
-  }, [startTypeWriting]);
 
   const handleStartButtonClick = () => {
     setIsFadeOut(true);
@@ -68,9 +47,10 @@ const Home = () => {
       <AnimatePresence>
         {!isFadeOut && (
           <>
+            {/* marquee animation (top) */}
             <motion.div
               className="marquee marquee-top"
-              variants={fadeOutVariants}
+              variants={visibleVariants}
               initial="initial"
               exit="exitTop"
             >
@@ -78,9 +58,11 @@ const Home = () => {
                 {marqueeContent}
               </div>
             </motion.div>
+
+            {/* marquee animation (bottom) */}
             <motion.div
               className="marquee marquee-bottom"
-              variants={fadeOutVariants}
+              variants={visibleVariants}
               initial="initial"
               exit="exitBottom"
             >
@@ -88,20 +70,39 @@ const Home = () => {
                 {marqueeContent}
               </div>
             </motion.div>
+              
+            {/* Huorotics logo */}
             <motion.div 
-              className="typewriter"
-              ref={typewriterRef}
-              variants={fadeOutVariants}
-              initial="initial"
+              className="huorotics-logo"
+              variants={visibleVariants}
+              initial="hidden"
+              animate={huroticsLogoAnimation}
               exit="exitTop"
+              onAnimationComplete={() => { setCesLogoAnimation("animateFadeIn"); }}
             >
-              <h1>H-Swing Project Arrived in CES 2024</h1>
+              <img src={huroticsLogo} alt="Hurotics Logo" />
             </motion.div>
+
+            {/* CES logo */}
+            <motion.div 
+              className="ces-logo"
+              variants={visibleVariants}
+              initial="hidden"
+              animate={cesLogoAnimation}
+              exit="exitTop"
+              onAnimationComplete={() => { setButtonAnimation("buttonFadeIn"); }}
+            >
+              <text>In</text>
+              <img src={cesLogo} alt="CES Logo" />
+            </motion.div>
+
+            {/* start button */}
             <motion.button
               className='home-start-button'
               ref={startButtonRef}
-              variants={fadeOutVariants}
-              initial="initial"
+              variants={visibleVariants}
+              initial="buttonInitial"
+              animate={buttonAnimation}
               exit="exitBottom"
               onClick={handleStartButtonClick}
             >
@@ -109,8 +110,8 @@ const Home = () => {
             </motion.button>
             <motion.div 
               className="marquee marquee-bottom"
-              variants={fadeOutVariants}
-              initial="initial"
+              variants={visibleVariants}
+              initial="hidden"
               exit="exitBottom"
             >
               <div className="marquee-content marquee-reverse">
@@ -133,19 +134,8 @@ const Home = () => {
           times: [0, 0.44, 0.8, 1],
           duration: 2.4,
         }}
-        onAnimationComplete={() => { setStartTypeWriting(true) }}
+        onAnimationComplete={() => { setHuroticsLogoAnimation("animateFadeIn"); }}
       />
-
-      {/* Company logo */}
-      {/* <div className="home-company-logo">
-        <a href="http://hurotics.com/" target="_blank" rel="noopener noreferrer">
-          <img
-            src={require('../assets/hurotics.png')}
-            alt="Company Logo"
-            className="company-logo"
-          />
-        </a>
-      </div> */}
     </div>
   );
 };
