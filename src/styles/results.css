@@ -55,19 +55,6 @@ video.result {
   color: rgb(67, 67, 67);
 }
 
-.score-table-row {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1vh 2vw;
-  border-bottom: 1px solid white;
-}
-
-.score-table-row:last-child {
-  border-bottom: none;
-}
-
 .message {
   font-family: 'Poppins', Courier, monospace;
   font-size: 4px;
@@ -139,9 +126,7 @@ video.result {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  /* height: 36px; */
-  margin-top: 0.5vh;
-  margin-bottom: 0.5vh;
+  padding: 0.1vh 0.1vw;
 }
 
 .swing-results-table-message {
