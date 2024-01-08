@@ -71,7 +71,7 @@ video.result {
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-top: 3vh;
+  margin-top: 5vh;
   height: 280px;
 }
 
@@ -154,7 +154,7 @@ hr {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-top: 10vh;
+  margin-top: 12vh;
   /* color: rgba(81, 81, 81, 0.8); */
   /* background-color: rgba(255, 251, 34, 0.636);
   box-shadow: 2px 2px 12px rgba(254, 252, 125, 0.4); */
