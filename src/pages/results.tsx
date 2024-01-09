@@ -47,6 +47,7 @@ const SwingResultHeader: React.FC<SwingResultHeaderProps> = ({ name }) => {
 };
 
 const ResultsSlider: React.FC<ResultsSliderProps> = ({ onSlideChange }) => {
+  const navigate = useNavigate();
   const swingResults = useSelector((state: AppState) => state.swingResults);
 
   const settings = {
@@ -93,6 +94,12 @@ const ResultsSlider: React.FC<ResultsSliderProps> = ({ onSlideChange }) => {
             </div>
           )
         ))}
+        <div className="results-slider-item">
+          <button 
+          className="try-again-button"
+          onClick={() => navigate('/record')}
+          >Try Again</button>
+        </div>
       </Slider>
     </div>
   );
