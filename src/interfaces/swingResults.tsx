@@ -1,6 +1,7 @@
 export interface SwingMotion {
   messages: string[];
   scores: number[];
+  video: string | null;
 }
 
 export interface SwingResults {
@@ -10,6 +11,4 @@ export interface SwingResults {
   downswing: SwingMotion;
   impact: SwingMotion;
   finish: SwingMotion;
-  frames: number[];
-  video: string | null;
 }
