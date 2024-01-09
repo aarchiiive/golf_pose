@@ -2,7 +2,7 @@
 import { SET_SWING_RESULTS } from '../actions/types';
 import { SwingMotion, SwingResults } from '../interfaces/swingResults';
 
-const initialSwingMotion: SwingMotion = { messages: [], scores: [] };
+const initialSwingMotion: SwingMotion = { messages: [], scores: [], video: null };
 
 const initialState: SwingResults = {
   toe_up: initialSwingMotion,
@@ -11,8 +11,6 @@ const initialState: SwingResults = {
   downswing: initialSwingMotion,
   impact: initialSwingMotion,
   finish: initialSwingMotion,
-  frames: [],
-  video: null,
 };
 
 
