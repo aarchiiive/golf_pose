@@ -57,8 +57,8 @@ const ResultsSlider: React.FC<ResultsSliderProps> = ({ onSlideChange }) => {
     arrows: false,
     slidesToShow: 1,
     slidesToScroll: 1,
-    autoplay: true,
-    autoplaySpeed: 2000,
+    // autoplay: true,
+    // autoplaySpeed: 2000,
     afterChange: onSlideChange,
   };
   
