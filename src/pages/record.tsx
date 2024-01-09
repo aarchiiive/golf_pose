@@ -173,17 +173,16 @@ const Record: React.FC = () => {
         setLoadingAnimation("animateFadeIn");
       }, 800);  
 
+      // axios.post(`${process.env.REACT_APP_API_URL}/upload/`, formData, {
       axios.post(`${process.env.REACT_APP_API_URL}/upload/`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
         setResponseCode(response.status);
-        const { video, frames, correction } = response.data;
+        const { correction } = response.data;
           dispatch(setSwingResults({
             ...swingResults,
-            video,
-            frames,
             ...correction,
           }));
       }).catch(error => {
