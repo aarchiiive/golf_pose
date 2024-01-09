@@ -31,120 +31,108 @@
   font-weight: normal;
 }
 
-video.result {
+.results-slider {
+  width: 90vw;
+  /* height: 80vh; */
   border-radius: 20px;
+  padding: 0 8vw;
+  padding-bottom: 6vh;
+  margin: auto;
+  box-sizing: border-box;
+  background-color: #f3f3f3;
 }
 
-.score-table-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 10vh;
-  /* padding-top: 5vh; */
-}
-
-.swing-results-table-title {
-  margin-top: 0.5vh;
-}
-
-.swing-results-table-title h2 {
+.results-slider h2 {
+  text-align: center;
   font-family: 'Poppins', Courier, monospace;
   font-size: 20px;
   font-weight: normal;
   color: rgb(67, 67, 67);
 }
 
-.message {
-  font-family: 'Poppins', Courier, monospace;
-  font-size: 4px;
-  font-weight: normal;
-}
+/* .results-slider-item {
+} */
 
-.score {
-  font-family: 'Poppins', Courier, monospace;
-  font-size: 4px;
-  font-weight: normal;
-}
-
-.scroll-menu-container {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-top: 5vh;
-  height: 280px;
-}
-
-.scroll-prev-button, .scroll-next-button {
-  position: absolute;
-  width: 4vw;
-  height: 8vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: none;
-  overflow: hidden;
-}
-
-.scroll-prev-button {
-  left: 2vw;
-}
-
-.scroll-next-button {
-  right: 2vw;
-}
-
-.next-button-icon {
-  width: 5vw;
-  height: 5vw;
-}
-
-.swing-results-table-title {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.results-slider-item h3 {
+  text-align: center;
+  height: 60vh;
+  margin-bottom: 60px;
   font-family: 'Poppins', Courier, monospace;
   font-size: 16px;
   font-weight: normal;
   color: rgb(67, 67, 67);
 }
 
-.swing-results-table {
-  width: 60vw;
-  max-height: 600px;
-  padding: 0.5vh 4vw;
-  border-radius: 30px;
-  font-family: 'Poppins', Courier, monospace;
-  font-weight: normal;
-  background-color: rgb(215, 241, 255);
+.slick-slide > div {
+  display: grid;
+  width: 60%;
+  margin: auto;
+  height: 70vh;
 }
 
-.message-score-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.1vh 0.1vw;
-}
-
-.swing-results-table-message {
-  /* margin-right: auto; */
-  font-family: 'Poppins', Courier, monospace;
-  font-size: 12px;
-  font-weight: normal;
-  flex-grow: 1;
-}
-
-.swing-results-table-score {
-  font-family: 'Poppins', Courier, monospace;
-  font-size: 12px;
-  font-weight: normal;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-hr {
+video.result {
+  align-self: center;
+  margin-right: auto;
+  border-radius: 20px;
   width: 100%;
-  border: 1px solid rgb(245, 245, 245);
+  margin: auto;
+}
+
+.results-table {
+  width: 100%;
+  table-layout: fixed;
+  border-collapse: separate; /* Adjusted for neumorphism */
+  border-spacing: 0 10px; /* Spacing between rows */
+  margin-top: 1vh;
+  margin-bottom: 1vh;
+  border-radius: 20px;
+  background-color: #E0F7FA; /* Light sky blue background */
+  font-family: 'Poppins', Courier, monospace;
+  font-size: 2vw;
+  box-shadow: 4px 4px 8px rgba(167, 196, 188, 0.4), /* Darker shadow */
+             -4px -4px 8px #ffffff; /* Lighter shadow */
+}
+
+.results-table td {
+  background-color: #E0F7FA; /* Light sky blue for cells */
+  padding: 0 2vw; /* Padding for content */
+  border-radius: 10px; /* Rounded corners */
+  /* border-bottom: 1px solid #36464e; */
+}
+
+.results-table tr {
+  border-bottom: 1px solid #36464e; /* Dark gray border */
+}
+
+.results-table .message-column {
+  text-align: left;
+  word-wrap: break-word; /* Ensures text wraps and doesn't overflow */
+}
+
+.results-table .score-column {
+  text-align: right;
+  word-wrap: break-word;
+}
+
+/* .slick-prev,
+.slick-next {
+  opacity: 0.75;
+  background-color: white;
+  width: 0;
+  height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1;
+} */
+
+.slick-prev {
+  left: -45px; /* Position from the left */
+}
+
+/* Specific style for the next button */
+.slick-next {
+  right: -45px; /* Position from the right */
 }
 
 .try-again-button {
