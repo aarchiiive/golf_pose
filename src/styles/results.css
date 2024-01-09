@@ -35,7 +35,7 @@
   width: 90vw;
   /* height: 80vh; */
   border-radius: 20px;
-  padding: 0 4vw;
+  padding: 0 2vw;
   padding-bottom: 6vh;
   margin: auto;
   box-sizing: border-box;
@@ -56,7 +56,7 @@
 .results-slider-item h3 {
   text-align: center;
   height: 60vh;
-  margin-bottom: 60px;
+  /* margin-bottom: 60px; */
   font-family: 'Poppins', Courier, monospace;
   font-size: 16px;
   font-weight: normal;
@@ -136,7 +136,7 @@ video.result {
 }
 
 .try-again-button {
-  width: 140px;
+  width: 100%;
   height: 60px;
   border-radius: 30px;
   display: flex;
