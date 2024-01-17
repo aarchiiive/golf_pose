@@ -86,10 +86,11 @@ class MetricAnalysis:
             
         self.img = 1
 
-    def __call__(self, keypoints, event, left_start, right_start):
-        return self.forward(keypoints, event, left_start, right_start)
+    def __call__(self, encoded_video, keypoints, event, left_start, right_start):
+        return self.forward(encoded_video, keypoints, event, left_start, right_start)
     
-    def forward(self, keypoints, event, left_start, right_start):
+    def forward(self,encoded_video ,keypoints, event, left_start, right_start):
+        self.encoded_video = encoded_video
         self.load_user(keypoints, event, left_start, right_start)
         self.toe_up_analysis()
         self.backswing_analysis()
@@ -121,6 +122,7 @@ class MetricAnalysis:
     def analyze_swing(self, sequence: SwingSequence):
         self.sequence_name = sequence.value
         self.correction[self.sequence_name] = defaultdict(list)
+        self.add_video(self.encoded_video)
         for i in self.swing_indicies[sequence].value:
             self.get_score(i)
             self.print_correction(i)
@@ -130,6 +132,9 @@ class MetricAnalysis:
         
     def add_score(self, score):
         self.correction[self.sequence_name]['scores'].append(score)
+    
+    def add_video(self, video):
+        self.correction[self.sequence_name]['video'].append(video)
     
     def get_score(self, index):
         if index in [17, 18]:
@@ -205,100 +210,100 @@ class MetricAnalysis:
         elif index in [3, 6, 9]:
             if self.mode == 'higher':
                 if self.score >= self.high_score:
-                    self.add_message("straightness of your left arm is perfect.")
+                    self.add_message("Straightness of your left arm is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("keep your left arm more away.")
+                    self.add_message("Keep your left arm more away.")
                 else:
-                    self.add_message("keep your left arm much further away.")
+                    self.add_message("Keep your left arm much further away.")
             elif self.mode == 'lower':
                 if self.score >= self.high_score:
-                    self.add_message("straightness of your left arm is perfect.")
+                    self.add_message("Straightness of your left arm is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("keep your left arm more away.")
+                    self.add_message("Keep your left arm more away.")
                 else:
-                    self.add_message("keep your left arm much further away.")
+                    self.add_message("Keep your left arm much further away.")
             else:
-                self.add_message("straightness of your left arm is perfect.")
+                self.add_message("Straightness of your left arm is perfect.")
             
         elif index in [1, 4, 7, 10, 13]:
             if self.mode == 'higher':
                 if self.score >= self.high_score:
-                    self.add_message("position of your right arm is perfect.")
+                    self.add_message("Position of your right arm is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("lower your right arm more.")
+                    self.add_message("Lower your right arm more.")
                 else:
-                    self.add_message("lower your right arm much more.")
+                    self.add_message("Lower your right arm much more.")
             elif self.mode == 'lower':
                 if self.score >= self.high_score:
-                    self.add_message("position of your right arm is perfect.")
+                    self.add_message("Position of your right arm is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("lift your right arm more.")
+                    self.add_message("Lift your right arm more.")
                 else:
-                    self.add_message("lift your right arm much more.")
+                    self.add_message("Lift your right arm much more.")
             else:
-                self.add_message("position of your right arm is perfect.")
+                self.add_message("Position of your right arm is perfect.")
                 
         elif index in [2, 5, 8, 11, 14]:
             if self.mode == 'higher':
                 if self.score >= self.high_score:
-                    self.add_message("rotation of your upper body is perfect.")
+                    self.add_message("Rotation of your upper body is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("reduce rotation of your upper body more.")
+                    self.add_message("Reduce rotation of your upper body more.")
                 else:
-                    self.add_message("reduce rotation of your upper body much more.")
+                    self.add_message("Reduce rotation of your upper body much more.")
             elif self.mode == 'lower':
                 if self.score >= self.high_score:
-                    self.add_message("rotation of your u pper body is perfect.")
+                    self.add_message("Rotation of your upper body is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("rotate your upper body more.")
+                    self.add_message("Rotate your upper body more.")
                 else:
-                    self.add_message("rotate your upper bodymuch more.")
+                    self.add_message("Rotate your upper bodymuch more.")
             else:
-                self.add_message("rotation of your upper body is perfect.")
+                self.add_message("Rotation of your upper body is perfect.")
 
         elif index in [12, 15]:
             if self.mode == 'higher':
                 if self.score >= self.high_score:
-                    self.add_message("rotation of your lower body is perfect.")
+                    self.add_message("Rotation of your lower body is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("reduce rotation of your lower body more.")
+                    self.add_message("Reduce rotation of your lower body more.")
                 else:
-                    self.add_message("reduce rotation of your lower body much more.")
+                    self.add_message("Reduce rotation of your lower body much more.")
             elif self.mode == 'lower':
                 if self.score >= self.high_score:
-                    self.add_message("rotation of your lower body is perfect.")
+                    self.add_message("Rotation of your lower body is perfect.")
                 elif self.low_score < self.score < self.high_score:
-                    self.add_message("rotate your lower body more.")
+                    self.add_message("Rotate your lower body more.")
                 else:
-                    self.add_message("rotate your lower body much more.")
+                    self.add_message("Rotate your lower body much more.")
             else:
-                self.add_message("rotation of your lower body is perfect.")
+                self.add_message("Rotation of your lower body is perfect.")
             
         elif index == 16:
             if self.score >= self.high_score:
-                self.add_message("position of your head is perfect.")
+                self.add_message("Position of your head is perfect.")
             else:
-                self.add_message("keep your head position.")
+                self.add_message("Keep your head position.")
 
         elif index == 17:
             if self.score >= self.high_score:
-                self.add_message(" your body shifting is perfect .")
+                self.add_message(" Your body shifting is perfect .")
             else:
                 self.add_message(" Keep your body from shifting to the right .")
         
         elif index == 18:
             if self.score >= self.high_score:
-                self.add_message(" your body shifting is perfect .")
+                self.add_message(" Your body shifting is perfect .")
             else:
                 self.add_message(" Keep your body from shifting to the left .")
         
         elif index == 19:
             if self.score >= self.high_score:
-                self.add_message(" your body shifting is perfect .")
+                self.add_message(" Your body shifting is perfect .")
             elif self.low_score < self.score < self.high_score:
-                self.add_message(" move your body to the left more.")
+                self.add_message(" Move your body to the left more.")
             else:
-                self.add_message(" move your body to the left much more.")
+                self.add_message(" Move your body to the left much more.")
             
         self.add_score(self.score)
 

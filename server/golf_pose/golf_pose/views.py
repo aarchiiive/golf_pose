@@ -46,21 +46,15 @@ class VideoUploadView(APIView):
         # file_name = 'pro.mp4'
         file_path = os.path.join('uploads', file_name)
         default_storage.save(file_path, video_file)
-        
         converted_file_path = os.path.join('uploads', f"{uuid.uuid4()}_converted.mp4")
         
         self.convert_video(file_path, converted_file_path)
     
         try:
             keypoints, frames = self.yolo(converted_file_path)
-            correction = self.metric_analyis(keypoints, frames, self.yolo.left_start, self.yolo.right_start)
-            encoded_video = self.encode_video_to_base64(self.yolo.save_path)
-            
-            logging.info(correction)
+            correction = self.metric_analyis(self.yolo.encoded_video, keypoints, frames, self.yolo.left_start, self.yolo.right_start)
             
             return Response({
-                "video": encoded_video,
-                "frames": self.yolo.event_list[1:7],
                 "correction": correction
             }, status=status.HTTP_200_OK)
             
@@ -69,8 +63,6 @@ class VideoUploadView(APIView):
             # encoded_video = self.encode_video_to_base64(self.yolo.save_path)
                 
             return Response({
-                "video": None,
-                "frames": [],
                 "correction": {}
             }, status=status.HTTP_204_NO_CONTENT)
             
@@ -97,7 +89,6 @@ class VideoUploadView(APIView):
             raise e
         finally:
             pass
-            # os.remove(input_path)
             
     def encode_video_to_base64(self, video_path):
         converted_video_path = f"{video_path.split('.')[0]}_converted.mp4"
@@ -107,89 +98,6 @@ class VideoUploadView(APIView):
         with open(converted_video_path, "rb") as video_file:
             encoded_video = base64.b64encode(video_file.read()).decode('utf-8')
 
-        os.remove(converted_video_path)
-
         return encoded_video
     
     
-    
-class VideoUploadTestView(APIView):
-    device = 'cuda:0'
-    metric_path = 'golf_pose/h_swing/metric/pro'
-    yolo = YOLOModel(device=device)
-    metric_analyis = MetricAnalysis(metric_path)
-    
-    def post(self, request):
-        start_time = time.time()
-        video_file = request.FILES.get('video', None)
-        if not video_file:
-            return Response({"message": "No video file provided."}, status=status.HTTP_400_BAD_REQUEST)
-
-        # file_name = f"{uuid.uuid4()}.mp4"
-        file_name = 'pro.mp4'
-        file_path = os.path.join('uploads', file_name)
-        default_storage.save(file_path, video_file)
-        
-        converted_file_path = os.path.join('uploads', f"{uuid.uuid4()}_converted.mp4")
-        
-        self.convert_video(file_path, converted_file_path)
-    
-        try:
-            keypoints, frames = self.yolo(converted_file_path)
-            correction = self.metric_analyis(keypoints, frames, self.yolo.left_start, self.yolo.right_start)
-            encoded_video = self.encode_video_to_base64(self.yolo.save_path)
-            
-            logging.info(correction)
-            
-            return Response({
-                "video": encoded_video,
-                "frames": self.yolo.event_list[1:7],
-                "correction": correction
-            }, status=status.HTTP_200_OK)
-            
-        except Exception as e:
-            logger.error(f"Error occurred during inference: {e}")
-            # encoded_video = self.encode_video_to_base64(self.yolo.save_path)
-                
-            return Response({
-                "video": None,
-                "frames": [],
-                "correction": {}
-            }, status=status.HTTP_204_NO_CONTENT)
-            
-        finally:
-            # os.remove(converted_file_path)
-            logger.info(f"Finished! ({time.time() - start_time:.4f}s)")
-            
-    def convert_video(self, input_path, output_path):
-        command = [
-            'ffmpeg',
-            '-i', input_path,
-            '-r', '30',
-            '-c:v', 'libx264',
-            '-preset', 'fast',
-            '-crf', '22',
-            output_path
-        ]
-        try:
-            result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-            os.remove(input_path)
-            return result
-        except subprocess.CalledProcessError as e:
-            print(f"An error occurred during video conversion: {e.stderr}")
-            raise e
-        finally:
-            pass
-            # os.remove(input_path)
-            
-    def encode_video_to_base64(self, video_path):
-        converted_video_path = f"{video_path.split('.')[0]}_converted.mp4"
-
-        self.convert_video(video_path, converted_video_path)
-
-        with open(converted_video_path, "rb") as video_file:
-            encoded_video = base64.b64encode(video_file.read()).decode('utf-8')
-
-        os.remove(converted_video_path)
-
-        return encoded_video

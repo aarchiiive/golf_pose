@@ -1,9 +1,12 @@
 import os
-import copy
-import logging
-from tqdm import tqdm
-
 import cv2
+import copy
+import base64
+import logging
+import subprocess
+
+from tqdm import tqdm
+from moviepy.editor import VideoFileClip
 import numpy as np
 
 from ultralytics import YOLO
@@ -22,6 +25,7 @@ class YOLOModel:
         self.left_frame = []
         self.new_event = {}
         self.event_list = []
+        self.video_clip = None
         self.event_dict = None
         self.image_frames = None
         self.image = None
@@ -36,6 +40,7 @@ class YOLOModel:
         self.radius = None
         self.y_position = None
         self.event = None
+        self.sequences = ['toe_up', 'backswing', 'top', 'downswing', 'impact', 'finish']
         self.connections = [[5, 7], [6, 8], [7, 9], [8, 10],
                             [5, 11], [6, 12], [11, 13], [12, 14],
                             [13, 15], [14, 16], [5, 6], [11, 12], [0, 5, 6]]
@@ -43,7 +48,10 @@ class YOLOModel:
         self.line_color = (153, 204, 153)
         self.colors = [(255, 204, 102), (153, 102, 204), (102, 204, 102)]
         self.thickness = 3
-
+        self.encoded_videos = {}
+        self.encoded_video = None
+        self.converted_video_path = None
+        
     def __call__(self, video_path):
         return self.forward(video_path)
     
@@ -78,11 +86,44 @@ class YOLOModel:
         self.event = self.golfdb(self.golfdb_video, self.golfdb_frames)
         self.event_dict = self._make_event_dict()
         self.video_writer.release()
+        # self._make_sepreate_video()
+        self._convert_video()
+        self._encode_video_to_base64()
         # self.make_sorted_events()
         # self.event_dict = self.new_event
         return self.keypoints, self.event_dict
 
-    def make_sorted_events(self):
+    def _convert_video(self):
+        self.converted_video_path = os.path.join(self.save_path_tmp, self.video_name + '_converted.mp4')
+        command = [
+            'ffmpeg',
+            '-i', self.save_path,
+            '-r', '30',
+            '-c:v', 'libx264',
+            '-preset', 'fast',
+            '-crf', '22',
+            self.converted_video_path
+        ]
+        result = subprocess.run(command, check=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+    def _encode_video_to_base64(self):
+        with open((self.converted_video_path), "rb") as video_file:
+            self.encoded_video = base64.b64encode(video_file.read()).decode('utf-8')
+        # for i in range(len(self.event_list) - 2):
+        #     with open(os.path.join(self.video_path_tmp + f"_{self.sequences[i]}.mp4"), "rb") as video_file:
+        #         encoded_video = base64.b64encode(video_file.read()).decode('utf-8')
+        #         self.encoded_videos[str(self.sequences[i])] = encoded_video
+    
+    def _make_sepreate_video(self):
+        self.video_clip = VideoFileClip(self.save_path)
+        self.video_path_tmp = os.path.join(self.save_path_tmp, self.video_name)
+        for i in range(len(self.event_list) - 2):
+            start_frame = self.event_list[i]
+            end_frame = self.event_list[i + 1]
+            sub_clip = self.video_clip.subclip(start_frame / self.video_clip.fps, end_frame / self.video_clip.fps)
+            sub_clip.write_videofile(os.path.join(self.video_path_tmp + f"_{self.sequences[i]}.mp4"), codec = "libx264", fps = self.video_clip.fps)
+
+    def _make_sorted_events(self):
         for frame, keypoint in enumerate(self.keypoints):
             wrist_keypoint = keypoint[10]
             before_keypoint = self.keypoints[frame-1][10]
@@ -92,7 +133,6 @@ class YOLOModel:
             max_right = (np.array(self.keypoints)[:,10,0]).max()
             x_dif = before_keypoint[0] - wrist_keypoint[0]
             y_dif = before_keypoint[1] - wrist_keypoint[1]
-            
             if x_dif >= 8 and len(self.new_event) == 0 and frame != 0:
                 self.new_event[0] = frame - 1
             # else: self.new_event[0] = 10
@@ -104,7 +144,6 @@ class YOLOModel:
                 self.new_event[5] = frame + 1
             if abs(max_right - wrist_keypoint[0]) < 1 and len(self.new_event) == 4:
                 self.new_event[6] = frame
-            
         self.new_event[1] = self.new_event[0] + (self.new_event[2] - self.new_event[0]) // 2
         self.new_event[4] = self.new_event[5] - 3
         self.new_event[7] = self.new_event[6] + 5
@@ -145,12 +184,14 @@ class YOLOModel:
             self._save_images(img)
 
     def _save_images(self, image):
-        save_path = os.path.join('results',self.video_name)
-        os.makedirs(save_path, exist_ok=True)
-        cv2.imwrite(os.path.join(save_path, str(len(self.golfdb_frames)) + '.png'), image)
+        # self.save_path_tmp = os.path.join('results',self.video_name)
+        # os.makedirs(self.save_path_tmp, exist_ok=True)
+        cv2.imwrite(os.path.join(self.save_path_tmp, str(len(self.golfdb_frames)) + '.png'), image)
 
     def _save_video(self):
-        self.save_path = os.path.join('results' , self.video_name + '.mp4')
+        self.save_path_tmp = os.path.join('results', self.video_name)
+        os.makedirs(self.save_path_tmp, exist_ok = True)
+        self.save_path = os.path.join(self.save_path_tmp, self.video_name + '.mp4')
         self.video_writer = cv2.VideoWriter(self.save_path, cv2.VideoWriter_fourcc(*'mp4v'), 30, self.save_video_size)
     
     def _save_kpts(self,r):

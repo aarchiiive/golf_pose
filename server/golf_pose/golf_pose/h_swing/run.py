@@ -1,3 +1,4 @@
+import os
 import time
 import pprint
 
@@ -14,15 +15,12 @@ start_time = time.time()
 input_video = 'dataset/pro.mp4'
 # frames = golfdb(input_video) 
 keypoints, frames = yolo(input_video)
-correction = metric_analyis(keypoints, frames, yolo.left_start, yolo.right_start)
-
+correction = metric_analyis(yolo.encoded_video, keypoints, frames, yolo.left_start, yolo.right_start)
 pp = pprint.PrettyPrinter(indent=2,width=160)
 print(yolo.save_path)
 
-
 ### video
 # video = open(yolo.save_path, 'rb')
-
 
 print(yolo.event_list[1:6])
 pp.pprint(correction)
