@@ -12,7 +12,6 @@ def read_pkl(video_name):
     return input_video
 
 def normalize_pro(Tigerwoods, input_video):
-
     mult_list = []
     for i in range(len(input_video)):
         try:
@@ -23,7 +22,6 @@ def normalize_pro(Tigerwoods, input_video):
         except:
             continue
     Tigerwoods = (min(mult_list))* Tigerwoods
-
     return Tigerwoods
 
 def draw_all_joints(kps, img, left_start, right_start, radius):
@@ -36,7 +34,6 @@ def draw_all_joints(kps, img, left_start, right_start, radius):
     hcolor = (0, 255, 0)
     colors = [lcolor, rcolor, hcolor]
     thickness = 3
-
     for j,c in enumerate(connections):
         if len(c) == 3:
             start = list(map(int, kps[c[0]]))
@@ -51,10 +48,8 @@ def draw_all_joints(kps, img, left_start, right_start, radius):
             cv2.line(img, (start[0], start[1]), (end[0], end[1]), colors[LR[j]], thickness)
             cv2.circle(img, (start[0], start[1]), thickness=-1, color=(0, 255, 0), radius=3)
             cv2.circle(img, (end[0], end[1]), thickness=-1, color=(0, 255, 0), radius=3)
-
     cv2.line(img, (left_start[0]-30, left_start[1]), (left_start[0]-30, left_start[1]-500), (100,100,100), thickness)
     cv2.line(img, (right_start[0]+ 30, right_start[1]), (right_start[0]+30, right_start[1]-500), (100,100,100), thickness)
-
     return img
 
 def save_all_joints(input_video, video_name, event_dict):
@@ -68,97 +63,41 @@ def save_all_joints(input_video, video_name, event_dict):
         os.makedirs(output_dir, exist_ok=True)
         cv2.imwrite(os.path.join(output_dir , str(('%04d'% i)) + '.png'), image)
 
-def joint_mov_sync(start, start1, end, end1, movement_list, movement_2_list):
-
-    movement = start1[0] - start[0]
-    movement_2 = end1[0] - end[0]
-
-    movement_list.append(movement)
-    movement_2_list.append(movement_2)
-
-    current_movement = movement - movement_list[0]
-    current_movement_2 = movement_2 - movement_list[0]
-
-
-    start = np.array(start)
-    current_movement = [current_movement,0]
-    current_movement = np.array(current_movement)
-    start = start - current_movement
-
-    end = np.array(end)
-    current_movement_2 = [current_movement_2,0]
-    current_movement_2 = np.array(current_movement_2)
-    end = end - current_movement_2
-
-    return start, end
-
 def get_angle_from_2vectors(vector1,vector2):
-
     vect_norm1 = np.linalg.norm(vector1)
     vect_norm2 = np.linalg.norm(vector2)
-
     dot = np.dot(vector1,vector2)
     cos = dot / (vect_norm1*vect_norm2)
     angle = np.arccos(cos)
     angle = np.rad2deg(angle)
-
     return angle
-
-def split_left_right(angle_list):
-    right = []
-    left = []
-
-    for i in range(len(angle_list)):
-        try:
-            if angle_list[i+1] > angle_list[i] :
-                if (len(right) == 0) and (len(left)==0):
-                    right.append(angle_list[i])
-                elif len(right) == 0:
-                    left.append(angle_list[i])
-                right.append(angle_list[i+1])
-            else: left.append(angle_list[i])
-        except:
-            if angle_list[i] < angle_list[i-1]:
-                left.append(angle_list[i])
-            else: continue
-
-    return right,left
  
 def draw_joints(kps, img, check_joint,index):
- 
     lcolor = (255, 0, 0)
     rcolor = (0, 0, 255)
     thickness = 2
-
     start = map(int, kps[index][check_joint[1]])
     end1 = map(int, kps[index][check_joint[0]])    
     end2 = map(int, kps[index][check_joint[2]])      
-
     start = list(start)
     end1 = list(end1)       
     end2 = list(end2)
-
     # cv2.line(img, (start[0], start[1]), (end1[0], end1[1]), lcolor , thickness)
     # cv2.line(img, (start[0], start[1]), (end2[0], end2[1]), lcolor , thickness)
     # cv2.circle(img, (start[0], start[1]), thickness=-1, color=(0, 255, 0), radius=1)
     # cv2.circle(img, (end1[0], end1[1]), thickness=-1, color=(0, 255, 0), radius=3)
     # cv2.circle(img, (end2[0], end2[1]), thickness=-1, color=(0, 255, 0), radius=3)
-
     start = np.array(start)
     end1 = np.array(end1)       
     end2 = np.array(end2)
-
     return start, end1, end2
 
 def draw_points(kps, img, check_joint, index, mode = None,line = None):
- 
     lcolor = (255, 0, 0)
     rcolor = (0, 0, 255)
     thickness = 2
-
     point = map(int, kps[index][check_joint])
     point = list(point)
- 
     # cv2.circle(img, (point[0], point[1]), thickness=-1, color=(0, 255, 0), radius=3)
     # point = np.array(point)
     
@@ -167,7 +106,6 @@ def draw_points(kps, img, check_joint, index, mode = None,line = None):
     #         cv2.line(img, (line[0] - 30, line[1]), (line[0] - 30, line[1] - 400), (100,100,100), thickness)
     #     elif mode == 'right':
     #         cv2.line(img, (line[0] + 30, line[1]), (line[0] + 30, line[1] - 400), (100,100,100), thickness)
-
     return point
 #######################################################################################
 
@@ -408,10 +346,6 @@ def down_center(kps, img, event_dict, left_start=None, right_start=None):
         x_position_list.append(right_start[0] + 30 - point[0])
     min = np.min(x_position_list)
     return img, min
-
-
-
-
 
 ##################################################################################################
 

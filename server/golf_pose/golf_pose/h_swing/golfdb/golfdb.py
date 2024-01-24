@@ -17,6 +17,15 @@ class GolfDB:
         self.device = torch.device(device)    
         self.mode = mode
         self.seq_length = seq_length
+
+        self.batch = 0
+        self.probs = None
+        self.events = None
+        self.not_sorted = 0
+        self.load_weights()
+        self.confidence = []
+        self.seen_events = {}
+        self.sorted_events = None
         self.model = EventDetector(
             pretrain=True,
             width_mult=1.,
@@ -26,14 +35,6 @@ class GolfDB:
             dropout=False,
             device=device,
         )
-        self.load_weights()
-        self.confidence = []
-        self.batch = 0
-        self.probs = None
-        self.events = None
-        self.not_sorted = 0
-        self.sorted_events = None
-        self.seen_events = {}
         self.event_names = {
             0: '0',
             1: '1',
@@ -59,13 +60,10 @@ class GolfDB:
                                         Normalize([0.485, 0.456, 0.406],
                                         [0.229, 0.224, 0.225])]))
         self.dataloader = DataLoader(self.dataset, batch_size=1, shuffle=False, drop_last=False)
-        self.cal_probability()
+        self._cal_probability()
         self.cal_confidence()
         
         if not self.is_sorted():
-            # self.sorted_events = [3,3,57,61,78,129,136,136,139]
-            # self.sorted_events = self.modify_list(self.sorted_events)
-            # print(self.sorted_events)
             return self.sorted_events
         else:
             self.events = self.modify_list(self.events)
@@ -89,7 +87,7 @@ class GolfDB:
         for i, e in enumerate(self.events):
             self.confidence.append(self.probs[e, i])
     
-    def cal_probability(self):
+    def _cal_probability(self):
         for sample in self.dataloader:
             images = sample['images']
             while self.batch * self.seq_length < images.shape[1]:

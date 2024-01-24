@@ -8,7 +8,6 @@ import numpy as np
 
 from .metricc import *
 
-
 class SwingSequence(Enum):
     TOE_UP = 'toe_up'
     BACKSWING = 'backswing'
