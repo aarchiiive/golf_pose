@@ -3,10 +3,10 @@ from enum import Enum
 from collections import defaultdict, Sequence
 
 import random
-import pandas as pd
 import numpy as np
+import pandas as pd
 
-from .metricc import *
+from .util import *
 
 class SwingSequence(Enum):
     TOE_UP = 'toe_up'

@@ -6,7 +6,6 @@ import cv2
 import numpy as np
 import pandas as pd
 
-#############################################################################################
 def read_pkl(video_name):
     input_video = np.array(pd.read_pickle(video_name))
     return input_video
@@ -107,8 +106,8 @@ def draw_points(kps, img, check_joint, index, mode = None,line = None):
     #     elif mode == 'right':
     #         cv2.line(img, (line[0] + 30, line[1]), (line[0] + 30, line[1] - 400), (100,100,100), thickness)
     return point
-#######################################################################################
 
+########################toe up 시 오른팔의 펴짐 정도 확인############################
 def toe_up_right_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [6, 8, 10]
     angle_list = []
@@ -121,6 +120,7 @@ def toe_up_right_arm(kps, img, event_dict, left_start=None, right_start=None):
     mean = np.mean(angle_list)
     return img, mean
 
+########################toe up 시 오른팔의 높이 확인############################
 def toe_up_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
@@ -134,6 +134,7 @@ def toe_up_right_shoulder(kps, img, event_dict, left_start=None, right_start=Non
     max = np.max(angle_list)
     return img, mean
 
+########################toe up 시 상체회전 각도 확인############################
 def toe_up_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
@@ -147,6 +148,7 @@ def toe_up_rotate(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################backswing 시 오른팔의 펴짐 정도 확인############################
 def back_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
@@ -159,6 +161,7 @@ def back_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     mean = np.mean(angle_list)
     return img,mean
 
+########################backswing 시 오른팔의 높이 확인############################
 def back_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
@@ -171,6 +174,7 @@ def back_right_shoulder(kps, img, event_dict, left_start=None, right_start=None)
     mean = np.mean(angle_list)
     return img, mean
 
+########################backswing 시 상체회전 각도 확인############################
 def back_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
@@ -184,6 +188,7 @@ def back_rotate(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################topswing 시 오른팔의 펴짐 정도 확인############################
 def top_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
@@ -196,6 +201,7 @@ def top_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     mean = np.mean(angle_list)
     return img,mean
 
+########################topswing 시 오른팔의 높이 확인############################
 def top_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
@@ -209,6 +215,7 @@ def top_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, mean
 
+########################topswing 시 상체회전 각도 확인############################
 def top_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
@@ -222,6 +229,7 @@ def top_rotate(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################downswing 시 오른팔의 펴짐 정도 확인############################
 def down_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [5, 7, 9]
     angle_list = []
@@ -234,6 +242,7 @@ def down_left_arm(kps, img, event_dict, left_start=None, right_start=None):
     mean = np.mean(angle_list)
     return img,mean
 
+########################downswing 시 오른팔의 높이 확인############################
 def down_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
@@ -246,6 +255,7 @@ def down_right_shoulder(kps, img, event_dict, left_start=None, right_start=None)
     mean = np.mean(angle_list)
     return img, mean
 
+########################downswing 시 상체회전 각도 확인############################
 def down_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
@@ -259,6 +269,7 @@ def down_rotate(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################downswing 시 하체회전 각도 확인############################
 def down_rotate_lower(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [13, 11, 12]
     angle_list = []
@@ -272,6 +283,7 @@ def down_rotate_lower(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################impact 시 오른팔의 높이 확인############################
 def impact_right_shoulder(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 8]
     angle_list = []
@@ -284,6 +296,7 @@ def impact_right_shoulder(kps, img, event_dict, left_start=None, right_start=Non
     mean = np.mean(angle_list)
     return img, mean
 
+########################impact 시 상체회전 각도 확인############################
 def impact_rotate(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [12, 6, 5]
     angle_list = []
@@ -297,6 +310,7 @@ def impact_rotate(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(angle_list)
     return img, max-min
 
+########################impact 시 하체회전 각도 확인############################
 def impact_rotate_lower(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = [13, 11, 12]
     angle_list = []
@@ -310,6 +324,7 @@ def impact_rotate_lower(kps, img, event_dict, left_start=None, right_start=None)
     max = np.max(angle_list)
     return img, max-min
 
+########################impact 시 머리의 고정 정도 확인############################
 def impact_head(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 0
     y_position_list = []
@@ -320,6 +335,7 @@ def impact_head(kps, img, event_dict, left_start=None, right_start=None):
     max = np.max(y_position_list)
     return img, max-min
 
+########################finish 동작에서 무게중심의 이동 정도 확인############################
 def finish_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 11
     x_position_list = []
@@ -329,6 +345,8 @@ def finish_center(kps, img, event_dict, left_start=None, right_start=None):
     min = np.min(x_position_list)
     return img, min
 
+
+########################backswing 동작에서 무게중심의 이동 정도 확인############################
 def back_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 14
     x_position_list = []
@@ -338,6 +356,8 @@ def back_center(kps, img, event_dict, left_start=None, right_start=None):
     min = np.min(x_position_list)
     return img, min
 
+
+########################downswing 동작에서 무게중심의 이동 정도 확인############################
 def down_center(kps, img, event_dict, left_start=None, right_start=None):
     check_joint = 13
     x_position_list = []
@@ -347,194 +367,192 @@ def down_center(kps, img, event_dict, left_start=None, right_start=None):
     min = np.min(x_position_list)
     return img, min
 
-##################################################################################################
+# if __name__ =='__main__':
+#     event = [0, 50, 55, 60, 66, 68, 70, 87]
+#     # event = [128, 137, 142, 157, 161, 165, 171, 192] #준혁4
 
-if __name__ =='__main__':
-    event = [0, 50, 55, 60, 66, 68, 70, 87]
-    # event = [128, 137, 142, 157, 161, 165, 171, 192] #준혁4
+#     pro_video_name = 'Tigerwoods.pickle'
+#     video_name = 'junyuk4.pickle'
 
-    pro_video_name = 'Tigerwoods.pickle'
-    video_name = 'junyuk4.pickle'
+#     Tigerwoods = read_pkl(pro_video_name)
+#     input_video = read_pkl(video_name)
+#     Tigerwoods = normalize_pro(Tigerwoods, input_video)
+#     video_name = video_name.split('.')[-2]
 
-    Tigerwoods = read_pkl(pro_video_name)
-    input_video = read_pkl(video_name)
-    Tigerwoods = normalize_pro(Tigerwoods, input_video)
-    video_name = video_name.split('.')[-2]
-
-    input_video = Tigerwoods
-    video_name = pro_video_name.split('.')[-2]
+#     input_video = Tigerwoods
+#     video_name = pro_video_name.split('.')[-2]
 
     
-    event_dict = {}
-    for i, frame in enumerate(event):
-        event_dict[i] = frame
+#     event_dict = {}
+#     for i, frame in enumerate(event):
+#         event_dict[i] = frame
         
-    # save_all_joints(input_video, video_name, event_dict)
-    right_start = list(map(int, input_video[event_dict[0]][15]))
-    left_start = list(map(int, input_video[event_dict[0]][16]))
-    img = np.full((480,860,3), 255, dtype=np.uint8)
-    output_dir = str(video_name) + '/' + 'output2/'
+#     # save_all_joints(input_video, video_name, event_dict)
+#     right_start = list(map(int, input_video[event_dict[0]][15]))
+#     left_start = list(map(int, input_video[event_dict[0]][16]))
+#     img = np.full((480,860,3), 255, dtype=np.uint8)
+#     output_dir = str(video_name) + '/' + 'output2/'
 
-    ###############################################################################################  
-    image, result= toe_up_right_arm(input_video,copy.deepcopy(img),event_dict)
+#     ###############################################################################################  
+#     image, result= toe_up_right_arm(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'toe_up_right_arm' + '.png', image) 
-    with open('metric_list1.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('toe up-right arm angle :',result)
-    ###############################################################################################  
-    image, result= toe_up_right_shoulder(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'toe_up_right_arm' + '.png', image) 
+#     with open('metric_list1.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('toe up-right arm angle :',result)
+#     ###############################################################################################  
+#     image, result= toe_up_right_shoulder(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'toe_up_right_shoulder' + '.png', image) 
-    with open('metric_list2.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('toe up-right shoulder angle :',result)
-    ###############################################################################################  
-    image, result= toe_up_rotate(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'toe_up_right_shoulder' + '.png', image) 
+#     with open('metric_list2.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('toe up-right shoulder angle :',result)
+#     ###############################################################################################  
+#     image, result= toe_up_rotate(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir  +'toe_up_rotate' + '.png', image) 
-    with open('metric_list3.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('toe up-rotation angle :',result)
-    ###############################################################################################  
-    image, result= back_left_arm(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir  +'toe_up_rotate' + '.png', image) 
+#     with open('metric_list3.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('toe up-rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= back_left_arm(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'back_left_arm' + '.png', image) 
-    with open('metric_list4.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('backswing-left arm angle :',result)
-    ###############################################################################################  
-    image, result= back_right_shoulder(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'back_left_arm' + '.png', image) 
+#     with open('metric_list4.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('backswing-left arm angle :',result)
+#     ###############################################################################################  
+#     image, result= back_right_shoulder(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'back_right_shoulder' + '.png', image) 
-    with open('metric_list5.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('backswing-right shoulder angle :',result)
-    ###############################################################################################  
-    image, result= back_rotate(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'back_right_shoulder' + '.png', image) 
+#     with open('metric_list5.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('backswing-right shoulder angle :',result)
+#     ###############################################################################################  
+#     image, result= back_rotate(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'back_rotate' + '.png', image) 
-    with open('metric_list6.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('backswing-rotation angle :',result)
-    ###############################################################################################  
-    image, result= top_left_arm(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'back_rotate' + '.png', image) 
+#     with open('metric_list6.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('backswing-rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= top_left_arm(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'top_left_arm' + '.png', image) 
-    with open('metric_list7.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('top-left arm angle :',result)
-    ###############################################################################################  
-    image, result= top_right_shoulder(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'top_left_arm' + '.png', image) 
+#     with open('metric_list7.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('top-left arm angle :',result)
+#     ###############################################################################################  
+#     image, result= top_right_shoulder(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'top_right_shoulder' + '.png', image) 
-    with open('metric_list8.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
-    print('top-right shoulder angle :',result)
-    ###############################################################################################  
-    image, result= top_rotate(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'top_right_shoulder' + '.png', image) 
+#     with open('metric_list8.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)  
+#     print('top-right shoulder angle :',result)
+#     ###############################################################################################  
+#     image, result= top_rotate(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'top_rotate' + '.png', image) 
-    with open('metric_list9.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('top-rotation angle :',result)
-    ###############################################################################################  
-    image, result= down_left_arm(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'top_rotate' + '.png', image) 
+#     with open('metric_list9.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('top-rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= down_left_arm(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'down_left_arm' + '.png', image) 
-    with open('metric_list10.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('downswing-left arm angle :',result)
-    ###############################################################################################  
-    image, result= down_right_shoulder(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'down_left_arm' + '.png', image) 
+#     with open('metric_list10.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('downswing-left arm angle :',result)
+#     ###############################################################################################  
+#     image, result= down_right_shoulder(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'down_right_shoulder' + '.png', image) 
-    with open('metric_list11.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('downswing-right shoulder angle :',result)
-    ###############################################################################################  
-    image, result= down_rotate(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'down_right_shoulder' + '.png', image) 
+#     with open('metric_list11.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('downswing-right shoulder angle :',result)
+#     ###############################################################################################  
+#     image, result= down_rotate(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'down_rotate' + '.png', image) 
-    with open('metric_list12.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('downswing-rotation angle :',result)
-    ###############################################################################################  
-    image, result= down_rotate_lower(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'down_rotate' + '.png', image) 
+#     with open('metric_list12.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('downswing-rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= down_rotate_lower(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'down_rotate_lower' + '.png', image) 
-    with open('metric_list13.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('downswing-lower rotation angle :',result)
-    ###############################################################################################  
-    image, result= impact_right_shoulder(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'down_rotate_lower' + '.png', image) 
+#     with open('metric_list13.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('downswing-lower rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= impact_right_shoulder(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'impact_right_shoulder' + '.png', image) 
-    with open('metric_list14.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL) 
-    print('impact-right shoulder angle :',result)
-    ###############################################################################################  
-    image, result= impact_rotate(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'impact_right_shoulder' + '.png', image) 
+#     with open('metric_list14.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL) 
+#     print('impact-right shoulder angle :',result)
+#     ###############################################################################################  
+#     image, result= impact_rotate(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'impact_rotate' + '.png', image) 
-    with open('metric_list15.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('impact-rotation angle :',result)
-    ###############################################################################################  
-    image, result= impact_rotate_lower(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'impact_rotate' + '.png', image) 
+#     with open('metric_list15.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('impact-rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= impact_rotate_lower(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'impact_rotate_lower' + '.png', image) 
-    with open('metric_list16.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('impact-lower rotation angle :',result)
-    ###############################################################################################  
-    image, result= impact_head(input_video,copy.deepcopy(img),event_dict)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'impact_rotate_lower' + '.png', image) 
+#     with open('metric_list16.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('impact-lower rotation angle :',result)
+#     ###############################################################################################  
+#     image, result= impact_head(input_video,copy.deepcopy(img),event_dict)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'impact_head' + '.png', image) 
-    with open('metric_list17.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('impact-head position :',result)
-    ###############################################################################################  
-    image, result= finish_center(input_video,copy.deepcopy(img),event_dict, right_start)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'impact_head' + '.png', image) 
+#     with open('metric_list17.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('impact-head position :',result)
+#     ###############################################################################################  
+#     image, result= finish_center(input_video,copy.deepcopy(img),event_dict, right_start)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'finish_pelvis' + '.png', image) 
-    with open('metric_list18.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('finish center movement :',result)
-    ###############################################################################################  
-    image, result= back_center(input_video,copy.deepcopy(img),event_dict, left_start)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'finish_pelvis' + '.png', image) 
+#     with open('metric_list18.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('finish center movement :',result)
+#     ###############################################################################################  
+#     image, result= back_center(input_video,copy.deepcopy(img),event_dict, left_start)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'back_center' + '.png', image) 
-    with open('metric_list19.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL) 
-    print('backswing center movement :',result)
-    ###############################################################################################  
-    image, result= down_center(input_video,copy.deepcopy(img),event_dict, right_start)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'back_center' + '.png', image) 
+#     with open('metric_list19.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL) 
+#     print('backswing center movement :',result)
+#     ###############################################################################################  
+#     image, result= down_center(input_video,copy.deepcopy(img),event_dict, right_start)
     
-    os.makedirs(output_dir, exist_ok=True)
-    cv2.imwrite(output_dir +'down_center' + '.png', image) 
-    with open('metric_list20.pickle', 'wb') as f:
-        pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
-    print('downswing center movement :',result)
+#     os.makedirs(output_dir, exist_ok=True)
+#     cv2.imwrite(output_dir +'down_center' + '.png', image) 
+#     with open('metric_list20.pickle', 'wb') as f:
+#         pickle.dump(result, f, pickle.HIGHEST_PROTOCOL)
+#     print('downswing center movement :',result)
 
 
 
